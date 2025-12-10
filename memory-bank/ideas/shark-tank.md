@@ -1,8 +1,48 @@
-# Shark Tank Products Directory - Research
+# Shark Tank Products Directory
 
-**Last Updated:** 2025-12-09  
-**Status:** Research / Planning  
-**Overview:** [niche-directory.md](./niche-directory.md#-shark-tank-products-directory)
+**Last Updated:** 2025-12-10  
+**Status:** Phase 1 - Setup  
+**Repo:** https://github.com/Gr0x01/shark-tank
+
+---
+
+## Project Setup
+
+### Environment Variables (.env.local)
+```bash
+# Supabase (create new project at supabase.com)
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# OpenAI (for enrichment)
+OPENAI_API_KEY=
+
+# Tavily (for web search during enrichment)
+TAVILY_API_KEY=
+
+# Analytics (optional for now)
+NEXT_PUBLIC_POSTHOG_KEY=
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+```
+
+### Setup Checklist
+- [x] GitHub repo created
+- [x] Next.js project scaffolded
+- [x] Memory bank initialized
+- [x] Database schema written (`supabase/migrations/00001_initial_schema.sql`)
+- [x] Supabase project created
+- [x] Schema deployed to Supabase
+- [x] `.claude/` agents and skills copied from chefs
+- [ ] Initial data seeding (Wikipedia scrape)
+- [ ] Basic pages working
+- [ ] Enrichment pipeline setup
+
+### Reference Project
+The `chefs/` repo is our north star for architecture patterns:
+- Enrichment system: `scripts/ingestion/enrichment/`
+- Database patterns: `src/lib/supabase/`
+- Component patterns: `src/components/`
 
 ---
 
@@ -121,49 +161,52 @@
 
 ---
 
-## Data Model (Draft)
+## Data Model
 
-```
-products
-  - id
-  - name
-  - slug
-  - season
-  - episode
-  - air_date
-  - description
-  - category
-  - asking_amount
-  - asking_equity
-  - deal_amount
-  - deal_equity
-  - sharks (array)
-  - status (active, out_of_business, acquired, unknown)
-  - website_url
-  - amazon_url
-  - retail_availability (json)
-  - price_range
-  - last_verified
-  - photo_url
+**Schema:** `supabase/migrations/00001_initial_schema.sql`
 
-sharks
-  - id
-  - name
-  - slug
-  - bio
-  - photo_url
-  - seasons_active
-  - total_deals
-  - total_invested
+### Core Tables
 
-product_updates (freshness tracking)
-  - product_id
-  - field_changed
-  - old_value
-  - new_value
-  - updated_at
-  - source
-```
+**products** - Every product pitched on the show
+- Basic: name, slug, company_name, tagline, description
+- Episode: episode_id, season, episode_number, air_date
+- Founders: founder_names[], founder_story
+- Pitch: asking_amount, asking_equity, asking_valuation (computed)
+- Deal: deal_outcome, deal_amount, deal_equity, deal_valuation (computed), royalty_deal, royalty_terms, deal_notes
+- Status: status (active/out_of_business/acquired/unknown), last_verified, verification_notes, last_activity_date
+- URLs: website_url, amazon_url, retail_availability (jsonb), social_urls (jsonb)
+- Pricing: price_range, current_price, original_pitch_price
+- SEO: meta_description, pitch_summary, outcome_story (LLM generated)
+- Enrichment: enrichment_status, enrichment_source, last_enriched_at
+
+**sharks** - The investors
+- Basic: name, slug, bio, meta_description, investment_style
+- Media: photo_url, social_urls (jsonb)
+- Meta: seasons_active[], is_guest_shark
+
+**episodes** - For episode pages
+- Basic: season, episode_number, air_date, title, description
+- SEO: meta_description
+- Meta: guest_sharks[]
+
+**categories** - Product categories
+- Basic: name, slug, description, meta_description
+- Hierarchy: parent_id (self-reference)
+
+**product_sharks** - Junction table (many-to-many)
+- Links: product_id, shark_id
+- Deal details: investment_amount, equity_percentage, is_lead_investor, notes
+
+**product_updates** - Freshness tracking
+- Tracks: product_id, field_changed, old_value, new_value, source, updated_at
+
+### Views
+- `products_with_sharks` - Products with shark names aggregated
+- `shark_stats` - Shark portfolio stats (total deals, invested, success rate)
+
+### Seed Data
+- 6 main sharks (Cuban, Corcoran, Daymond, O'Leary, Greiner, Herjavec)
+- 13 categories (Food, Tech, Fashion, Health, Pets, etc.)
 
 ---
 
