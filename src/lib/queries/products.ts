@@ -118,3 +118,54 @@ export async function getProductStats() {
   
   return stats
 }
+
+export async function getTopDeals(limit = 5): Promise<ProductWithSharks[]> {
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .eq('deal_outcome', 'deal')
+    .not('deal_amount', 'is', null)
+    .order('deal_amount', { ascending: false })
+    .limit(limit)
+  
+  if (error) throw error
+  return (data as ProductWithSharks[]) || []
+}
+
+export async function getFeaturedDeal(): Promise<ProductWithSharks | null> {
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .eq('deal_outcome', 'deal')
+    .eq('status', 'active')
+    .not('deal_amount', 'is', null)
+    .order('deal_amount', { ascending: false })
+    .limit(1)
+    .single()
+  
+  if (error) {
+    if (error.code === 'PGRST116') return null
+    throw error
+  }
+  return data as ProductWithSharks
+}
+
+export async function getSuccessStories(limit = 4): Promise<ProductWithSharks[]> {
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .eq('deal_outcome', 'deal')
+    .eq('status', 'active')
+    .not('deal_amount', 'is', null)
+    .order('deal_amount', { ascending: false })
+    .limit(limit)
+  
+  if (error) throw error
+  return (data as ProductWithSharks[]) || []
+}
