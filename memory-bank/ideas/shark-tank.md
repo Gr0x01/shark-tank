@@ -236,6 +236,39 @@ The `chefs/` repo is our north star for architecture patterns:
 
 ---
 
+## Homepage UX (E-commerce Focus)
+
+### User Intent
+Primary: Search for a specific product they saw on the show
+Secondary: Browse by category or curated lists (for SEO landing pages)
+
+### Above-the-Fold Principles
+- **Search is king** - Large, prominent search bar. Users from SEO want to find specific products.
+- **Products visible immediately** - 4-8 product cards above the fold, not a giant hero image.
+- **Trust signals compact** - One-liner: "589 products · Updated weekly" - not a whole section.
+- **No wasted space** - Every pixel shows products or helps find them.
+
+### What NOT to Do
+- Giant hero images that push products below fold (editorial style, not e-commerce)
+- Fake "trending" sections without real data
+- Redundant elements showing same stats multiple ways
+- Status filters floating without context
+
+### Homepage Layout
+```
+[Header with prominent search]
+[Compact category nav]
+[Product grid starts immediately - 2-3 rows visible]
+[Curated lists for SEO (when we have them)]
+[Category browse]
+[Compact footer CTA]
+```
+
+### Categories
+Products have `category_id` populated. Should be visible on product cards and filterable.
+
+---
+
 ## Site Architecture (Scaffolding)
 
 ### Core Pages

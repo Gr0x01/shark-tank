@@ -18,6 +18,32 @@ function formatMoney(amount: number | null): string {
   return `$${amount.toLocaleString()}`
 }
 
+function formatVerifiedDate(date: string | null): string {
+  if (!date) return 'Unverified'
+  const d = new Date(date)
+  const now = new Date()
+  const diffDays = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 0) return 'Today'
+  if (diffDays === 1) return 'Yesterday'
+  if (diffDays < 7) return `${diffDays}d ago`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+function getStatusConfig(status: string) {
+  switch (status) {
+    case 'active':
+      return { label: 'Active', icon: '✓', className: 'status-active' }
+    case 'out_of_business':
+      return { label: 'Closed', icon: '✗', className: 'status-closed' }
+    case 'acquired':
+      return { label: 'Acquired', icon: '◆', className: 'status-acquired' }
+    default:
+      return { label: 'Unknown', icon: '?', className: 'status-unknown' }
+  }
+}
+
 export function ProductCardCommerce({ product, showTrending = false, rank }: ProductCardCommerceProps) {
   const [imgError, setImgError] = useState(false)
   
@@ -78,6 +104,13 @@ export function ProductCardCommerce({ product, showTrending = false, rank }: Pro
               </a>
             </div>
           )}
+          
+          <div className="freshness-indicator">
+            <span className={`status-dot ${getStatusConfig(product.status).className}`} />
+            <span className="verified-text">
+              {getStatusConfig(product.status).label} · {formatVerifiedDate(product.last_enriched_at)}
+            </span>
+          </div>
         </div>
 
         <div className="card-body">
@@ -96,11 +129,14 @@ export function ProductCardCommerce({ product, showTrending = false, rank }: Pro
           )}
 
           <div className="card-footer">
-            <div>
+            <div className="footer-left">
               {product.deal_amount && (
                 <span className="deal-info">
                   {formatMoney(product.deal_amount)} deal
                 </span>
+              )}
+              {product.deal_outcome === 'no_deal' && (
+                <span className="no-deal-info">No Deal</span>
               )}
             </div>
             
