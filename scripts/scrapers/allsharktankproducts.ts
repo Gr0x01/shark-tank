@@ -1,4 +1,6 @@
 import { chromium, Browser, Page } from 'playwright';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface ScrapedProduct {
   name: string;
@@ -24,6 +26,31 @@ export interface ScrapeResult {
 }
 
 const BASE_URL = 'https://allsharktankproducts.com';
+const OUTPUT_PATH = path.join(__dirname, '..', 'data', 'scraped-products.json');
+const SAVE_INTERVAL = 50;
+
+function loadExistingResults(): ScrapeResult | null {
+  if (!fs.existsSync(OUTPUT_PATH)) return null;
+  try {
+    const data = JSON.parse(fs.readFileSync(OUTPUT_PATH, 'utf8'));
+    console.log(`   📂 Found existing results: ${data.products?.length || 0} products`);
+    return {
+      products: data.products || [],
+      scrapedAt: new Date(data.scrapedAt),
+      errors: data.errors || [],
+    };
+  } catch {
+    return null;
+  }
+}
+
+function saveResults(result: ScrapeResult): void {
+  const dir = path.dirname(OUTPUT_PATH);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(result, null, 2));
+}
 
 function getSeasonUrl(season: number): string {
   return `${BASE_URL}/sharktankproducts/season-${season}-products/`;
@@ -60,7 +87,11 @@ function extractSharks(text: string): string[] {
     'Rohan Oza', 'Daniel Lubetzky', 'Sara Blakely', 
     'Bethenny Frankel', 'Ashton Kutcher', 'Alex Rodriguez',
     'Kendra Scott', 'Emma Grede', 'Tony Xu', 'Nirav Tolia',
-    'Guest Shark', 'Chris Sacca', 'Troy Carter', 'Richard Branson'
+    'Guest Shark', 'Chris Sacca', 'Troy Carter', 'Richard Branson',
+    'Kevin Hart', 'Gwyneth Paltrow', 'Charles Barkley', 'Maria Sharapova',
+    'Jamie Siminoff', 'Matt Higgins', 'Anne Wojcicki', 'Katrina Lake',
+    'Blake Mycoskie', 'Peter Jones', 'John Paul DeJoria', 'Jeff Foxworthy',
+    'Nick Woodman', 'Steve Tisch', 'Candace Nelson'
   ];
   
   const found: string[] = [];
@@ -202,11 +233,15 @@ export async function scrapeAllSharkTankProducts(options: {
   seasons?: number[];
   limit?: number;
   dryRun?: boolean;
+  resume?: boolean;
 }): Promise<ScrapeResult> {
+  const existing = options.resume ? loadExistingResults() : null;
+  const scrapedUrls = new Set(existing?.products.map(p => p.url) || []);
+  
   const result: ScrapeResult = {
-    products: [],
+    products: existing?.products || [],
     scrapedAt: new Date(),
-    errors: [],
+    errors: existing?.errors || [],
   };
   
   const seasons = options.seasons || Array.from({ length: 17 }, (_, i) => i + 1);
@@ -251,22 +286,34 @@ export async function scrapeAllSharkTankProducts(options: {
       return result;
     }
     
-    console.log('\n   Scraping product details...\n');
+    const urlsToScrape = allProductUrls.filter(url => !scrapedUrls.has(url));
+    console.log(`\n   Scraping product details... (${urlsToScrape.length} new, ${scrapedUrls.size} already done)\n`);
     
     let processed = 0;
-    for (const url of allProductUrls) {
+    const startCount = result.products.length;
+    
+    for (const url of urlsToScrape) {
       const product = await scrapeProductDetails(page, url);
       if (product) {
         result.products.push(product);
+      } else {
+        result.errors.push(`Failed to scrape: ${url}`);
       }
       processed++;
       
       if (processed % 10 === 0) {
-        console.log(`   [${processed}/${allProductUrls.length}] ${result.products.length} products scraped`);
+        console.log(`   [${processed}/${urlsToScrape.length}] ${result.products.length - startCount} new products scraped`);
       }
       
-      await new Promise(r => setTimeout(r, 500));
+      if (processed % SAVE_INTERVAL === 0) {
+        saveResults(result);
+        console.log(`   💾 Checkpoint saved (${result.products.length} total)`);
+      }
+      
+      await new Promise(r => setTimeout(r, 200));
     }
+    
+    saveResults(result);
     
     await context.close();
   } catch (err) {
@@ -289,6 +336,7 @@ export async function scrapeAllSharkTankProducts(options: {
 async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes('--dry-run');
+  const resume = args.includes('--resume');
   
   let seasons: number[] | undefined;
   const seasonIndex = args.indexOf('--season');
@@ -308,19 +356,10 @@ async function main() {
     limit = parseInt(args[limitIndex + 1], 10);
   }
   
-  const result = await scrapeAllSharkTankProducts({ seasons, limit, dryRun });
+  const result = await scrapeAllSharkTankProducts({ seasons, limit, dryRun, resume });
   
-  if (!dryRun && result.products.length > 0) {
-    console.log('\n📝 Sample products:');
-    for (const product of result.products.slice(0, 5)) {
-      console.log(`\n   ${product.name}`);
-      console.log(`      Season ${product.season}, Episode ${product.episode}`);
-      console.log(`      Category: ${product.category}`);
-      console.log(`      Outcome: ${product.dealOutcome}`);
-      if (product.sharks.length > 0) {
-        console.log(`      Sharks: ${product.sharks.join(', ')}`);
-      }
-    }
+  if (!dryRun) {
+    console.log(`\n💾 Saved ${result.products.length} products to ${OUTPUT_PATH}`);
   }
 }
 
