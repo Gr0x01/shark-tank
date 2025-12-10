@@ -21,15 +21,21 @@ Status: Phase 2 Complete
 | 3 | Database Schema | Dec 10 | ✅ Complete |
 | 4 | Product Scraping | Dec 10 | ✅ Complete (589 products) |
 | 5 | Product Enrichment | Dec 10 | ✅ Complete (589 enriched) |
-| 6 | Frontend Pages | - | ⏳ Pending |
+| 6 | Shark Seeding & Photos | Dec 10 | ✅ Complete (47 sharks) |
+| 7 | Shark-Product Links | Dec 10 | ✅ Complete (279 deals linked) |
+| 8 | Frontend Pages | - | ⏳ Pending |
 
 ## Current Status (as of Dec 10, 2025)
 
-**Data**: 589 Shark Tank products fully enriched
-- Scraped from allsharktankproducts.com
-- Enriched via Tavily search + OpenAI LLM
-- Complex deal types supported (royalty, contingent, multi-shark)
-- All stored in Supabase
+**Products**: 589 total
+- 279 deals (with shark investments)
+- 238 no deal
+- 67 deal fell through
+- 5 unknown
+
+**Sharks**: 47 total (8 main + 39 guest sharks)
+- All have photos in Supabase Storage (`shark-photos` bucket)
+- 279 deal products linked to correct sharks via `product_sharks` table
 
 **Stack**: Next.js 14, Supabase, Tailwind CSS, Playwright
 
@@ -47,12 +53,24 @@ Status: Phase 2 Complete
 - Slug generation
 - Upsert logic
 
+### Shark Management
+- `scripts/seed-sharks.ts` - Seeds all 47 Shark Tank sharks (main + guest)
+- `scripts/scrape-shark-photos.ts` - Tavily image search → Supabase Storage
+
 ### Enrichment Pipeline
 - `scripts/enrich-product.ts` - Single product testing
-- `scripts/batch-enrich.ts` - Parallel batch processing
+- `scripts/batch-enrich.ts` - Parallel batch processing (creates missing guest sharks)
+- `scripts/re-enrich-deals.ts` - Re-enrich shark links only for deal products
+- `scripts/fix-missing-sharks.ts` - Targeted fix for specific products
 - Tavily web search with caching
 - OpenAI synthesis with Zod validation
-- Token/cost tracking (~$0.35 total for 589 products)
+- Token/cost tracking
+
+### LLM Model Selection
+- Tested: gpt-4o-mini, gpt-4.1-mini, gpt-5-mini, gpt-5, gpt-5.1, claude-haiku-4.5
+- **Winner: gpt-4.1-mini** (100% accuracy, cheapest at ~$0.05 for 279 products)
+- gpt-4o-mini had hallucination issues (added sharks who made offers but didn't close deals)
+- Using Flex tier for 50% cost savings
 
 ### Database Migrations
 - `00001_initial_schema.sql` - Core tables
@@ -62,6 +80,9 @@ Status: Phase 2 Complete
 - Royalty-only deals (equity=0 → null)
 - LLM-invented deal types (equity_plus_contingent → contingent)
 - DB constraint violations fixed with nullIfZero()
+- Guest shark creation on-the-fly during enrichment
+- Multi-shark deals (up to 6 sharks on GoGo Gear)
+- LLM hallucination fix: gpt-4o-mini confused "made offer" with "closed deal"
 
 ## Phase 3 Goals
 
@@ -69,4 +90,3 @@ Status: Phase 2 Complete
 2. [ ] Product detail pages
 3. [ ] Shark portfolio pages
 4. [ ] Search functionality
-5. [ ] Product photo scraping (later)

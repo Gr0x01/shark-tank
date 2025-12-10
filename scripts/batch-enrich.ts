@@ -87,9 +87,18 @@ const SHARK_NAME_MAP: Record<string, string> = {
   'daymond john': 'daymond-john',
   "kevin o'leary": 'kevin-oleary',
   'kevin oleary': 'kevin-oleary',
+  'mr. wonderful': 'kevin-oleary',
   'lori greiner': 'lori-greiner',
   'robert herjavec': 'robert-herjavec',
 };
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
 async function getSharkIds(): Promise<Map<string, string>> {
   const { data, error } = await supabase.from('sharks').select('id, slug, name');
@@ -181,8 +190,29 @@ async function updateProduct(
     await supabase.from('product_sharks').delete().eq('product_id', productId);
 
     for (const shark of enriched.sharks) {
-      const sharkSlug = SHARK_NAME_MAP[shark.name.toLowerCase()];
-      const sharkId = sharkSlug ? sharkIds.get(sharkSlug) : sharkIds.get(shark.name.toLowerCase());
+      const normalizedName = shark.name.toLowerCase();
+      const sharkSlug = SHARK_NAME_MAP[normalizedName];
+      let sharkId = sharkSlug ? sharkIds.get(sharkSlug) : sharkIds.get(normalizedName);
+      
+      if (!sharkId) {
+        const newSlug = slugify(shark.name);
+        const { data: newShark, error: createError } = await supabase
+          .from('sharks')
+          .insert({
+            name: shark.name,
+            slug: newSlug,
+            is_guest_shark: true,
+          })
+          .select('id')
+          .single();
+        
+        if (!createError && newShark) {
+          sharkId = newShark.id;
+          sharkIds.set(normalizedName, sharkId);
+          sharkIds.set(newSlug, sharkId);
+          console.log(`      🦈 Created guest shark: ${shark.name}`);
+        }
+      }
       
       if (sharkId) {
         await supabase.from('product_sharks').insert({

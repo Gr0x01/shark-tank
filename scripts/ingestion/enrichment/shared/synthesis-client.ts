@@ -16,7 +16,7 @@ export interface SynthesisConfig {
 }
 
 let _openaiClient: OpenAI | null = null;
-let _config: Required<SynthesisConfig> = { model: 'gpt-4o-mini' };
+let _config: Required<SynthesisConfig> = { model: 'gpt-4.1-mini' };
 
 export function configure(config: SynthesisConfig): void {
   _config = { model: config.model ?? 'gpt-4o-mini' };
@@ -39,8 +39,9 @@ function getOpenAIClient(): OpenAI {
 export function estimateCost(usage: TokenUsage, model: string): number {
   const rates: Record<string, { input: number; output: number }> = {
     'gpt-4o-mini': { input: 0.075, output: 0.30 },
+    'gpt-4.1-mini': { input: 0.20, output: 0.80 },
   };
-  const r = rates[model] || { input: 0.15, output: 0.60 };
+  const r = rates[model] || { input: 0.20, output: 0.80 };
   return (usage.prompt / 1_000_000) * r.input + (usage.completion / 1_000_000) * r.output;
 }
 
