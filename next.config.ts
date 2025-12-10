@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'rhwfizaqeprgnslcagse.supabase.co',
+      },
+      {
+        protocol: 'https',
         hostname: 'upload.wikimedia.org',
       },
       {
