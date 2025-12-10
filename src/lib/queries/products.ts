@@ -169,3 +169,60 @@ export async function getSuccessStories(limit = 4): Promise<ProductWithSharks[]>
   if (error) throw error
   return (data as ProductWithSharks[]) || []
 }
+
+export async function getLatestEpisodeProducts(limit = 4): Promise<{
+  episode: { season: number; episode_number: number; air_date: string | null } | null
+  products: ProductWithSharks[]
+}> {
+  const supabase = await createClient()
+  
+  const { data: latestProduct, error: episodeError } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .not('season', 'is', null)
+    .not('episode_number', 'is', null)
+    .order('season', { ascending: false })
+    .order('episode_number', { ascending: false })
+    .limit(1)
+    .single()
+  
+  if (episodeError || !latestProduct) {
+    return { episode: null, products: [] }
+  }
+  
+  const product = latestProduct as ProductWithSharks
+  
+  const { data: products, error: productsError } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .eq('season', product.season as number)
+    .eq('episode_number', product.episode_number as number)
+    .limit(limit)
+  
+  if (productsError) throw productsError
+  
+  return {
+    episode: {
+      season: product.season as number,
+      episode_number: product.episode_number as number,
+      air_date: product.air_date
+    },
+    products: (products as ProductWithSharks[]) || []
+  }
+}
+
+export async function getTrendingProducts(limit = 6): Promise<ProductWithSharks[]> {
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .eq('status', 'active')
+    .eq('deal_outcome', 'deal')
+    .not('amazon_url', 'is', null)
+    .order('deal_amount', { ascending: false })
+    .limit(limit)
+  
+  if (error) throw error
+  return (data as ProductWithSharks[]) || []
+}

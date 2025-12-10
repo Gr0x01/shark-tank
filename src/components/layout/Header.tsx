@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 
 const navigation = [
+  { name: 'Just Aired', href: '/seasons', badge: true },
   { name: 'Products', href: '/products' },
   { name: 'Sharks', href: '/sharks' },
-  { name: 'Seasons', href: '/seasons' },
 ]
 
 export function Header() {
@@ -30,12 +30,15 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 className={clsx(
-                  'font-display text-sm font-medium transition-colors',
+                  'font-display text-sm font-medium transition-colors flex items-center gap-1.5',
                   pathname.startsWith(item.href)
-                    ? 'text-[var(--cyan-600)]'
+                    ? 'text-[var(--coral)]'
                     : 'text-[var(--ink-500)] hover:text-[var(--ink-900)]'
                 )}
               >
+                {item.badge && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--coral)] animate-pulse" />
+                )}
                 {item.name}
               </Link>
             ))}
