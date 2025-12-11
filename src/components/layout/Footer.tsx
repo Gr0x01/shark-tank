@@ -8,27 +8,27 @@ export function Footer() {
           <div>
             <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">Browse</h3>
             <ul className="space-y-2.5 text-[var(--ink-500)]">
-              <li><Link href="/products" className="hover:text-[var(--cyan-600)] transition-colors text-sm">All Products</Link></li>
-              <li><Link href="/sharks" className="hover:text-[var(--cyan-600)] transition-colors text-sm">The Sharks</Link></li>
-              <li><Link href="/seasons" className="hover:text-[var(--cyan-600)] transition-colors text-sm">By Season</Link></li>
+              <li><Link href="/products" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">All Products</Link></li>
+              <li><Link href="/sharks" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">The Sharks</Link></li>
+              <li><Link href="/seasons" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">By Season</Link></li>
             </ul>
           </div>
           
           <div>
             <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">Discover</h3>
             <ul className="space-y-2.5 text-[var(--ink-500)]">
-              <li><Link href="/products?status=active" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Still in Business</Link></li>
-              <li><Link href="/products?deal=deal" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Got a Deal</Link></li>
-              <li><Link href="/products?deal=no_deal" className="hover:text-[var(--cyan-600)] transition-colors text-sm">No Deal</Link></li>
+              <li><Link href="/still-in-business" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">Still in Business</Link></li>
+              <li><Link href="/products?deal=deal" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">Got a Deal</Link></li>
+              <li><Link href="/products?deal=no_deal" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">No Deal</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">Categories</h3>
             <ul className="space-y-2.5 text-[var(--ink-500)]">
-              <li><Link href="/categories/food-beverage" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Food & Beverage</Link></li>
-              <li><Link href="/categories/technology" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Technology</Link></li>
-              <li><Link href="/categories/health-wellness" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Health & Wellness</Link></li>
+              <li><Link href="/categories/food-beverage" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">Food & Beverage</Link></li>
+              <li><Link href="/categories/technology" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">Technology</Link></li>
+              <li><Link href="/categories/health-wellness" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">Health & Wellness</Link></li>
             </ul>
           </div>
 
