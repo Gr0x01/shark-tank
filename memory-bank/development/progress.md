@@ -1,7 +1,7 @@
 ---
-Last-Updated: 2025-12-10
+Last-Updated: 2025-12-11
 Maintainer: RB
-Status: Phase 2 Complete
+Status: Phase 3 In Progress
 ---
 
 # Progress Log: Shark Tank Products
@@ -23,15 +23,18 @@ Status: Phase 2 Complete
 | 5 | Product Enrichment | Dec 10 | ✅ Complete (589 enriched) |
 | 6 | Shark Seeding & Photos | Dec 10 | ✅ Complete (47 sharks) |
 | 7 | Shark-Product Links | Dec 10 | ✅ Complete (279 deals linked) |
-| 8 | Frontend Pages | - | ⏳ Pending |
+| 8 | Narrative Enrichment | Dec 11 | ✅ Pipeline Ready (3 tested) |
+| 9 | Product Page Redesign | Dec 11 | ✅ Complete |
+| 10 | Frontend Pages | - | ⏳ In Progress |
 
-## Current Status (as of Dec 10, 2025)
+## Current Status (as of Dec 11, 2025)
 
 **Products**: 589 total
 - 279 deals (with shark investments)
 - 238 no deal
 - 67 deal fell through
 - 5 unknown
+- 3 with narrative content (tested: SneakERASERS, Grinds Coffee Pouches, Toygaroo)
 
 **Sharks**: 47 total (8 main + 39 guest sharks)
 - All have photos in Supabase Storage (`shark-photos` bucket)
@@ -84,9 +87,41 @@ Status: Phase 2 Complete
 - Multi-shark deals (up to 6 sharks on GoGo Gear)
 - LLM hallucination fix: gpt-4o-mini confused "made offer" with "closed deal"
 
-## Phase 3 Goals
+## Phase 3 Deliverables
 
-1. [ ] Product listing page with filters
-2. [ ] Product detail pages
+### Narrative Enrichment Pipeline (`scripts/enrich-narratives.ts`)
+- SEO-optimized long-form content generation for product pages
+- 6 narrative sections: origin_story, pitch_journey, deal_dynamics, after_tank, current_status, where_to_buy
+- Tavily web search for research + OpenAI gpt-4.1-mini for synthesis
+- Database fields: `narrative_content` (JSONB), `narrative_version`, `narrative_generated_at`
+- Flags: `--product`, `--limit`, `--dry-run`, `--json`
+- Rate limiting: 1.5s delay between requests
+- Cost: ~$0.001/product (~$0.60 for all 589)
+
+### Product Page Redesign (`src/app/products/[slug]/page.tsx`)
+- Editorial magazine-style layout
+- Hero section with product image, deal stats, shark chips
+- 6 narrative sections with SEO-optimized headings:
+  - "The Origin Story"
+  - "Inside the Tank"
+  - "Making the Deal" / "Why No Deal"
+  - "[Product] After Shark Tank"
+  - "Is [Product] Still in Business?"
+  - "Where to Buy [Product]"
+- Revenue stats display (lifetime/annual)
+- Fallback to existing content when no narrative
+- Enhanced SEO metadata with deal status in title
+
+### Database Migration (`00004_narrative_content.sql`)
+- Added `narrative_content` JSONB column
+- Added `narrative_version` INTEGER (0 = needs generation)
+- Added `narrative_generated_at` TIMESTAMPTZ
+- Partial index for finding products needing enrichment
+- Recreated `products_with_sharks` view
+
+## Phase 3 Remaining Goals
+
+1. [ ] Batch enrich all 589 products with narrative content
+2. [ ] Product listing page with filters
 3. [ ] Shark portfolio pages
 4. [ ] Search functionality

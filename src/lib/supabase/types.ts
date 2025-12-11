@@ -1,6 +1,16 @@
 export type ProductStatus = 'active' | 'out_of_business' | 'acquired' | 'unknown'
 export type EnrichmentStatus = 'pending' | 'enriched' | 'failed' | 'stale'
 export type DealOutcome = 'deal' | 'no_deal' | 'deal_fell_through' | 'unknown'
+export type DealType = 'equity' | 'royalty' | 'loan' | 'equity_plus_royalty' | 'equity_plus_loan' | 'contingent' | 'unknown'
+
+export interface NarrativeContent {
+  origin_story?: string | null
+  pitch_journey?: string | null
+  deal_dynamics?: string | null
+  after_tank?: string | null
+  current_status?: string | null
+  where_to_buy?: string | null
+}
 
 export interface Shark {
   id: string
@@ -88,6 +98,14 @@ export interface Product {
   enrichment_status: EnrichmentStatus
   enrichment_source: string | null
   last_enriched_at: string | null
+  deal_type: DealType
+  royalty_percent: number | null
+  lifetime_revenue: number | null
+  annual_revenue: number | null
+  revenue_year: number | null
+  narrative_content: NarrativeContent | null
+  narrative_version: number | null
+  narrative_generated_at: string | null
   created_at: string
   updated_at: string
 }

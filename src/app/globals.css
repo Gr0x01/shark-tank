@@ -2599,3 +2599,346 @@ h3, h4, h5, h6 {
   color: var(--coral);
   text-transform: uppercase;
 }
+
+/* ==========================================
+   PRODUCT PAGE - Editorial Magazine Style
+   ========================================== */
+
+.product-hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--ink-100);
+}
+
+.product-breadcrumb {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-400);
+  transition: color 0.15s ease;
+}
+
+.product-breadcrumb:hover {
+  color: var(--coral);
+}
+
+.product-hero-image {
+  position: relative;
+  background: var(--cream);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.product-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.product-episode-badge {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--coral);
+  background: rgba(255, 107, 107, 0.08);
+  padding: 0.375rem 0.75rem;
+  display: inline-block;
+  width: fit-content;
+}
+
+.product-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ink-900);
+  margin: 0.5rem 0;
+}
+
+.product-company {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-400);
+}
+
+.product-tagline {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 300;
+  color: var(--ink-600);
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.product-stats-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin: 1.5rem 0;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--ink-100);
+  border-bottom: 1px solid var(--ink-100);
+}
+
+.product-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.product-stat-label {
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ink-400);
+}
+
+.product-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink-900);
+  letter-spacing: -0.02em;
+}
+
+.product-stat-detail {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-500);
+}
+
+.product-stat-deal {
+  color: var(--success);
+}
+
+.product-stat-nodeal {
+  color: var(--danger);
+}
+
+.product-stat-fell-through {
+  color: var(--warning);
+}
+
+.product-stat-divider {
+  width: 1px;
+  height: 50px;
+  background: var(--ink-200);
+  align-self: center;
+}
+
+.product-sharks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.product-sharks-label {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-400);
+}
+
+.product-sharks-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.product-shark-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem 0.375rem 0.375rem;
+  background: var(--cream);
+  border: 1px solid var(--ink-100);
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-700);
+  transition: all 0.15s ease;
+}
+
+.product-shark-chip:hover {
+  border-color: var(--shark-blue);
+  background: rgba(30, 58, 138, 0.05);
+  color: var(--shark-blue);
+}
+
+.product-cta-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.product-verified {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--ink-400);
+  margin-top: 0.5rem;
+}
+
+/* Narrative Sections */
+.product-narrative {
+  padding: 4rem 0;
+  background: var(--warm-white);
+}
+
+.narrative-section {
+  margin-bottom: 3rem;
+}
+
+.narrative-section:last-child {
+  margin-bottom: 0;
+}
+
+.narrative-heading {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--ink-900);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.narrative-heading::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.25em;
+  width: 3px;
+  height: 1em;
+  background: var(--coral);
+}
+
+.narrative-text {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  font-weight: 300;
+  color: var(--ink-700);
+  line-height: 1.8;
+}
+
+.narrative-cta-section {
+  background: var(--white);
+  padding: 2rem;
+  border: 1px solid var(--ink-100);
+  margin-top: 2rem;
+}
+
+.narrative-cta-section .narrative-heading {
+  padding-left: 0;
+}
+
+.narrative-cta-section .narrative-heading::before {
+  display: none;
+}
+
+.narrative-cta-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+/* Revenue Section */
+.product-revenue-section {
+  padding: 3rem 0;
+  background: var(--cream);
+  border-top: 1px solid var(--ink-100);
+}
+
+.product-revenue-grid {
+  display: flex;
+  gap: 3rem;
+  margin-top: 1.5rem;
+}
+
+.product-revenue-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.product-revenue-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 200;
+  color: var(--success);
+  letter-spacing: -0.03em;
+}
+
+.product-revenue-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-500);
+}
+
+/* Episode Link Section */
+.product-episode-section {
+  padding: 2rem 0;
+  background: var(--white);
+  border-top: 1px solid var(--ink-100);
+}
+
+.product-episode-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: var(--cream);
+  border: 1px solid var(--ink-100);
+  transition: all 0.2s ease;
+}
+
+.product-episode-link:hover {
+  border-color: var(--coral);
+  transform: translateX(4px);
+}
+
+.product-episode-link-label {
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ink-400);
+}
+
+.product-episode-link-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink-900);
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.product-episode-link-arrow {
+  font-size: 1.25rem;
+  color: var(--coral);
+  transition: transform 0.2s ease;
+}
+
+.product-episode-link:hover .product-episode-link-arrow {
+  transform: translateX(4px);
+}
