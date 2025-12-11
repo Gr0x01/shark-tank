@@ -1,10 +1,48 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getSeasons, getSeasonStats } from '@/lib/queries/episodes'
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
+import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
-export const metadata: Metadata = {
-  title: 'All Seasons | Shark Tank Products',
-  description: 'Browse all 16+ seasons of Shark Tank. See every product pitched and every deal made.',
+export async function generateMetadata(): Promise<Metadata> {
+  const title = 'All Seasons | tankd.io'
+  const description = 'Browse all 17+ seasons of Shark Tank. See every product pitched and every deal made, season by season.'
+
+  return {
+    title,
+    description,
+    keywords: [
+      'Shark Tank seasons',
+      'all seasons',
+      'episodes',
+      'season 1',
+      'season 17',
+      'products by season',
+      'Shark Tank history'
+    ],
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/seasons`,
+      siteName: SITE_NAME,
+      images: [{
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: 'Browse Shark Tank by Season'
+      }],
+      type: 'website'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE]
+    },
+    alternates: {
+      canonical: `${SITE_URL}/seasons`
+    }
+  }
 }
 
 export default async function SeasonsPage() {
@@ -17,8 +55,31 @@ export default async function SeasonsPage() {
     }))
   )
 
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Seasons' }
+  ])
+
+  const collectionSchema = createCollectionPageSchema(
+    'All Shark Tank Seasons',
+    'Browse products from every season of Shark Tank',
+    `${SITE_URL}/seasons`,
+    seasons.length
+  )
+
   return (
-    <main className="min-h-screen py-12 px-6">
+    <>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(collectionSchema) }}
+      />
+
+      <main className="min-h-screen py-12 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="mb-10">
           <p className="section-label mb-2">Browse</p>
@@ -54,5 +115,6 @@ export default async function SeasonsPage() {
         )}
       </div>
     </main>
+    </>
   )
 }

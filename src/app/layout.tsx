@@ -9,10 +9,9 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Metadata is now handled by individual pages (especially homepage in page.tsx)
+// Keeping robots directive at layout level
 export const metadata: Metadata = {
-  title: "Shark Tank Products | Every Product Ever Pitched",
-  description: "The complete directory of Shark Tank products. Find out which products are still in business, where to buy them, and what deals were made.",
-  keywords: ["Shark Tank", "Shark Tank products", "where to buy", "still in business", "deals"],
   robots: "index, follow",
 };
 

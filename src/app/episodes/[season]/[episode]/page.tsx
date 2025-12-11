@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getEpisode, getEpisodeProducts } from '@/lib/queries/episodes'
 import { ProductListCard } from '@/components/ui/ProductListCard'
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
+import { createBreadcrumbSchema, createTVEpisodeSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
 type Props = {
   params: Promise<{ season: string; episode: string }>
@@ -16,9 +18,51 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Episode Not Found' }
   }
 
+  const title = episodeData.seo_title ||
+    `Season ${season} Episode ${ep}${episodeData.title ? ` - ${episodeData.title}` : ''} | tankd.io`
+
+  const description = episodeData.meta_description ||
+    `Products from Shark Tank Season ${season} Episode ${ep}. ${episodeData.air_date ? `Aired ${new Date(episodeData.air_date).toLocaleDateString()}.` : ''} See what deals were made and where to buy.`
+
+  // Build keywords dynamically
+  const keywords = [
+    `Shark Tank Season ${season} Episode ${ep}`,
+    `S${season}E${ep}`,
+    'Shark Tank episode',
+    ...(episodeData.title ? [episodeData.title] : []),
+    ...(episodeData.air_date ? [
+      new Date(episodeData.air_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    ] : []),
+    'products',
+    'deals'
+  ]
+
   return {
-    title: episodeData.seo_title || `Season ${season} Episode ${ep} | Shark Tank Products`,
-    description: episodeData.meta_description || `Products from Shark Tank Season ${season} Episode ${ep}`,
+    title,
+    description,
+    keywords,
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/episodes/${season}/${ep}`,
+      siteName: SITE_NAME,
+      images: [{
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: `Shark Tank Season ${season} Episode ${ep}`
+      }],
+      type: 'video.episode' // Specific OG type for TV episodes
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE]
+    },
+    alternates: {
+      canonical: `/episodes/${season}/${ep}`
+    }
   }
 }
 
@@ -36,8 +80,34 @@ export default async function EpisodePage({ params }: Props) {
     notFound()
   }
 
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Seasons', url: `${SITE_URL}/seasons` },
+    { name: `Season ${season}`, url: `${SITE_URL}/seasons/${season}` },
+    { name: `Episode ${ep}` }
+  ])
+
+  const tvEpisodeSchema = createTVEpisodeSchema(
+    seasonNum,
+    episodeNum,
+    episodeData?.air_date || undefined,
+    episodeData?.title || undefined,
+    episodeData?.description || undefined
+  )
+
   return (
-    <main className="min-h-screen py-12 px-6">
+    <>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(tvEpisodeSchema) }}
+      />
+
+      <main className="min-h-screen py-12 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <Link href={`/seasons/${season}`} className="text-sm text-[var(--cyan-600)] hover:underline underline-offset-4 font-display">
@@ -83,6 +153,7 @@ export default async function EpisodePage({ params }: Props) {
         </section>
       </div>
     </main>
+    </>
   )
 }
 
