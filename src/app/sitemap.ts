@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createStaticClient } from '@/lib/supabase/server'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'
 
 interface ProductSlug {
   slug: string

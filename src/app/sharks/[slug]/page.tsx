@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Shark Not Found' }
   }
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'
 
   // Enhanced title with stats
   const title = shark.seo_title ||
@@ -157,7 +157,7 @@ export default async function SharkPage({ params, searchParams }: Props) {
   const categories: Category[] = categoriesData.data || []
   const currentSeason = 17 // TODO: Get from database or config
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'
 
   // Extract narrative content
   const narrative = isSharkNarrative(shark.narrative_content)

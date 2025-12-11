@@ -24,7 +24,7 @@ interface NarrativeContent {
   where_to_buy?: string | null
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
