@@ -10,7 +10,7 @@ Status: Phase 3 In Progress
 
 **Phase 1 (Dec 2025)**: Project setup - COMPLETE
 **Phase 2 (Dec 2025)**: Data ingestion - COMPLETE
-**Phase 3 (Dec 2025)**: Frontend development - NEXT
+**Phase 3 (Dec 2025)**: Frontend + New Episode Workflow - IN PROGRESS
 
 ## Key Milestones
 
@@ -25,7 +25,8 @@ Status: Phase 3 In Progress
 | 7 | Shark-Product Links | Dec 10 | ✅ Complete (279 deals linked) |
 | 8 | Narrative Enrichment | Dec 11 | ✅ Pipeline Ready (3 tested) |
 | 9 | Product Page Redesign | Dec 11 | ✅ Complete |
-| 10 | Frontend Pages | - | ⏳ In Progress |
+| 10 | New Episode Workflow | Dec 11 | ✅ Complete (3 scripts) |
+| 11 | Frontend Pages | - | ⏳ In Progress |
 
 ## Current Status (as of Dec 11, 2025)
 
@@ -118,6 +119,39 @@ Status: Phase 3 In Progress
 - Added `narrative_generated_at` TIMESTAMPTZ
 - Partial index for finding products needing enrichment
 - Recreated `products_with_sharks` view
+
+### New Episode Workflow (Dec 11)
+
+Scripts for ingesting new Shark Tank episodes as they air:
+
+1. **`scripts/new-episode.ts`** - Create products for a new episode
+   - Takes product names + season/episode
+   - Creates products with `deal_outcome: 'unknown'`
+   - Runs enrichment for backstory (Tavily + OpenAI)
+   - Usage: `npx tsx scripts/new-episode.ts "Product A" "Product B" --season 17 --episode 8`
+
+2. **`scripts/update-deal.ts`** - Add deal details after watching
+   - Finds product by name/slug
+   - Updates deal outcome, amounts, equity, sharks
+   - Supports royalty deals, multi-shark deals
+   - Usage: `npx tsx scripts/update-deal.ts "Product A" --deal --amount 200000 --equity 20 --sharks "Lori"`
+
+3. **`scripts/daily-enrich-pending.ts`** - Safety net cron
+   - Re-searches for deal info on products with `deal_outcome: 'unknown'`
+   - Only updates with high-confidence results
+   - Tracks attempts, gives up after 7 tries
+   - Usage: `npx tsx scripts/daily-enrich-pending.ts`
+
+**Friday Workflow:**
+1. Episode airs Friday 8pm ET
+2. Find product names (Google, Reddit, competitor)
+3. Run `new-episode.ts` → pages live with backstory
+4. Watch episode, note deals
+5. Run `update-deal.ts` for each product
+6. Daily cron catches anything missed
+
+**Database Migration:**
+- `00005_deal_search_tracking.sql` - Adds `deal_search_attempts` column
 
 ## Phase 3 Remaining Goals
 
