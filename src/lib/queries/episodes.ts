@@ -5,14 +5,15 @@ export async function getSeasons(): Promise<number[]> {
   const supabase = await createClient()
 
   const { data, error } = await supabase
-    .from('episodes')
+    .from('products')
     .select('season')
+    .not('season', 'is', null)
     .order('season', { ascending: false })
 
   if (error) throw error
 
-  const episodes = (data as Pick<Episode, 'season'>[]) || []
-  const seasons = [...new Set(episodes.map(e => e.season))]
+  const products = (data as Pick<Product, 'season'>[]) || []
+  const seasons = [...new Set(products.map(p => p.season).filter((s): s is number => s !== null))]
   return seasons
 }
 
@@ -23,14 +24,15 @@ export async function getSeasonNumbers(): Promise<number[]> {
   const supabase = createStaticClient()
 
   const { data, error } = await supabase
-    .from('episodes')
+    .from('products')
     .select('season')
+    .not('season', 'is', null)
     .order('season', { ascending: false })
 
   if (error) throw error
 
-  const episodes = (data as Pick<Episode, 'season'>[]) || []
-  return [...new Set(episodes.map(e => e.season))]
+  const products = (data as Pick<Product, 'season'>[]) || []
+  return [...new Set(products.map(p => p.season).filter((s): s is number => s !== null))]
 }
 
 export async function getEpisodesBySeason(season: number): Promise<Episode[]> {
