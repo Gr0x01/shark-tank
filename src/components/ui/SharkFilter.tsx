@@ -48,12 +48,12 @@ export function SharkFilter({ sharks, stats, maxDeals, maxActive, maxSuccess, st
             <Link
               key={shark.id}
               href={`/sharks/${shark.slug}`}
-              className="card group relative cursor-pointer hover:shadow-lg transition-all duration-300 animate-fadeIn"
+              className="card group relative cursor-pointer hover:shadow-2xl hover:shadow-[var(--cyan-600)]/10 transition-all duration-300 animate-fadeIn overflow-visible"
             >
               {/* Investment Style Tag */}
               {shark.investment_style && (
                 <div
-                  className="absolute -top-1 -right-1 px-2.5 py-1 rounded-full font-display font-bold text-[10px] uppercase tracking-wider transform rotate-2 shadow-sm z-10"
+                  className="absolute -top-1 -right-1 px-2.5 py-1 rounded-full font-display font-bold text-[10px] uppercase tracking-wider transform rotate-2 shadow-sm z-10 group-hover:rotate-6 group-hover:scale-105 transition-all duration-300"
                   style={{
                     backgroundColor: styleColors[shark.investment_style]?.bg || 'var(--ink-300)',
                     color: styleColors[shark.investment_style]?.text || 'var(--ink-900)'
@@ -64,16 +64,24 @@ export function SharkFilter({ sharks, stats, maxDeals, maxActive, maxSuccess, st
               )}
 
               <div className="flex items-center gap-4 mb-5">
-                <div className="overflow-hidden rounded-full">
-                  <SharkImage
-                    src={shark.photo_url}
-                    name={shark.name}
-                    size="lg"
-                    className="group-hover:border-[var(--cyan-600)] group-hover:scale-110 transition-all duration-500 ease-out"
-                  />
+                <div className="relative">
+                  {/* Glow ring on hover */}
+                  <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 -m-1">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[var(--cyan-600)] to-[var(--shark-blue)] opacity-20 blur-md animate-pulse" />
+                  </div>
+
+                  <div className="relative overflow-hidden rounded-full ring-2 ring-transparent group-hover:ring-[var(--shark-blue)] group-hover:ring-offset-2 group-hover:ring-offset-[var(--cream)] transition-all duration-500">
+                    <SharkImage
+                      src={shark.photo_url}
+                      name={shark.name}
+                      size="lg"
+                      className="group-hover:scale-110 transition-transform duration-500 ease-out"
+                    />
+                  </div>
                 </div>
+
                 <div className="flex-1">
-                  <h2 className="text-xl font-display font-medium text-[var(--ink-900)] group-hover:text-[var(--cyan-600)] group-hover:-translate-y-0.5 transition-all duration-300">
+                  <h2 className="text-xl font-display font-semibold text-[var(--ink-900)] group-hover:text-[var(--cyan-600)] group-hover:-translate-y-0.5 transition-all duration-300">
                     {shark.name}
                   </h2>
                 </div>
