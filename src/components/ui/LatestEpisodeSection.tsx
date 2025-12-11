@@ -95,16 +95,14 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
                   )}
                   <div className="ep-card-overlay">
                     <h4 className="ep-card-name">{product.name}</h4>
+                    {product.asking_amount && product.asking_equity ? (
+                      <span className="ep-card-ask-inline">{formatMoney(product.asking_amount)} for {product.asking_equity}%</span>
+                    ) : (
+                      <span className="ep-card-ask-inline unknown">Ask unknown</span>
+                    )}
                   </div>
                 </div>
                 
-                <div className="ep-card-ask">
-                  {product.asking_amount && product.asking_equity ? (
-                    <span>{formatMoney(product.asking_amount)} for {product.asking_equity}%</span>
-                  ) : (
-                    <span className="ep-card-ask-unknown">Ask unknown</span>
-                  )}
-                </div>
                 
                 <button
                   className={`ep-card-spoiler ${isRevealed ? 'revealed' : ''}`}
