@@ -1,14 +1,18 @@
 import Link from 'next/link'
-import { getProductStats, getRecentProducts } from '@/lib/queries/products'
+import { getProductStats, getRecentProducts, getLatestEpisodeProducts } from '@/lib/queries/products'
 import { getCategories } from '@/lib/queries/categories'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
+import { LatestEpisodeSection } from '@/components/ui/LatestEpisodeSection'
 
 export default async function Home() {
-  const [stats, categories, products] = await Promise.all([
+  const [stats, categories, products, latestEpisode] = await Promise.all([
     getProductStats(),
     getCategories(),
     getRecentProducts(12),
+    getLatestEpisodeProducts(4),
   ])
+
+  const currentSeason = latestEpisode.episode?.season || 16
 
   return (
     <main className="min-h-screen bg-[var(--warm-white)]">
@@ -43,7 +47,7 @@ export default async function Home() {
       <section className="category-nav">
         <div className="max-w-6xl mx-auto px-6">
           <div className="category-nav-inner">
-            {categories.slice(0, 8).map((cat) => (
+            {categories.slice(0, 6).map((cat) => (
               <Link
                 key={cat.id}
                 href={`/categories/${cat.slug}`}
@@ -52,6 +56,9 @@ export default async function Home() {
                 {cat.name}
               </Link>
             ))}
+            <Link href={`/seasons/${currentSeason}`} className="category-nav-link category-nav-season">
+              Season {currentSeason}
+            </Link>
             <Link href="/products" className="category-nav-link category-nav-all">
               All Products
             </Link>
@@ -59,10 +66,17 @@ export default async function Home() {
         </div>
       </section>
 
+      {latestEpisode.episode && (
+        <LatestEpisodeSection 
+          episode={latestEpisode.episode} 
+          products={latestEpisode.products} 
+        />
+      )}
+
       <section className="products-main">
         <div className="max-w-6xl mx-auto px-6">
           <div className="products-header">
-            <h2 className="products-title">Recent Products</h2>
+            <h2 className="products-title">Recently Aired</h2>
             <Link href="/products" className="products-link">
               View all {stats.total} →
             </Link>
@@ -85,11 +99,28 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="season-browser">
+        <div className="max-w-6xl mx-auto px-6">
+          <h3 className="season-browser-title">Browse by Season</h3>
+          <div className="season-browser-list">
+            {Array.from({ length: currentSeason }, (_, i) => currentSeason - i).map((season) => (
+              <Link
+                key={season}
+                href={`/seasons/${season}`}
+                className={`season-browser-link ${season === currentSeason ? 'current' : ''}`}
+              >
+                Season {season}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="bottom-cta">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="bottom-cta-text">
-            <span className="text-[var(--success)]">{stats.active}</span> active businesses &middot; 
-            <span className="text-[var(--gold)]"> {stats.gotDeal}</span> got deals &middot; 
+            <span className="text-[var(--success)]">{stats.active}</span> active businesses · 
+            <span className="text-[var(--gold)]"> {stats.gotDeal}</span> got deals · 
             <span className="text-[var(--ink-400)]"> {stats.outOfBusiness}</span> out of business
           </p>
         </div>

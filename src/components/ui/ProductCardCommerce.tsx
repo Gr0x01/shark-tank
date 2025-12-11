@@ -9,6 +9,10 @@ interface ProductCardCommerceProps {
   product: ProductWithSharks
   showTrending?: boolean
   rank?: number
+  compact?: boolean
+  spoiler?: boolean
+  hideEpisodeInfo?: boolean
+  hideBadges?: boolean
 }
 
 function formatMoney(amount: number | null): string {
@@ -18,17 +22,18 @@ function formatMoney(amount: number | null): string {
   return `$${amount.toLocaleString()}`
 }
 
-function formatVerifiedDate(date: string | null): string {
-  if (!date) return 'Unverified'
+function isDataStale(date: string | null): boolean {
+  if (!date) return true
   const d = new Date(date)
   const now = new Date()
   const diffDays = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
-  
-  if (diffDays === 0) return 'Today'
-  if (diffDays === 1) return 'Yesterday'
-  if (diffDays < 7) return `${diffDays}d ago`
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return diffDays > 30
+}
+
+function formatStaleDate(date: string | null): string {
+  if (!date) return 'Unverified'
+  const d = new Date(date)
+  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
 function getStatusConfig(status: string) {
@@ -44,15 +49,26 @@ function getStatusConfig(status: string) {
   }
 }
 
-export function ProductCardCommerce({ product, showTrending = false, rank }: ProductCardCommerceProps) {
+export function ProductCardCommerce({ product, showTrending = false, rank, compact = false, spoiler = false, hideEpisodeInfo = false, hideBadges = false }: ProductCardCommerceProps) {
   const [imgError, setImgError] = useState(false)
+  const [revealed, setRevealed] = useState(false)
+  
+  const showDealInfo = !spoiler || revealed
   
   const hasShopLink = product.amazon_url || product.website_url
   const shopUrl = product.amazon_url || product.website_url || `/products/${product.slug}`
   const isExternal = product.amazon_url || product.website_url
+  
+  // Format asking amount for display
+  const askingFormatted = product.asking_amount && product.asking_equity 
+    ? `Asked for ${formatMoney(product.asking_amount)} for ${product.asking_equity}%`
+    : null
+  
+  // Only show freshness warning if data is stale (>30 days)
+  const showFreshnessWarning = isDataStale(product.last_enriched_at)
 
   return (
-    <div className="product-card-commerce group">
+    <div className={`product-card-commerce group ${compact ? 'compact' : ''}`}>
       <Link href={`/products/${product.slug}`} className="block">
         <div className="product-image-wrapper">
           {product.photo_url && !imgError ? (
@@ -61,61 +77,69 @@ export function ProductCardCommerce({ product, showTrending = false, rank }: Pro
               alt={product.name}
               width={400}
               height={300}
-              className="w-full aspect-[4/3] object-cover"
+              className={`w-full object-cover ${compact ? 'aspect-square' : 'aspect-[4/3]'}`}
               onError={() => setImgError(true)}
             />
           ) : (
-            <div className="w-full aspect-[4/3] bg-[var(--cream)] flex items-center justify-center">
+            <div className={`w-full bg-[var(--cream)] flex items-center justify-center ${compact ? 'aspect-square' : 'aspect-[4/3]'}`}>
               <svg className="w-12 h-12 text-[var(--ink-300)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
             </div>
           )}
           
-          <div className="badges">
-            {showTrending && (
-              <span className="badge-trending">
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
-                </svg>
-                Trending
-              </span>
-            )}
-            {rank && rank <= 3 && (
-              <span className="badge-rank">
-                {rank}
-              </span>
-            )}
-            {product.status === 'active' && !showTrending && !rank && (
-              <span className="badge-active">Active</span>
-            )}
-          </div>
-
-          {hasShopLink && (
-            <div className="quick-shop-overlay">
-              <a 
-                href={shopUrl}
-                target={isExternal ? "_blank" : undefined}
-                rel={isExternal ? "noopener noreferrer" : undefined}
-                className="btn-shop"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {product.amazon_url ? 'Shop on Amazon' : 'Visit Store'}
-              </a>
+          {!hideBadges && (
+            <div className="badges">
+              {showTrending && (
+                <span className="badge-trending">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
+                  </svg>
+                  Trending
+                </span>
+              )}
+              {rank && rank <= 3 && (
+                <span className="badge-rank">
+                  {rank}
+                </span>
+              )}
+              {product.status === 'active' && !showTrending && !rank && (
+                <span className="badge-active">Active</span>
+              )}
             </div>
           )}
-          
-          <div className="freshness-indicator">
-            <span className={`status-dot ${getStatusConfig(product.status).className}`} />
-            <span className="verified-text">
-              {getStatusConfig(product.status).label} · {formatVerifiedDate(product.last_enriched_at)}
-            </span>
-          </div>
+
+          {showFreshnessWarning && (
+            <div className="freshness-indicator stale">
+              <span className="verified-text">
+                Last checked {formatStaleDate(product.last_enriched_at)}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="card-body">
-          {product.deal_outcome === 'deal' && product.shark_names && product.shark_names.length > 0 && (
-            <p className="shark-attribution">
+          {!compact && !hideEpisodeInfo && (
+            <div className="episode-context">
+              {product.season && product.episode_number && (
+                <span className="episode-info">
+                  S{product.season}E{product.episode_number}
+                </span>
+              )}
+              {product.founder_names && product.founder_names.length > 0 && (
+                <span className="founder-info">
+                  by {product.founder_names.join(' & ')}
+                </span>
+              )}
+            </div>
+          )}
+          
+          {!compact && hideEpisodeInfo && product.founder_names && product.founder_names.length > 0 && (
+            <p className="founder-info">by {product.founder_names.join(' & ')}</p>
+          )}
+          
+          {!compact && !showDealInfo && product.deal_outcome === 'deal' && product.shark_names && product.shark_names.length > 0 && (
+            <p className="shark-attribution spoiler-hidden">
               {product.shark_names[0]}&apos;s Pick
             </p>
           )}
@@ -124,19 +148,42 @@ export function ProductCardCommerce({ product, showTrending = false, rank }: Pro
             {product.name}
           </h3>
           
-          {product.tagline && (
+          {!compact && product.tagline && (
             <p className="product-tagline">{product.tagline}</p>
+          )}
+          
+          {!compact && askingFormatted && (
+            <p className="asking-info">{askingFormatted}</p>
           )}
 
           <div className="card-footer">
             <div className="footer-left">
-              {product.deal_amount && (
-                <span className="deal-info">
-                  {formatMoney(product.deal_amount)} deal
-                </span>
-              )}
-              {product.deal_outcome === 'no_deal' && (
-                <span className="no-deal-info">No Deal</span>
+              {showDealInfo ? (
+                <>
+                  {product.deal_outcome === 'deal' && product.deal_amount && (
+                    <span className="deal-info">{formatMoney(product.deal_amount)} deal</span>
+                  )}
+                  {product.deal_outcome === 'deal' && product.shark_names && product.shark_names.length > 0 && (
+                    <span className="deal-shark">w/ {product.shark_names[0]}</span>
+                  )}
+                  {product.deal_outcome === 'no_deal' && (
+                    <span className="no-deal-info">No Deal</span>
+                  )}
+                  {product.deal_outcome === 'deal_fell_through' && (
+                    <span className="deal-fell-through">Deal Fell Through</span>
+                  )}
+                </>
+              ) : (
+                <button 
+                  className="reveal-deal-btn"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    setRevealed(true)
+                  }}
+                >
+                  Deal: ??????
+                </button>
               )}
             </div>
             
@@ -148,7 +195,7 @@ export function ProductCardCommerce({ product, showTrending = false, rank }: Pro
                 className="shop-link"
                 onClick={(e) => e.stopPropagation()}
               >
-                Shop →
+                {product.amazon_url ? 'Amazon' : 'Buy Now'} →
               </a>
             )}
           </div>

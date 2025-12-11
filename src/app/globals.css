@@ -671,11 +671,24 @@ h3, h4, h5, h6 {
 
 .product-card-commerce .card-footer {
   display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ink-100);
+}
+
+.product-card-commerce .footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.product-card-commerce .footer-actions {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--ink-100);
+  gap: 0.75rem;
 }
 
 .product-card-commerce .deal-info {
@@ -686,17 +699,23 @@ h3, h4, h5, h6 {
 }
 
 .product-card-commerce .shop-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
   font-family: var(--font-display);
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--coral);
-  transition: color 0.2s ease;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  background: var(--coral);
+  padding: 0.5rem 0.875rem;
+  transition: all 0.2s ease;
 }
 
 .product-card-commerce .shop-link:hover {
-  color: var(--ink-900);
+  background: var(--ink-900);
+  color: var(--white);
 }
 
 .product-card-commerce .freshness-indicator {
@@ -706,44 +725,108 @@ h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(217, 119, 6, 0.95);
   backdrop-filter: blur(4px);
   padding: 0.375rem 0.625rem;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.product-card-commerce .status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.product-card-commerce .status-dot.status-active {
-  background: var(--success);
-  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
-}
-
-.product-card-commerce .status-dot.status-closed {
-  background: var(--danger);
-}
-
-.product-card-commerce .status-dot.status-acquired {
-  background: var(--shark-blue);
-}
-
-.product-card-commerce .status-dot.status-unknown {
-  background: var(--ink-300);
 }
 
 .product-card-commerce .verified-text {
   font-family: var(--font-display);
   font-size: 0.5625rem;
   font-weight: 600;
-  color: var(--ink-600);
+  color: var(--white);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* Episode Card Enhancements */
+.product-card-commerce .episode-context {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.625rem;
+  flex-wrap: wrap;
+}
+
+.product-card-commerce .episode-info {
+  font-family: var(--font-display);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: var(--coral);
+  background: rgba(255, 107, 107, 0.1);
+  padding: 0.1875rem 0.375rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.product-card-commerce .founder-info {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--ink-500);
+  font-style: italic;
+}
+
+.product-card-commerce .asking-info {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-top: 0.25rem;
+}
+
+.product-card-commerce .deal-results {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.product-card-commerce .deal-shark {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--ink-600);
+  font-style: italic;
+}
+
+.product-card-commerce .deal-fell-through {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--warning);
+}
+
+.product-card-commerce .shop-link-prominent {
+  background: var(--coral);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.product-card-commerce .shop-link-prominent:hover {
+  background: var(--coral-dark);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.product-card-commerce .shark-attribution.spoiler-hidden {
+  opacity: 0.6;
+  filter: blur(3px);
+  transition: all 0.3s ease;
+}
+
+.product-card-commerce .shark-attribution.spoiler-hidden:hover {
+  opacity: 0.8;
+  filter: blur(1px);
 }
 
 .product-card-commerce .no-deal-info {
@@ -751,6 +834,32 @@ h3, h4, h5, h6 {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--ink-400);
+}
+
+.product-card-commerce.compact .card-body {
+  padding: 0.75rem;
+}
+
+.product-card-commerce.compact .product-name {
+  font-size: 0.8125rem;
+  -webkit-line-clamp: 1;
+}
+
+.product-card-commerce.compact .card-footer {
+  margin-top: 0.25rem;
+}
+
+.product-card-commerce.compact .deal-info,
+.product-card-commerce.compact .no-deal-info {
+  font-size: 0.6875rem;
+}
+
+.product-card-commerce.compact .freshness-indicator {
+  padding: 0.25rem 0.5rem;
+}
+
+.product-card-commerce.compact .verified-text {
+  font-size: 0.5rem;
 }
 
 .deals-section {
@@ -1628,4 +1737,263 @@ h3, h4, h5, h6 {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--ink-500);
+}
+
+.category-nav-season {
+  color: var(--shark-blue);
+  font-weight: 700;
+}
+
+.category-nav-season:hover {
+  color: var(--shark-blue-dark);
+  background: rgba(30, 58, 138, 0.06);
+}
+
+/* ==========================================
+   LATEST EPISODE SECTION
+   ========================================== */
+
+.latest-ep-section {
+  background: var(--ink-900);
+  padding: 2.5rem 0 3rem;
+}
+
+.latest-ep-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.latest-ep-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.latest-ep-title h2 {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.02em;
+}
+
+.ep-badge {
+  font-family: var(--font-display);
+  font-size: 0.5625rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--coral);
+  color: var(--white);
+  padding: 0.25rem 0.625rem;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.latest-ep-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.spoiler-toggle {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-400);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.spoiler-toggle:hover {
+  color: var(--white);
+}
+
+.spoiler-toggle.revealed {
+  color: var(--gold);
+}
+
+.ep-view-all {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-400);
+  transition: color 0.15s ease;
+}
+
+.ep-view-all:hover {
+  color: var(--coral);
+}
+
+.latest-ep-section .product-card-commerce {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.latest-ep-section .product-card-commerce:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.latest-ep-section .product-card-commerce .card-body {
+  background: var(--ink-800);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+.latest-ep-section .product-card-commerce .freshness-indicator {
+  display: none;
+}
+
+.latest-ep-section .product-card-commerce .shark-attribution {
+  color: var(--coral);
+}
+
+.latest-ep-section .product-card-commerce .product-name {
+  color: var(--white);
+}
+
+.latest-ep-section .product-card-commerce:hover .product-name {
+  color: var(--coral);
+}
+
+.latest-ep-section .product-card-commerce .product-tagline {
+  color: var(--ink-400);
+}
+
+.latest-ep-section .product-card-commerce .card-footer {
+  border-color: var(--ink-700);
+  margin-top: auto;
+}
+
+.latest-ep-section .product-card-commerce .no-deal-info {
+  color: var(--ink-500);
+}
+
+.reveal-deal-btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-400);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.reveal-deal-btn:hover {
+  color: var(--ink-600);
+}
+
+.latest-ep-section .product-card-commerce .episode-info {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--coral);
+}
+
+.latest-ep-section .product-card-commerce .founder-info {
+  color: var(--ink-500);
+}
+
+.latest-ep-section .product-card-commerce .asking-info {
+  color: var(--gold-light);
+}
+
+.latest-ep-section .product-card-commerce .deal-shark {
+  color: var(--ink-400);
+}
+
+.latest-ep-section .product-card-commerce .deal-info {
+  color: var(--success-light);
+}
+
+.latest-ep-section .product-card-commerce .shop-link {
+  background: var(--coral);
+  color: var(--white);
+}
+
+.latest-ep-section .product-card-commerce .shop-link:hover {
+  background: var(--white);
+  color: var(--ink-900);
+}
+
+.latest-ep-section .reveal-deal-btn {
+  color: var(--ink-400);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 2px;
+}
+
+.latest-ep-section .reveal-deal-btn:hover {
+  color: var(--gold-light);
+  text-decoration-color: var(--gold-light);
+}
+
+.season-browser {
+  padding: 3rem 0;
+  background: var(--cream);
+  border-top: 1px solid var(--ink-100);
+}
+
+.season-browser-title {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-400);
+  margin-bottom: 1rem;
+}
+
+.season-browser-list {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.season-browser-list::-webkit-scrollbar {
+  display: none;
+}
+
+.season-browser-link {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-600);
+  padding: 0.5rem 1rem;
+  background: var(--white);
+  border: 1px solid var(--ink-100);
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.season-browser-link:hover {
+  border-color: var(--ink-300);
+  color: var(--ink-900);
+}
+
+.season-browser-link.current {
+  background: var(--shark-blue);
+  border-color: var(--shark-blue);
+  color: var(--white);
+}
+
+.season-browser-link.current:hover {
+  background: var(--shark-blue-dark);
+  border-color: var(--shark-blue-dark);
 }
