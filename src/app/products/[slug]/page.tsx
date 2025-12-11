@@ -22,6 +22,8 @@ interface NarrativeContent {
   where_to_buy?: string | null
 }
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const result = await getProductBySlug(slug)
@@ -50,14 +52,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const titleParts = [product.name, 'Shark Tank', dealStatus, businessStatus].filter(Boolean)
   const title = product.seo_title || titleParts.slice(0, 3).join(' | ')
 
+  const description = product.meta_description || product.pitch_summary || product.tagline ||
+    `${product.name} appeared on Shark Tank Season ${product.season}. Find out what happened and where to buy.`
+
   return {
     title,
-    description: product.meta_description || product.pitch_summary || product.tagline ||
-      `${product.name} appeared on Shark Tank Season ${product.season}. Find out what happened and where to buy.`,
+    description,
     openGraph: {
       title: `${product.name} - Shark Tank`,
       description: product.pitch_summary || product.tagline || '',
       images: product.photo_url ? [{ url: product.photo_url }] : [],
+      type: 'website',
+      siteName: 'Shark Tank Products',
+      url: `/products/${slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${product.name} - Shark Tank`,
+      description: product.pitch_summary || product.tagline || description,
+      images: product.photo_url ? [product.photo_url] : [],
+    },
+    alternates: {
+      canonical: `/products/${slug}`,
     },
   }
 }
@@ -86,16 +102,92 @@ export default async function ProductPage({ params }: Props) {
     photoUrl: sharkPhotos[name] || null,
   }))
 
+  // JSON-LD Structured Data
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.meta_description || product.tagline || product.pitch_summary,
+    image: product.photo_url,
+    brand: {
+      '@type': 'Brand',
+      name: product.company_name || product.name,
+    },
+    ...(product.amazon_url && {
+      offers: {
+        '@type': 'Offer',
+        url: product.amazon_url,
+        availability: product.status === 'active'
+          ? 'https://schema.org/InStock'
+          : product.status === 'out_of_business'
+            ? 'https://schema.org/Discontinued'
+            : 'https://schema.org/OutOfStock',
+      },
+    }),
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/products` },
+      { '@type': 'ListItem', position: 3, name: product.name },
+    ],
+  }
+
+  const faqJsonLd = narrative?.current_status ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [{
+      '@type': 'Question',
+      name: `Is ${product.name} still in business?`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: narrative.current_status,
+      },
+    }],
+  } : null
+
+  // Get best available date for "last updated"
+  const lastUpdatedDate = product.last_verified || product.last_enriched_at || product.updated_at
+
   return (
-    <main className="min-h-screen">
-      {/* Hero Section */}
-      <section className="product-hero" data-deal-status={product.deal_outcome}>
-        <div className="max-w-6xl mx-auto px-6 py-12 md:py-16">
-          <div className="mb-6">
-            <Link href="/products" className="product-breadcrumb">
-              ← All Products
-            </Link>
-          </div>
+    <>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c')
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c')
+        }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c')
+          }}
+        />
+      )}
+
+      <main className="min-h-screen">
+        {/* Hero Section */}
+        <section className="product-hero" data-deal-status={product.deal_outcome}>
+          <div className="max-w-6xl mx-auto px-6 py-12 md:py-16">
+            {/* Breadcrumb Navigation */}
+            <nav aria-label="Breadcrumb" className="mb-6">
+              <ol className="product-breadcrumb-list">
+                <li><Link href="/">Home</Link></li>
+                <li><Link href="/products">Products</Link></li>
+                <li aria-current="page">{product.name}</li>
+              </ol>
+            </nav>
 
           <div className="grid lg:grid-cols-[340px_1fr] gap-10 lg:gap-16">
             {/* Product Image */}
@@ -114,10 +206,21 @@ export default async function ProductPage({ params }: Props) {
 
             {/* Product Info */}
             <div className="product-hero-info">
-              {/* Episode Badge */}
+              {/* Episode Badge + Air Date */}
               {product.season && (
-                <div className="product-episode-badge">
-                  Season {product.season}{product.episode_number ? `, Episode ${product.episode_number}` : ''}
+                <div className="product-episode-meta">
+                  <span className="product-episode-badge">
+                    Season {product.season}{product.episode_number ? `, Episode ${product.episode_number}` : ''}
+                  </span>
+                  {product.air_date && (
+                    <time className="product-air-date" dateTime={product.air_date}>
+                      Aired {new Date(product.air_date).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </time>
+                  )}
                 </div>
               )}
 
@@ -170,9 +273,10 @@ export default async function ProductPage({ params }: Props) {
                 </div>
               )}
 
-              {product.last_verified && (
+              {lastUpdatedDate && (
                 <p className="product-verified">
-                  Last verified {new Date(product.last_verified).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  {product.last_verified ? 'Last verified' : 'Last updated'}{' '}
+                  {new Date(lastUpdatedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                 </p>
               )}
             </div>
@@ -334,5 +438,6 @@ export default async function ProductPage({ params }: Props) {
         dealAmount={product.deal_amount}
       />
     </main>
+    </>
   )
 }
