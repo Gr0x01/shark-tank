@@ -137,6 +137,30 @@ export interface ProductShark {
   created_at: string
 }
 
+export interface SharkCoInvestor {
+  id: string
+  name: string
+  slug: string
+  photo_url: string | null
+  deal_count: number
+  success_rate: number | null
+}
+
+export interface TimelineEntry {
+  season: number
+  year: number | null
+  products: ProductWithSharks[]
+}
+
+export interface LeaderboardShark {
+  id: string
+  name: string
+  slug: string
+  photo_url: string | null
+  stat_value: number
+  stat_type: 'deals' | 'success_rate' | 'total_invested'
+}
+
 export type Database = {
   public: {
     Tables: {

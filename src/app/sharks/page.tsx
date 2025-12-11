@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { getSharks, getAllSharkStats } from '@/lib/queries/sharks'
+import { getSharks, getAllSharkStats, getLeaderboardSharks } from '@/lib/queries/sharks'
 import { SharkImage } from '@/components/ui/SharkImage'
+import { SharkLeaderboard } from '@/components/ui/SharkLeaderboard'
 
 export const metadata: Metadata = {
   title: 'The Sharks | Shark Tank Products',
@@ -9,9 +10,10 @@ export const metadata: Metadata = {
 }
 
 export default async function SharksPage() {
-  const [sharks, stats] = await Promise.all([
+  const [sharks, stats, leaderboard] = await Promise.all([
     getSharks(),
     getAllSharkStats(),
+    getLeaderboardSharks(),
   ])
 
   const statsMap = new Map(stats.map(s => [s.slug, s]))
@@ -26,6 +28,13 @@ export default async function SharksPage() {
             Explore their portfolios, success rates, and investment styles
           </p>
         </div>
+
+        {/* Leaderboard */}
+        <SharkLeaderboard
+          mostDeals={leaderboard.mostDeals}
+          highestSuccess={leaderboard.highestSuccess}
+          biggestInvestor={leaderboard.biggestInvestor}
+        />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sharks.map(shark => {
