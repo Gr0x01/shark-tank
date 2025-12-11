@@ -7,6 +7,7 @@ import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { FilterSidebar } from '@/components/ui/FilterSidebar'
 import { FilterChips } from '@/components/ui/FilterChips'
 import { MobileFilters } from '@/components/ui/MobileFilters'
+import { InterstitialBand } from '@/components/ui/InterstitialBand'
 import type { ProductStatus, DealOutcome } from '@/lib/supabase/types'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
@@ -153,6 +154,37 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <Suspense fallback={null}>
           <FilterChips sharks={sharks} categories={categories} />
         </Suspense>
+
+        {/* Context-aware Status CTA */}
+        {filters.status === 'active' && (
+          <InterstitialBand
+            title="Still in Business"
+            description="These products are still active and thriving. Support businesses that made it beyond the Tank."
+            ctaText="Read Success Stories"
+            ctaHref="/still-in-business"
+            variant="cream"
+          />
+        )}
+
+        {filters.status === 'out_of_business' && (
+          <InterstitialBand
+            title="Out of Business"
+            description="Not all Shark Tank products survive. Learn what went wrong and what lessons we can take."
+            ctaText="View Analysis"
+            ctaHref="/out-of-business"
+            variant="cream"
+          />
+        )}
+
+        {!filters.status && !filters.dealOutcome && !filters.search && (
+          <InterstitialBand
+            title="Filter by Status"
+            description="Curious which products are still thriving? Filter to see active businesses or those that closed."
+            ctaText="View All Active"
+            ctaHref="/still-in-business"
+            variant="cream"
+          />
+        )}
 
         <div className="flex gap-10">
           {/* Desktop Sidebar */}
