@@ -158,6 +158,17 @@ export default async function SharkPage({ params, searchParams }: Props) {
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
 
+  // Extract narrative content
+  const narrative = shark.narrative_content as {
+    biography?: string | null
+    investment_philosophy?: string | null
+    shark_tank_journey?: string | null
+    notable_deals?: string | null
+    beyond_the_tank?: string | null
+  } | null
+
+  const hasNarrative = narrative && Object.values(narrative).some(v => v)
+
   // Person Schema
   const personJsonLd = {
     '@context': 'https://schema.org',
@@ -334,6 +345,53 @@ export default async function SharkPage({ params, searchParams }: Props) {
               <div className="stat-label mt-1">Success Rate</div>
             </div>
           </div>
+        )}
+
+        {/* Narrative Content - Editorial Profile */}
+        {hasNarrative && narrative && (
+          <article className="shark-narrative">
+            <div className="shark-narrative-container">
+              {narrative.biography && (
+                <section className="shark-narrative-section">
+                  <div className="shark-narrative-number">01</div>
+                  <h2 className="shark-narrative-heading">Biography</h2>
+                  <div className="shark-narrative-text">{narrative.biography}</div>
+                </section>
+              )}
+
+              {narrative.investment_philosophy && (
+                <section className="shark-narrative-section">
+                  <div className="shark-narrative-number">02</div>
+                  <h2 className="shark-narrative-heading">Investment Philosophy</h2>
+                  <div className="shark-narrative-text">{narrative.investment_philosophy}</div>
+                </section>
+              )}
+
+              {narrative.shark_tank_journey && (
+                <section className="shark-narrative-section">
+                  <div className="shark-narrative-number">03</div>
+                  <h2 className="shark-narrative-heading">Journey on Shark Tank</h2>
+                  <div className="shark-narrative-text">{narrative.shark_tank_journey}</div>
+                </section>
+              )}
+
+              {narrative.notable_deals && (
+                <section className="shark-narrative-section">
+                  <div className="shark-narrative-number">04</div>
+                  <h2 className="shark-narrative-heading">Notable Investments</h2>
+                  <div className="shark-narrative-text">{narrative.notable_deals}</div>
+                </section>
+              )}
+
+              {narrative.beyond_the_tank && (
+                <section className="shark-narrative-section">
+                  <div className="shark-narrative-number">05</div>
+                  <h2 className="shark-narrative-heading">Beyond the Tank</h2>
+                  <div className="shark-narrative-text">{narrative.beyond_the_tank}</div>
+                </section>
+              )}
+            </div>
+          </article>
         )}
 
         {/* Co-Investors */}
