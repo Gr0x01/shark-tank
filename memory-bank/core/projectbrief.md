@@ -4,7 +4,7 @@ Maintainer: RB
 Status: Defined
 ---
 
-# Project Brief: Shark Tank Products Directory
+# Project Brief: tankd.io
 
 ## Project Overview
 A comprehensive directory of every product ever pitched on Shark Tank, with real-time tracking of business status, where to buy, and deal details. Built to outcompete existing sites through better data freshness, filtering, and affiliate optimization.

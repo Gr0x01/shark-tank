@@ -113,7 +113,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
   const collectionSchema = createCollectionPageSchema(
     'All Shark Tank Products',
-    'Complete directory of every product pitched on Shark Tank',
+    'Complete database of every product pitched on Shark Tank',
     `${SITE_URL}/products`,
     stats.total
   )

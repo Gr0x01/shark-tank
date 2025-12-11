@@ -9,7 +9,7 @@ import { createOrganizationSchema, createSearchActionSchema, escapeJsonLd } from
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = 'tankd.io | Every Shark Tank Product, Deal & Business Status'
-  const description = 'The complete directory of Shark Tank products. Find out which products are still in business, where to buy them, and what deals were made.'
+  const description = 'Every Shark Tank product in one place. Find out which products are still in business, where to buy them, and what deals were made.'
 
   return {
     title,
@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
         url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: 'tankd.io - Shark Tank Products Directory'
+        alt: 'tankd.io - Every Shark Tank Product'
       }],
       type: 'website',
       locale: 'en_US'

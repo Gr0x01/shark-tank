@@ -4,7 +4,7 @@ Maintainer: RB
 Status: Phase 3 Complete - Production Ready
 ---
 
-# Progress Log: Shark Tank Products
+# Progress Log: tankd.io
 
 ## Project Timeline
 

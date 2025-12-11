@@ -4,7 +4,7 @@ Maintainer: RB
 Status: Defined
 ---
 
-# Technology Stack: Shark Tank Products
+# Technology Stack: tankd.io
 
 ## Core Technologies
 Modern web stack optimized for rapid development and minimal operational overhead.

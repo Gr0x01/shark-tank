@@ -102,9 +102,8 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-1.5 group">
             <span className="font-display font-bold text-lg tracking-tight text-[var(--ink-900)]">
-              SharkTank
+              tankd.io
             </span>
-            <span className="text-[var(--coral)] font-display text-sm font-medium">Directory</span>
           </Link>
           
           <div className="flex items-center gap-6">

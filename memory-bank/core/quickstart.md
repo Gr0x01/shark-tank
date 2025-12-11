@@ -4,7 +4,7 @@ Maintainer: RB
 Status: Phase 3 Complete - Production Ready
 ---
 
-# Quickstart: Shark Tank Products
+# Quickstart: tankd.io
 
 ## Current Status
 - **Phase**: 3 - COMPLETE ✅
@@ -91,7 +91,7 @@ OPENAI_API_KEY=...
 ```
 
 ## Project Overview
-Shark Tank Products Directory - comprehensive database of every product pitched on Shark Tank with:
+tankd.io - comprehensive database of every product pitched on Shark Tank with:
 - Current business status (active/closed)
 - Deal details (shark, amount, equity)
 - Rich narrative content for products and sharks

@@ -35,7 +35,7 @@ export function Footer() {
           <div>
             <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">About</h3>
             <p className="text-[var(--ink-500)] text-sm leading-relaxed">
-              The most comprehensive directory of Shark Tank products with real-time business status tracking.
+              Every Shark Tank product with real-time business status tracking.
             </p>
           </div>
         </div>
@@ -43,8 +43,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-[var(--ink-100)]">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-4">
             <div className="flex items-center gap-2">
-              <span className="font-display font-medium text-[var(--ink-900)]">SharkTank</span>
-              <span className="text-[var(--cyan-600)] font-display text-sm">Directory</span>
+              <span className="font-display font-medium text-[var(--ink-900)]">tankd.io</span>
             </div>
             <p className="text-sm text-[var(--ink-400)]">
               © {new Date().getFullYear()} Not affiliated with ABC or Sony Pictures Television.

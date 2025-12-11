@@ -44,7 +44,7 @@ export function createOrganizationSchema() {
     name: SCHEMA_ORG_NAME,
     url: SCHEMA_ORG_URL,
     logo: SCHEMA_ORG_LOGO,
-    description: 'The complete directory of Shark Tank products with business status tracking and deal information.',
+    description: 'tankd.io - Complete database of every Shark Tank product with business status tracking and deal information.',
     sameAs: [
       // Add social media URLs when available
     ]
