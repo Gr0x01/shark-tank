@@ -12,6 +12,20 @@ export interface NarrativeContent {
   where_to_buy?: string | null
 }
 
+export interface SharkNarrativeContent {
+  biography?: string | null
+  investment_philosophy?: string | null
+  shark_tank_journey?: string | null
+  notable_deals?: string | null
+  beyond_the_tank?: string | null
+}
+
+export function isSharkNarrative(content: unknown): content is SharkNarrativeContent {
+  if (!content || typeof content !== 'object') return false
+  const obj = content as Record<string, unknown>
+  return Object.values(obj).some(v => typeof v === 'string' && v.length > 0)
+}
+
 export interface Shark {
   id: string
   name: string
@@ -24,6 +38,9 @@ export interface Shark {
   seasons_active: number[] | null
   is_guest_shark: boolean
   social_urls: Record<string, string>
+  narrative_content: SharkNarrativeContent | null
+  narrative_version: number | null
+  narrative_generated_at: string | null
   created_at: string
   updated_at: string
 }
