@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 import clsx from 'clsx'
+import { useSpoilerContext } from '@/contexts/SpoilerContext'
 
 const navigation = [
   { name: 'Products', href: '/products' },
@@ -17,6 +18,7 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+  const { spoilersHidden, toggleSpoilers } = useSpoilerContext()
 
   useEffect(() => {
     if (searchOpen && inputRef.current) {
@@ -60,6 +62,19 @@ export function Header() {
           </Link>
           
           <div className="flex items-center gap-6">
+            <button
+              onClick={toggleSpoilers}
+              className={clsx('spoiler-slide-toggle', !spoilersHidden && 'revealed')}
+              aria-label={spoilersHidden ? 'Show deal outcomes' : 'Hide deal outcomes'}
+              role="switch"
+              aria-checked={!spoilersHidden}
+            >
+              <span className="spoiler-slide-label">Spoilers</span>
+              <span className="spoiler-slide-track">
+                <span className="spoiler-slide-knob" />
+              </span>
+            </button>
+            
             <button
               onClick={() => setSearchOpen(true)}
               className="header-search-trigger"

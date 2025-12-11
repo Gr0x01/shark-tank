@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import type { ProductWithSharks } from '@/lib/supabase/types'
+import { useSpoilerContext } from '@/contexts/SpoilerContext'
 
 interface ProductCardCommerceProps {
   product: ProductWithSharks
@@ -21,10 +22,11 @@ function formatMoney(amount: number | null): string {
 }
 
 export function ProductCardCommerce({ product, compact = false, spoiler = false, hideBadges = false, sharkPhotos = {} }: ProductCardCommerceProps) {
+  const { spoilersHidden } = useSpoilerContext()
   const [imgError, setImgError] = useState(false)
   const [revealed, setRevealed] = useState(false)
   
-  const showDealInfo = !spoiler || revealed
+  const showDealInfo = !spoilersHidden || revealed
   const gotDeal = product.deal_outcome === 'deal'
   const productSharks = product.shark_names || []
   const firstShark = productSharks[0]

@@ -1180,6 +1180,69 @@ h3, h4, h5, h6 {
   background: var(--warm-white);
 }
 
+.spoiler-slide-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.spoiler-slide-label {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-400);
+  transition: color 0.2s ease;
+}
+
+.spoiler-slide-toggle:hover .spoiler-slide-label {
+  color: var(--ink-600);
+}
+
+.spoiler-slide-toggle.revealed .spoiler-slide-label {
+  color: var(--coral);
+}
+
+.spoiler-slide-track {
+  position: relative;
+  width: 36px;
+  height: 18px;
+  background: var(--ink-200);
+  transition: background 0.2s ease;
+}
+
+.spoiler-slide-toggle:hover .spoiler-slide-track {
+  background: var(--ink-300);
+}
+
+.spoiler-slide-toggle.revealed .spoiler-slide-track {
+  background: var(--coral);
+}
+
+.spoiler-slide-toggle.revealed:hover .spoiler-slide-track {
+  background: var(--coral-dark);
+}
+
+.spoiler-slide-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+}
+
+.spoiler-slide-toggle.revealed .spoiler-slide-knob {
+  transform: translateX(18px);
+}
+
 .header-search-trigger {
   display: flex;
   align-items: center;
@@ -2148,13 +2211,6 @@ h3, h4, h5, h6 {
   transition: all 0.2s ease;
 }
 
-.ep-card-spoiler-hint::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-}
 
 .ep-card-spoiler:hover .ep-card-spoiler-hint {
   color: var(--gold-light);

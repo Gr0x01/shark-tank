@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { ProductWithSharks } from '@/lib/supabase/types'
+import { useSpoilerContext } from '@/contexts/SpoilerContext'
 
 interface LatestEpisodeSectionProps {
   episode: { season: number; episode_number: number; air_date: string | null }
@@ -19,31 +20,14 @@ function formatMoney(amount: number | null): string {
 }
 
 export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhotos: rawSharkPhotos }: LatestEpisodeSectionProps) {
-  const [spoilersHidden, setSpoilersHidden] = useState(true)
+  const { spoilersHidden } = useSpoilerContext()
   const [imgError, setImgError] = useState<Record<string, boolean>>({})
   const [revealed, setRevealed] = useState<Record<string, boolean>>({})
 
   if (rawProducts.length === 0) return null
 
-  const MOCK_MODE = true
-  
-  const products = MOCK_MODE ? rawProducts.map((p, i) => ({
-    ...p,
-    deal_outcome: i === 0 ? 'deal' as const : i === 1 ? 'no_deal' as const : i === 2 ? 'deal' as const : p.deal_outcome,
-    deal_amount: i === 0 ? 200000 : i === 2 ? 100000 : p.deal_amount,
-    deal_equity: i === 0 ? 25 : i === 2 ? 30 : p.deal_equity,
-    royalty_deal: i === 2 ? true : p.royalty_deal,
-    royalty_terms: i === 2 ? '5% until $500K repaid' : p.royalty_terms,
-    shark_names: i === 0 ? ['Mark Cuban', 'Lori Greiner'] : i === 2 ? ['Daymond John'] : p.shark_names,
-  })) : rawProducts
-  
-  const sharkPhotos = MOCK_MODE ? { 
-    ...rawSharkPhotos, 
-    'Mark Cuban': 'https://rhwfizaqeprgnslcagse.supabase.co/storage/v1/object/public/shark-photos/mark-cuban.jpg',
-    'Lori Greiner': 'https://rhwfizaqeprgnslcagse.supabase.co/storage/v1/object/public/shark-photos/lori-greiner.jpg',
-    'Robert Herjavec': 'https://rhwfizaqeprgnslcagse.supabase.co/storage/v1/object/public/shark-photos/robert-herjavec.jpg',
-    'Daymond John': 'https://rhwfizaqeprgnslcagse.supabase.co/storage/v1/object/public/shark-photos/daymond-john.jpg',
-  } : rawSharkPhotos
+  const products = rawProducts
+  const sharkPhotos = rawSharkPhotos
 
   return (
     <section className="latest-ep-section">
@@ -55,12 +39,6 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
           </div>
           
           <div className="latest-ep-actions">
-            <button
-              onClick={() => setSpoilersHidden(!spoilersHidden)}
-              className={`spoiler-toggle ${spoilersHidden ? '' : 'revealed'}`}
-            >
-              {spoilersHidden ? 'Show all deals' : 'Hide spoilers'}
-            </button>
             <Link href={`/seasons/${episode.season}`} className="ep-view-all">
               All Season {episode.season} →
             </Link>

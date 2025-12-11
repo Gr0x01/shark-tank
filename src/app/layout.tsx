@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SpoilerProvider } from "@/contexts/SpoilerContext";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -31,9 +32,11 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <Header />
-        {children}
-        <Footer />
+        <SpoilerProvider>
+          <Header />
+          {children}
+          <Footer />
+        </SpoilerProvider>
       </body>
     </html>
   );
