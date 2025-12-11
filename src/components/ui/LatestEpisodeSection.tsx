@@ -115,35 +115,44 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
                     }
                   }}
                 >
-                  <div className="ep-card-spoiler-content">
-                    {gotDeal ? (
-                      <>
-                        <div className="ep-card-spoiler-shark">
-                          {firstSharkPhoto ? (
-                            <Image
-                              src={firstSharkPhoto}
-                              alt={firstShark || 'Shark'}
-                              width={32}
-                              height={32}
-                              className="ep-card-spoiler-shark-img"
-                            />
-                          ) : (
-                            <div className="ep-card-spoiler-shark-placeholder" />
-                          )}
-                          {productSharks.length > 1 && (
-                            <span className="ep-card-spoiler-more">+{productSharks.length - 1}</span>
-                          )}
-                        </div>
-                        <span className="ep-card-spoiler-deal">
-                          {formatMoney(product.deal_amount)}
-                          {product.deal_equity && ` / ${product.deal_equity}%`}
-                        </span>
-                      </>
-                    ) : (
-                      <span className="ep-card-spoiler-nodeal">NO DEAL</span>
-                    )}
-                  </div>
-                  {!isRevealed && <span className="ep-card-spoiler-hint">tap to reveal</span>}
+                  {!isRevealed ? (
+                    <div className="ep-card-spoiler-hidden">
+                      <div className="ep-card-spoiler-fake">
+                        <div className="ep-card-spoiler-shark-placeholder" />
+                        <span className="ep-card-spoiler-fake-deal">$???K / ??%</span>
+                      </div>
+                      <span className="ep-card-spoiler-hint">tap to reveal</span>
+                    </div>
+                  ) : (
+                    <div className="ep-card-spoiler-content">
+                      {gotDeal ? (
+                        <>
+                          <div className="ep-card-spoiler-shark">
+                            {firstSharkPhoto ? (
+                              <Image
+                                src={firstSharkPhoto}
+                                alt={firstShark || 'Shark'}
+                                width={36}
+                                height={36}
+                                className="ep-card-spoiler-shark-img"
+                              />
+                            ) : (
+                              <div className="ep-card-spoiler-shark-placeholder" />
+                            )}
+                            {productSharks.length > 1 && (
+                              <span className="ep-card-spoiler-more">+{productSharks.length - 1}</span>
+                            )}
+                          </div>
+                          <span className="ep-card-spoiler-deal">
+                            {formatMoney(product.deal_amount)}
+                            {product.deal_equity && ` / ${product.deal_equity}%`}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="ep-card-spoiler-nodeal">NO DEAL</span>
+                      )}
+                    </div>
+                  )}
                 </button>
               </Link>
             )
