@@ -3122,6 +3122,83 @@ h3, h4, h5, h6 {
   margin-top: 1.5rem;
 }
 
+/* ================================================
+   SHARK NARRATIVE SECTIONS - Editorial Profile
+   ================================================ */
+
+.shark-narrative {
+  padding: 5rem 0;
+  background: linear-gradient(to bottom, var(--white) 0%, var(--cream) 100%);
+  margin: 3rem 0;
+  border-top: 1px solid var(--ink-100);
+  border-bottom: 1px solid var(--ink-100);
+}
+
+.shark-narrative-container {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.shark-narrative-section {
+  margin-bottom: 4.5rem;
+  position: relative;
+}
+
+.shark-narrative-section:last-child {
+  margin-bottom: 0;
+}
+
+.shark-narrative-number {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--cyan-600);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.shark-narrative-heading {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ink-900);
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.shark-narrative-text {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  font-weight: 300;
+  color: var(--ink-700);
+  line-height: 1.85;
+  text-align: left;
+}
+
+/* Two-column layout for wider screens */
+@media (min-width: 768px) {
+  .shark-narrative-text {
+    columns: 2;
+    column-gap: 3rem;
+    text-align: justify;
+  }
+
+  .shark-narrative-heading {
+    font-size: 2rem;
+  }
+}
+
+/* Three-column for very wide screens */
+@media (min-width: 1200px) {
+  .shark-narrative-container {
+    max-w: 1200px;
+  }
+}
+
 /* Revenue Section */
 .product-revenue-section {
   padding: 3rem 0;

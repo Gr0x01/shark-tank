@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useCallback } from 'react'
 import { SeasonSelect } from './SeasonSelect'
+import { CategorySelect } from './CategorySelect'
 import type { Category } from '@/lib/supabase/types'
 
 interface SharkPortfolioFiltersProps {
@@ -150,18 +151,11 @@ export function SharkPortfolioFilters({ categories, currentSeason }: SharkPortfo
         {/* Category */}
         <div>
           <h4 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Category</h4>
-          <select
+          <CategorySelect
             value={currentCategoryFilter}
-            onChange={(e) => setFilter('category', e.target.value)}
-            className="w-full px-3 py-2 text-sm border border-[var(--ink-300)] rounded-md focus:ring-[var(--coral)] focus:border-[var(--coral)]"
-          >
-            <option value="">All Categories</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.slug}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => setFilter('category', value)}
+            categories={categories}
+          />
         </div>
       </div>
     </div>

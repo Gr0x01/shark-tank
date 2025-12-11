@@ -7,7 +7,6 @@ import {
   getSharkProducts,
   getSharkSlugs,
   getSharkTopPerformers,
-  getSharkRecentFailures,
   getSharkCoInvestors,
   getSharkTimeline,
   type SharkProductFilters
@@ -18,7 +17,8 @@ import { SharkTopDeals } from '@/components/ui/SharkTopDeals'
 import { SharkCoInvestors } from '@/components/ui/SharkCoInvestors'
 import { SharkPortfolioFilters } from '@/components/ui/SharkPortfolioFilters'
 import { SharkTimeline } from '@/components/ui/SharkTimeline'
-import { ProductListCard } from '@/components/ui/ProductListCard'
+import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
+import { getSharkPhotos } from '@/lib/queries/products'
 import type { Category, ProductStatus, DealOutcome } from '@/lib/supabase/types'
 
 type Props = {
@@ -134,19 +134,19 @@ export default async function SharkPage({ params, searchParams }: Props) {
     stats,
     products,
     topPerformers,
-    failures,
     coInvestors,
     timeline,
-    categoriesData
+    categoriesData,
+    sharkPhotos
   ] = await Promise.all([
     getSharkBySlug(slug),
     getSharkStats(slug),
     getSharkProducts(slug, filters),
     getSharkTopPerformers(slug),
-    getSharkRecentFailures(slug),
     getSharkCoInvestors(slug),
     getSharkTimeline(slug),
-    supabase.from('categories').select('id, name, slug').order('name')
+    supabase.from('categories').select('id, name, slug').order('name'),
+    getSharkPhotos()
   ])
 
   if (!shark) {
@@ -397,10 +397,9 @@ export default async function SharkPage({ params, searchParams }: Props) {
         {/* Co-Investors */}
         <SharkCoInvestors coInvestors={coInvestors} sharkName={shark.name} />
 
-        {/* Top/Bottom Deals */}
+        {/* Top Deals */}
         <SharkTopDeals
           topDeals={topPerformers}
-          failures={failures}
           sharkName={shark.name}
         />
 
@@ -414,12 +413,12 @@ export default async function SharkPage({ params, searchParams }: Props) {
           <SharkPortfolioFilters categories={categories} currentSeason={currentSeason} />
 
           {products.length > 0 ? (
-            <div className="space-y-3">
+            <div className="products-grid-home">
               {products.map(product => (
-                <ProductListCard
+                <ProductCardCommerce
                   key={product.id}
                   product={product}
-                  showDealDetails
+                  sharkPhotos={sharkPhotos}
                 />
               ))}
             </div>
