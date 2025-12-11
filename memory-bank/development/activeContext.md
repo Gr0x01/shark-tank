@@ -166,8 +166,27 @@ TAVILY_API_KEY=...
 OPENAI_API_KEY=...
 ```
 
+## Shark Enrichment & Retired Status (Built Dec 12)
+
+**All 47 sharks enriched with narrative content:**
+- Cost: $0.0555 (50 enrichment runs, includes some duplicates)
+- 5 narrative sections per shark: biography, investment_philosophy, shark_tank_journey, notable_deals, beyond_the_tank
+- Enrichment command: `npx tsx scripts/enrich-shark-narratives.ts --all`
+
+**Retired shark tracking:**
+- Database field `is_retired` added to sharks table
+- Mark Cuban and Kevin Harrington marked as retired
+- Retired badge displays on shark pages: "No Longer on Shark Tank"
+- Badge styling: Subtle gray pill badge next to shark name
+
+**To mark additional retired sharks:**
+```sql
+UPDATE sharks SET is_retired = TRUE WHERE slug = 'shark-slug';
+```
+
 ## Recent Migrations
 - `00005_deal_search_tracking.sql` - Adds `deal_search_attempts` column for daily cron
 - `00006_shark_co_investors_function.sql` - Function for shark partnership data
 - `00006_shark_narrative_content.sql` - Adds narrative fields to sharks table
 - `00007_narrative_refresh_on_status_change.sql` - Auto-flags narrative refresh on status change
+- `00008_shark_retired_status.sql` - Adds `is_retired` field for retired sharks

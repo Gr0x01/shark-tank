@@ -40,14 +40,24 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="mt-12 pt-8 border-t border-[var(--ink-100)] flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-display font-medium text-[var(--ink-900)]">SharkTank</span>
-            <span className="text-[var(--cyan-600)] font-display text-sm">Directory</span>
+        <div className="mt-12 pt-8 border-t border-[var(--ink-100)]">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-4">
+            <div className="flex items-center gap-2">
+              <span className="font-display font-medium text-[var(--ink-900)]">SharkTank</span>
+              <span className="text-[var(--cyan-600)] font-display text-sm">Directory</span>
+            </div>
+            <p className="text-sm text-[var(--ink-400)]">
+              © {new Date().getFullYear()} Not affiliated with ABC or Sony Pictures Television.
+            </p>
           </div>
-          <p className="text-sm text-[var(--ink-400)]">
-            © {new Date().getFullYear()} Not affiliated with ABC or Sony Pictures Television.
-          </p>
+          <div className="text-xs text-[var(--ink-400)] leading-relaxed max-w-4xl">
+            <p>
+              <strong className="font-medium text-[var(--ink-500)]">Affiliate Disclosure:</strong>{' '}
+              We are a participant in the Amazon Services LLC Associates Program, an affiliate advertising program
+              designed to provide a means for us to earn fees by linking to Amazon.com and affiliated sites.
+              When you make a purchase through our links, we may earn a commission at no additional cost to you.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

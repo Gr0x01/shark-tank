@@ -20,6 +20,7 @@ import { SharkTimeline } from '@/components/ui/SharkTimeline'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { getSharkPhotos } from '@/lib/queries/products'
 import type { Category, ProductStatus, DealOutcome } from '@/lib/supabase/types'
+import { isSharkNarrative } from '@/lib/supabase/types'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -159,15 +160,10 @@ export default async function SharkPage({ params, searchParams }: Props) {
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
 
   // Extract narrative content
-  const narrative = shark.narrative_content as {
-    biography?: string | null
-    investment_philosophy?: string | null
-    shark_tank_journey?: string | null
-    notable_deals?: string | null
-    beyond_the_tank?: string | null
-  } | null
-
-  const hasNarrative = narrative && Object.values(narrative).some(v => v)
+  const narrative = isSharkNarrative(shark.narrative_content)
+    ? shark.narrative_content
+    : null
+  const hasNarrative = narrative !== null
 
   // Person Schema
   const personJsonLd = {
@@ -294,149 +290,171 @@ export default async function SharkPage({ params, searchParams }: Props) {
       )}
 
       <main className="min-h-screen py-12 px-6">
-        <div className="max-w-5xl mx-auto">
-        {/* Back link */}
-        <div className="mb-8">
-          <Link href="/sharks" className="text-sm text-[var(--cyan-600)] hover:underline underline-offset-4 font-display">
-            ← All Sharks
-          </Link>
-        </div>
-
-        {/* Hero section */}
-        <div className="flex flex-col md:flex-row gap-8 mb-12">
-          <SharkImage
-            src={shark.photo_url}
-            name={shark.name}
-            size="xl"
-            className="shrink-0"
-          />
-          <div>
-            <h1 className="text-3xl md:text-4xl font-medium mb-2">{shark.name}</h1>
-            {shark.investment_style && (
-              <p className="text-xl text-[var(--cyan-600)] font-display mb-4">{shark.investment_style}</p>
-            )}
-            {shark.bio && (
-              <p className="text-[var(--ink-600)] leading-relaxed">{shark.bio}</p>
-            )}
+        <div className="max-w-7xl mx-auto">
+          {/* Back link */}
+          <div className="mb-8">
+            <Link href="/sharks" className="text-sm text-[var(--cyan-600)] hover:underline underline-offset-4 font-display">
+              ← All Sharks
+            </Link>
           </div>
-        </div>
 
-        {/* Stats grid */}
-        {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <div className="card text-center">
-              <div className="stat-number text-3xl">{stats.total_deals}</div>
-              <div className="stat-label mt-1">Total Deals</div>
+          {/* Hero section - Full width */}
+          <div className="flex flex-col md:flex-row gap-8 mb-12">
+            <SharkImage
+              src={shark.photo_url}
+              name={shark.name}
+              size="xl"
+              className="shrink-0"
+            />
+            <div>
+              <h1 className="text-3xl md:text-4xl font-medium mb-2">
+                {shark.name}
+                {shark.is_retired && (
+                  <span className="ml-3 text-sm font-normal px-3 py-1 rounded-full bg-[var(--ink-100)] text-[var(--ink-600)] border border-[var(--ink-200)]">
+                    No Longer on Shark Tank
+                  </span>
+                )}
+              </h1>
+              {shark.investment_style && (
+                <p className="text-xl text-[var(--cyan-600)] font-display mb-4">{shark.investment_style}</p>
+              )}
+              {shark.bio && (
+                <p className="text-[var(--ink-600)] leading-relaxed">{shark.bio}</p>
+              )}
             </div>
-            <div className="card text-center">
-              <div className="stat-number text-3xl text-[var(--cyan-600)]">
-                {stats.total_invested ? `$${(stats.total_invested / 1000000).toFixed(1)}M` : '—'}
+          </div>
+
+          {/* Main content + Sidebar layout */}
+          <div className="shark-profile-layout">
+            {/* Main Content */}
+            <div className="shark-main-content">
+              {/* Co-Investors */}
+              <SharkCoInvestors coInvestors={coInvestors} sharkName={shark.name} />
+
+              {/* Top Deals */}
+              <SharkTopDeals
+                topDeals={topPerformers}
+                sharkName={shark.name}
+              />
+
+              {/* Narrative Content */}
+              {hasNarrative && narrative && (
+                <article className="shark-narrative">
+                  <div className="max-w-3xl mx-auto px-6">
+                    {narrative.biography && narrative.biography.length > 0 && (
+                      <section className="narrative-section">
+                        <h2 className="narrative-heading">Biography</h2>
+                        <div className="narrative-text">{narrative.biography}</div>
+                      </section>
+                    )}
+
+                    {narrative.investment_philosophy && narrative.investment_philosophy.length > 0 && (
+                      <section className="narrative-section">
+                        <h2 className="narrative-heading">Investment Philosophy</h2>
+                        <div className="narrative-text">{narrative.investment_philosophy}</div>
+                      </section>
+                    )}
+
+                    {narrative.notable_deals && narrative.notable_deals.length > 0 && (
+                      <section className="narrative-section narrative-cta-section">
+                        <h2 className="narrative-heading">Notable Investments</h2>
+                        <div className="narrative-text">{narrative.notable_deals}</div>
+                      </section>
+                    )}
+
+                    {narrative.shark_tank_journey && narrative.shark_tank_journey.length > 0 && (
+                      <section className="narrative-section">
+                        <h2 className="narrative-heading">Journey on Shark Tank</h2>
+                        <div className="narrative-text">{narrative.shark_tank_journey}</div>
+                      </section>
+                    )}
+
+                    {narrative.beyond_the_tank && narrative.beyond_the_tank.length > 0 && (
+                      <section className="narrative-section">
+                        <h2 className="narrative-heading">Beyond the Tank</h2>
+                        <div className="narrative-text">{narrative.beyond_the_tank}</div>
+                      </section>
+                    )}
+                  </div>
+                </article>
+              )}
+            </div>
+
+            {/* Sidebar */}
+            <aside className="shark-sidebar" aria-label="Shark portfolio summary">
+              {/* Stats Card */}
+              {stats && (
+                <div className="sidebar-card">
+                  <h3 className="sidebar-card-label">Portfolio Metrics</h3>
+                  <div className="sidebar-stats">
+                    <div className="sidebar-stat">
+                      <div className="stat-number text-2xl">{stats.total_deals}</div>
+                      <div className="stat-label">Total Deals</div>
+                    </div>
+                    <div className="sidebar-stat">
+                      <div className="stat-number text-2xl text-[var(--cyan-600)]">
+                        {stats.total_invested ? `$${(stats.total_invested / 1000000).toFixed(1)}M` : '—'}
+                      </div>
+                      <div className="stat-label">Invested</div>
+                    </div>
+                    <div className="sidebar-stat">
+                      <div className="stat-number text-2xl text-[var(--cyan-600)]">{stats.active_companies}</div>
+                      <div className="stat-label">Active</div>
+                    </div>
+                    <div className="sidebar-stat">
+                      <div className="stat-number text-2xl">
+                        {stats.success_rate ? `${stats.success_rate}%` : '—'}
+                      </div>
+                      <div className="stat-label">Success Rate</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Investment Style Card */}
+              {shark.investment_style && (
+                <div className="sidebar-card sidebar-style-card">
+                  <h3 className="sidebar-card-label">Investment Style</h3>
+                  <div className="sidebar-style-text">{shark.investment_style}</div>
+                </div>
+              )}
+            </aside>
+          </div>
+
+          {/* Portfolio - Full width below sidebar layout */}
+          <section className="mb-12">
+            <div className="mb-6">
+              <p className="section-label mb-2">Full Portfolio</p>
+              <h2 className="text-2xl font-medium">All Investments ({products.length})</h2>
+            </div>
+
+            <SharkPortfolioFilters categories={categories} currentSeason={currentSeason} />
+
+            {products.length > 0 ? (
+              <div className="products-grid-home">
+                {products.map(product => (
+                  <ProductCardCommerce
+                    key={product.id}
+                    product={product}
+                    sharkPhotos={sharkPhotos}
+                  />
+                ))}
               </div>
-              <div className="stat-label mt-1">Total Invested</div>
-            </div>
-            <div className="card text-center">
-              <div className="stat-number text-3xl text-[var(--success)]">{stats.active_companies}</div>
-              <div className="stat-label mt-1">Active Companies</div>
-            </div>
-            <div className="card text-center">
-              <div className="stat-number text-3xl">
-                {stats.success_rate ? `${stats.success_rate}%` : '—'}
+            ) : (
+              <div className="card text-center py-12">
+                <p className="text-[var(--ink-400)] font-display">
+                  {Object.keys(filters).length > 0
+                    ? 'No products match the selected filters.'
+                    : 'No portfolio data available yet.'}
+                </p>
               </div>
-              <div className="stat-label mt-1">Success Rate</div>
-            </div>
-          </div>
-        )}
+            )}
+          </section>
 
-        {/* Narrative Content - Editorial Profile */}
-        {hasNarrative && narrative && (
-          <article className="shark-narrative">
-            <div className="shark-narrative-container">
-              {narrative.biography && (
-                <section className="shark-narrative-section">
-                  <div className="shark-narrative-number">01</div>
-                  <h2 className="shark-narrative-heading">Biography</h2>
-                  <div className="shark-narrative-text">{narrative.biography}</div>
-                </section>
-              )}
-
-              {narrative.investment_philosophy && (
-                <section className="shark-narrative-section">
-                  <div className="shark-narrative-number">02</div>
-                  <h2 className="shark-narrative-heading">Investment Philosophy</h2>
-                  <div className="shark-narrative-text">{narrative.investment_philosophy}</div>
-                </section>
-              )}
-
-              {narrative.shark_tank_journey && (
-                <section className="shark-narrative-section">
-                  <div className="shark-narrative-number">03</div>
-                  <h2 className="shark-narrative-heading">Journey on Shark Tank</h2>
-                  <div className="shark-narrative-text">{narrative.shark_tank_journey}</div>
-                </section>
-              )}
-
-              {narrative.notable_deals && (
-                <section className="shark-narrative-section">
-                  <div className="shark-narrative-number">04</div>
-                  <h2 className="shark-narrative-heading">Notable Investments</h2>
-                  <div className="shark-narrative-text">{narrative.notable_deals}</div>
-                </section>
-              )}
-
-              {narrative.beyond_the_tank && (
-                <section className="shark-narrative-section">
-                  <div className="shark-narrative-number">05</div>
-                  <h2 className="shark-narrative-heading">Beyond the Tank</h2>
-                  <div className="shark-narrative-text">{narrative.beyond_the_tank}</div>
-                </section>
-              )}
-            </div>
-          </article>
-        )}
-
-        {/* Co-Investors */}
-        <SharkCoInvestors coInvestors={coInvestors} sharkName={shark.name} />
-
-        {/* Top Deals */}
-        <SharkTopDeals
-          topDeals={topPerformers}
-          sharkName={shark.name}
-        />
-
-        {/* Portfolio with filters */}
-        <section className="mb-12">
-          <div className="mb-6">
-            <p className="section-label mb-2">Full Portfolio</p>
-            <h2 className="text-2xl font-medium">All Investments ({products.length})</h2>
-          </div>
-
-          <SharkPortfolioFilters categories={categories} currentSeason={currentSeason} />
-
-          {products.length > 0 ? (
-            <div className="products-grid-home">
-              {products.map(product => (
-                <ProductCardCommerce
-                  key={product.id}
-                  product={product}
-                  sharkPhotos={sharkPhotos}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="card text-center py-12">
-              <p className="text-[var(--ink-400)] font-display">
-                {Object.keys(filters).length > 0
-                  ? 'No products match the selected filters.'
-                  : 'No portfolio data available yet.'}
-              </p>
-            </div>
-          )}
-        </section>
-
-        {/* Timeline */}
-        <SharkTimeline timeline={timeline} sharkName={shark.name} />
-      </div>
-    </main>
+          {/* Timeline - Full width */}
+          <SharkTimeline timeline={timeline} sharkName={shark.name} />
+        </div>
+      </main>
     </>
   )
 }

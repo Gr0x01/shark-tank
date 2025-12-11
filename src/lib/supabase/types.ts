@@ -37,6 +37,7 @@ export interface Shark {
   photo_url: string | null
   seasons_active: number[] | null
   is_guest_shark: boolean
+  is_retired: boolean
   social_urls: Record<string, string>
   narrative_content: SharkNarrativeContent | null
   narrative_version: number | null

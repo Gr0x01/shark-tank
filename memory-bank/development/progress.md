@@ -32,9 +32,11 @@ Status: Phase 3 Complete - Production Ready
 | 13 | Shark Listing Page | Dec 12 | ✅ Complete |
 | 14 | Shark Portfolio Pages | Dec 12 | ✅ Complete |
 | 15 | Search & Filters | Dec 12 | ✅ Complete |
-| 16 | Shark Narrative Enrichment | Dec 12 | ✅ Complete |
+| 16 | Shark Narrative Enrichment Script | Dec 12 | ✅ Complete |
 | 17 | SEO & Structured Data | Dec 12 | ✅ Complete |
 | 18 | Auto Narrative Refresh System | Dec 12 | ✅ Complete |
+| 19 | All Sharks Narrative Enrichment | Dec 12 | ✅ Complete (47 sharks) |
+| 20 | Retired Shark Status System | Dec 12 | ✅ Complete |
 
 ## Current Status (as of Dec 12, 2025)
 
@@ -48,7 +50,8 @@ Status: Phase 3 Complete - Production Ready
 **Sharks**: 47 total (8 main + 39 guest sharks)
 - All have photos in Supabase Storage (`shark-photos` bucket)
 - 279 deal products linked to correct sharks via `product_sharks` table
-- Narrative content enrichment pipeline ready
+- ALL 47 enriched with narrative content (cost: $0.0555)
+- Retired status tracking: 2 sharks marked as retired (Mark Cuban, Kevin Harrington)
 
 **Frontend**: All core pages shipped
 - Home page with latest episode + season sections
@@ -210,6 +213,16 @@ Scripts for ingesting new Shark Tank episodes as they air:
 - 5 narrative sections: biography, investment_philosophy, shark_tank_journey, notable_deals, beyond_the_tank
 - Same Tavily + OpenAI gpt-4.1-mini pipeline as products
 - Usage: `npx tsx scripts/enrich-shark-narratives.ts --shark "Mark Cuban"`
+- **ALL 47 sharks enriched** (Dec 12): 50 enrichment runs, $0.0555 cost, 100% success rate
+
+### Retired Shark Status System (Dec 12)
+- Migration `00008_shark_retired_status.sql` - Adds `is_retired` BOOLEAN field to sharks table
+- **Purpose**: Track sharks who are no longer on Shark Tank (retired/left the show)
+- **UI**: Retired badge displays on shark pages: "No Longer on Shark Tank"
+- **Initially marked as retired**: Mark Cuban, Kevin Harrington
+- **Type safety**: `Shark` interface updated in `src/lib/supabase/types.ts`
+- **Styling**: Subtle gray pill badge (bg-[var(--ink-100)], border-[var(--ink-200)])
+- **Location**: Badge appears next to shark name in hero section of shark pages
 
 ### Automatic Narrative Refresh System (Dec 12)
 - Migration `00007_narrative_refresh_on_status_change.sql` - Database trigger for auto-flagging

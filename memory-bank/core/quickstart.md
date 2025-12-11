@@ -77,8 +77,9 @@ npx tsx scripts/enrich-narratives.ts --limit 10
   - ALL 589 enriched with narrative content
 - **Sharks**: 47 (8 main + 39 guest)
   - All have photos in Supabase Storage
-  - Narrative content pipeline ready
-- **Schema**: Deployed with 7 migrations (00001-00006)
+  - ALL 47 enriched with narrative content
+  - 2 marked as retired (Mark Cuban, Kevin Harrington)
+- **Schema**: Deployed with 8 migrations (00001-00008)
 
 ## Environment Requirements
 ```

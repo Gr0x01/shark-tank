@@ -9,6 +9,7 @@ import { MidPageCTA } from '@/components/ui/MidPageCTA'
 import { WhereToBuySection } from '@/components/ui/WhereToBuySection'
 import { StickyCTABar } from '@/components/ui/StickyCTABar'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
+import { addAmazonAffiliateTag } from '@/lib/utils'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -174,6 +175,9 @@ export default async function ProductPage({ params }: Props) {
   // Get best available date for "last updated"
   const lastUpdatedDate = product.last_verified || product.last_enriched_at || product.updated_at
 
+  // Convert Amazon URL to affiliate link
+  const affiliateAmazonUrl = addAmazonAffiliateTag(product.amazon_url)
+
   return (
     <>
       {/* JSON-LD Structured Data */}
@@ -265,13 +269,13 @@ export default async function ProductPage({ params }: Props) {
               />
 
               {/* CTA Buttons */}
-              {(product.amazon_url || product.website_url) && (
+              {(affiliateAmazonUrl || product.website_url) && (
                 <div className="product-cta-row">
-                  {product.amazon_url ? (
+                  {affiliateAmazonUrl ? (
                     <a
-                      href={product.amazon_url}
+                      href={affiliateAmazonUrl}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noopener noreferrer sponsored"
                       className="btn-amazon"
                     >
                       <svg className="btn-amazon-icon" viewBox="0 0 35.418 35.418" fill="currentColor">
@@ -285,7 +289,7 @@ export default async function ProductPage({ params }: Props) {
                       href={product.website_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={product.amazon_url ? "btn-cta-secondary" : "btn-cta-primary"}
+                      className={affiliateAmazonUrl ? "btn-cta-secondary" : "btn-cta-primary"}
                     >
                       Official Website
                     </a>

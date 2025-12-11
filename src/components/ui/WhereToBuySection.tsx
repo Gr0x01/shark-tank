@@ -1,3 +1,5 @@
+import { addAmazonAffiliateTag } from '@/lib/utils'
+
 interface WhereToBuySectionProps {
   productName: string
   season?: number | null
@@ -55,6 +57,9 @@ export function WhereToBuySection({
     return null
   }
 
+  // Convert Amazon URL to affiliate link
+  const affiliateAmazonUrl = addAmazonAffiliateTag(amazonUrl)
+
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString)
@@ -82,12 +87,17 @@ export function WhereToBuySection({
         </div>
 
         <div className="retailer-grid">
+          {/* Brief disclosure above buttons per FTC guidelines */}
+          <p className="text-xs text-[var(--ink-500)] mb-3 col-span-full text-center">
+            We earn from qualifying purchases at no extra cost to you
+          </p>
+
           {/* Amazon Card - Featured */}
-          {amazonUrl && (
+          {affiliateAmazonUrl && (
             <a
-              href={amazonUrl}
+              href={affiliateAmazonUrl}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer sponsored"
               className="retailer-card retailer-featured"
               aria-label={`Buy ${productName} on Amazon (opens in new tab) - Fast Prime shipping, easy returns, customer reviews`}
             >
@@ -139,8 +149,8 @@ export function WhereToBuySection({
           <div className="affiliate-disclosure" role="note" aria-label="Affiliate disclosure">
             <InfoIcon aria-hidden="true" />
             <p>
-              We may earn a commission from purchases made through these links.
-              This helps us keep our content free and up-to-date.
+              As an Amazon Associate, we earn from qualifying purchases made through these links.
+              This helps us keep our content free and up-to-date, at no extra cost to you.
             </p>
           </div>
           {lastVerified && (

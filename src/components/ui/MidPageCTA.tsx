@@ -1,3 +1,5 @@
+import { addAmazonAffiliateTag } from '@/lib/utils'
+
 interface MidPageCTAProps {
   productName: string
   season?: number | null
@@ -23,6 +25,9 @@ export function MidPageCTA({
   if (!amazonUrl && !websiteUrl) {
     return null
   }
+
+  // Convert Amazon URL to affiliate link
+  const affiliateAmazonUrl = addAmazonAffiliateTag(amazonUrl)
 
   const formatDate = (dateString: string) => {
     try {
@@ -50,11 +55,11 @@ export function MidPageCTA({
             {season ? ` Season ${season}` : ''}
           </p>
           <div className="cta-card-buttons">
-            {amazonUrl && (
+            {affiliateAmazonUrl && (
               <a
-                href={amazonUrl}
+                href={affiliateAmazonUrl}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer sponsored"
                 className="btn-amazon btn-amazon-large"
               >
                 <AmazonIcon />

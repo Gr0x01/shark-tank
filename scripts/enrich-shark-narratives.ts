@@ -30,11 +30,11 @@ const openai = new OpenAI({
 
 // Narrative structure schema
 const SharkNarrativeSchema = z.object({
-  biography: z.string().describe('Rich biography covering early life, background, path to success. 250-400 words. Engaging storytelling style.'),
-  investment_philosophy: z.string().describe('Their investment approach, what they look for in businesses, key criteria. 200-300 words. Focus on insights not visible in stats.'),
-  shark_tank_journey: z.string().describe('How they joined Shark Tank, evolution on the show, memorable moments. 200-300 words. Tell the story of their time on the show.'),
-  notable_deals: z.string().describe('Highlight 2-3 key investments with stories behind them - why they invested, what happened. 250-350 words. Stories not stats.'),
-  beyond_the_tank: z.string().describe('Current ventures, other business activities, media presence. 150-250 words. What they do beyond Shark Tank.')
+  biography: z.string().describe('Concise biography covering key milestones and path to success. 100-150 words. Focus on most important formative experiences.'),
+  investment_philosophy: z.string().describe('Core investment approach and criteria. 100-150 words. Key insights about their decision-making process.'),
+  shark_tank_journey: z.string().describe('When they joined, their role on the show. 75-100 words. Brief overview of their Shark Tank presence.'),
+  notable_deals: z.string().describe('2-3 specific investment examples with brief context. 100-150 words. Concrete examples, not lengthy stories.'),
+  beyond_the_tank: z.string().describe('Current ventures and activities. 75-100 words. Brief overview of what they do beyond Shark Tank.')
 });
 
 type SharkNarrative = z.infer<typeof SharkNarrativeSchema>;
@@ -127,7 +127,7 @@ Your narratives should provide the human stories, context, and insights BEHIND t
 
 Return ONLY valid JSON matching the requested schema. No markdown, no explanations, just the JSON object.`;
 
-  const userPrompt = `Create rich editorial narrative content for ${shark.name}'s Shark Tank profile page.
+  const userPrompt = `Create concise, scannable narrative content for ${shark.name}'s Shark Tank profile page.
 
 Current basic info:
 - Bio: ${shark.bio || 'None'}
@@ -136,38 +136,34 @@ Current basic info:
 Research sources:
 ${allResults.join('\n\n---\n\n')}
 
-Generate 5 narrative sections:
+Generate 5 BRIEF narrative sections (total ~450-650 words):
 
-1. **biography** (250-400 words)
-   - Early life, background, path to business success
-   - Tell the story of how they became who they are
-   - Focus on formative experiences and key turning points
+1. **biography** (100-150 words)
+   - Key milestones and path to success
+   - Most important formative experiences
+   - Be concise and focus on what made them successful
 
-2. **investment_philosophy** (200-300 words)
-   - What they look for in investments
-   - Their approach and criteria
-   - What makes them say yes or no
-   - Provide insights not visible in the stats
+2. **investment_philosophy** (100-150 words)
+   - Core investment approach and criteria
+   - What they look for, what makes them say yes/no
+   - Key insights about their decision-making
 
-3. **shark_tank_journey** (200-300 words)
-   - How and when they joined Shark Tank
-   - Their evolution on the show
-   - Memorable moments or shifts in approach
-   - Their role in the "tank dynamic"
+3. **shark_tank_journey** (75-100 words)
+   - When they joined Shark Tank
+   - Their role and presence on the show
+   - Brief, factual overview
 
-4. **notable_deals** (250-350 words)
-   - Tell the STORIES behind 2-3 key investments
-   - Why they invested, what they saw
-   - What happened with those companies
-   - Use specific examples with context, not just stats
+4. **notable_deals** (100-150 words)
+   - 2-3 specific investment examples
+   - Brief context on why they invested
+   - Concrete examples, not lengthy stories
 
-5. **beyond_the_tank** (150-250 words)
-   - Current business ventures
-   - Other media/book/speaking activities
-   - What they're focused on now
-   - Their broader impact
+5. **beyond_the_tank** (75-100 words)
+   - Current ventures and activities
+   - What they do beyond Shark Tank
+   - Brief, factual overview
 
-Write in a clean editorial magazine style. Use natural paragraph breaks. Be specific and engaging.`;
+IMPORTANT: Keep each section CONCISE and SCANNABLE. Users should be able to quickly grasp key information. No lengthy prose or flowery language. Direct, informative, brief.`;
 
   try {
     const response = await openai.chat.completions.create({
