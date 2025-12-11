@@ -18,13 +18,6 @@ function formatMoney(amount: number | null): string {
   return `$${amount.toLocaleString()}`
 }
 
-function formatSharkNames(names: string[]): string {
-  if (names.length === 0) return ''
-  if (names.length === 1) return names[0]
-  if (names.length === 2) return `${names[0]} & ${names[1]}`
-  return `${names.slice(0, -1).join(', ')} & ${names[names.length - 1]}`
-}
-
 export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhotos: rawSharkPhotos }: LatestEpisodeSectionProps) {
   const [spoilersHidden, setSpoilersHidden] = useState(true)
   const [imgError, setImgError] = useState<Record<string, boolean>>({})
@@ -41,7 +34,7 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
     deal_equity: i === 0 ? 25 : i === 2 ? 30 : p.deal_equity,
     royalty_deal: i === 2 ? true : p.royalty_deal,
     royalty_terms: i === 2 ? '5% until $500K repaid' : p.royalty_terms,
-    shark_names: i === 0 ? ['Mark Cuban', 'Lori Greiner', 'Robert Herjavec'] : i === 2 ? ['Daymond John'] : p.shark_names,
+    shark_names: i === 0 ? ['Mark Cuban', 'Lori Greiner'] : i === 2 ? ['Daymond John'] : p.shark_names,
   })) : rawProducts
   
   const sharkPhotos = MOCK_MODE ? { 
@@ -51,12 +44,6 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
     'Robert Herjavec': 'https://rhwfizaqeprgnslcagse.supabase.co/storage/v1/object/public/shark-photos/robert-herjavec.jpg',
     'Daymond John': 'https://rhwfizaqeprgnslcagse.supabase.co/storage/v1/object/public/shark-photos/daymond-john.jpg',
   } : rawSharkPhotos
-
-  const featured = products.find(p => p.deal_outcome === 'deal') || products[0]
-  const others = products.filter(p => p.id !== featured.id)
-  const showFeaturedDeal = !spoilersHidden || revealed[featured.id]
-  const featuredGotDeal = featured.deal_outcome === 'deal'
-  const featuredSharks = featured.shark_names || []
 
   return (
     <section className="latest-ep-section">
@@ -80,175 +67,87 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
           </div>
         </div>
 
-        <div className="ep-featured-layout">
-          <Link href={`/products/${featured.slug}`} className="ep-featured-card">
-            <div className="ep-featured-image">
-              {featured.photo_url && !imgError[featured.id] ? (
-                <Image
-                  src={featured.photo_url}
-                  alt={featured.name}
-                  fill
-                  className="object-cover"
-                  onError={() => setImgError(prev => ({ ...prev, [featured.id]: true }))}
-                />
-              ) : (
-                <div className="ep-featured-placeholder">
-                  <svg className="w-16 h-16 text-[var(--ink-500)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-              )}
-              <div className="ep-featured-overlay">
-                {featured.founder_names && featured.founder_names.length > 0 && (
-                  <p className="ep-featured-founders">by {featured.founder_names.join(' & ')}</p>
-                )}
-                <h3 className="ep-featured-name">{featured.name}</h3>
-                {featured.asking_amount && featured.asking_equity && (
-                  <p className="ep-featured-ask">
-                    Asked {formatMoney(featured.asking_amount)} for {featured.asking_equity}%
-                  </p>
-                )}
-              </div>
-            </div>
+        <div className="ep-cards-grid">
+          {products.map((product) => {
+            const isRevealed = !spoilersHidden || revealed[product.id]
+            const gotDeal = product.deal_outcome === 'deal'
+            const productSharks = product.shark_names || []
+            const firstShark = productSharks[0]
+            const firstSharkPhoto = firstShark ? sharkPhotos[firstShark] : null
             
-            <div className={`ep-result-band ${showFeaturedDeal ? (featuredGotDeal ? 'deal revealed' : 'no-deal revealed') : 'hidden-result'}`}>
-              {showFeaturedDeal ? (
-                <>
-                  {featuredGotDeal && featuredSharks.length > 0 && (
-                    <div className="ep-shark-stack">
-                      {featuredSharks.slice(0, 3).map((sharkName, idx) => (
-                        <div key={sharkName} className="ep-shark-stack-item" style={{ zIndex: 3 - idx }}>
-                          {sharkPhotos[sharkName] ? (
-                            <Image
-                              src={sharkPhotos[sharkName]}
-                              alt={sharkName}
-                              width={56}
-                              height={56}
-                              className="ep-result-shark-img"
-                            />
-                          ) : (
-                            <div className="ep-result-shark-placeholder" />
-                          )}
-                        </div>
-                      ))}
+            return (
+              <Link key={product.id} href={`/products/${product.slug}`} className="ep-card">
+                <div className="ep-card-image">
+                  {product.photo_url && !imgError[product.id] ? (
+                    <Image
+                      src={product.photo_url}
+                      alt={product.name}
+                      fill
+                      className="object-cover"
+                      onError={() => setImgError(prev => ({ ...prev, [product.id]: true }))}
+                    />
+                  ) : (
+                    <div className="ep-card-placeholder">
+                      <svg className="w-12 h-12 text-[var(--ink-500)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
                     </div>
                   )}
-                  <div className="ep-result-info">
-                    {featuredGotDeal ? (
+                  <div className="ep-card-overlay">
+                    <h4 className="ep-card-name">{product.name}</h4>
+                  </div>
+                </div>
+                
+                <div className="ep-card-ask">
+                  {product.asking_amount && product.asking_equity ? (
+                    <span>{formatMoney(product.asking_amount)} for {product.asking_equity}%</span>
+                  ) : (
+                    <span className="ep-card-ask-unknown">Ask unknown</span>
+                  )}
+                </div>
+                
+                <button
+                  className={`ep-card-spoiler ${isRevealed ? 'revealed' : ''}`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (!isRevealed) {
+                      setRevealed(prev => ({ ...prev, [product.id]: true }))
+                    }
+                  }}
+                >
+                  <div className="ep-card-spoiler-content">
+                    {gotDeal ? (
                       <>
-                        <div className="ep-result-labels">
-                          <span className="ep-result-label">DEAL</span>
-                          {featured.royalty_deal && <span className="ep-result-badge royalty">ROYALTY</span>}
+                        <div className="ep-card-spoiler-shark">
+                          {firstSharkPhoto ? (
+                            <Image
+                              src={firstSharkPhoto}
+                              alt={firstShark || 'Shark'}
+                              width={32}
+                              height={32}
+                              className="ep-card-spoiler-shark-img"
+                            />
+                          ) : (
+                            <div className="ep-card-spoiler-shark-placeholder" />
+                          )}
+                          {productSharks.length > 1 && (
+                            <span className="ep-card-spoiler-more">+{productSharks.length - 1}</span>
+                          )}
                         </div>
-                        <span className="ep-result-amount">
-                          {formatMoney(featured.deal_amount)}
-                          {featured.deal_equity && <span className="ep-result-equity"> for {featured.deal_equity}%</span>}
+                        <span className="ep-card-spoiler-deal">
+                          {formatMoney(product.deal_amount)}
+                          {product.deal_equity && ` / ${product.deal_equity}%`}
                         </span>
-                        {featuredSharks.length > 0 && (
-                          <span className="ep-result-shark-name">with {formatSharkNames(featuredSharks)}</span>
-                        )}
                       </>
                     ) : (
-                      <span className="ep-result-no-deal">
-                        {featured.deal_outcome === 'no_deal' ? 'NO DEAL' : featured.deal_outcome === 'deal_fell_through' ? 'DEAL FELL THROUGH' : 'UNKNOWN'}
-                      </span>
+                      <span className="ep-card-spoiler-nodeal">NO DEAL</span>
                     )}
                   </div>
-                  <span className="ep-result-cta">View Product →</span>
-                </>
-              ) : (
-                <>
-                  <button
-                    className="ep-reveal-trigger"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setRevealed(prev => ({ ...prev, [featured.id]: true }))
-                    }}
-                  >
-                    <span className="ep-reveal-icon">?</span>
-                    <span className="ep-reveal-label">Tap to reveal result</span>
-                  </button>
-                  <span className="ep-result-cta">View Product →</span>
-                </>
-              )}
-            </div>
-          </Link>
-
-          <div className="ep-small-cards">
-            {others.map((product) => {
-              const showDeal = !spoilersHidden || revealed[product.id]
-              const gotDeal = product.deal_outcome === 'deal'
-              const productSharks = product.shark_names || []
-              return (
-                <Link key={product.id} href={`/products/${product.slug}`} className="ep-small-card">
-                  <div className="ep-small-image">
-                    {product.photo_url && !imgError[product.id] ? (
-                      <Image
-                        src={product.photo_url}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                        onError={() => setImgError(prev => ({ ...prev, [product.id]: true }))}
-                      />
-                    ) : (
-                      <div className="ep-small-placeholder">
-                        <svg className="w-8 h-8 text-[var(--ink-500)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                  <div className="ep-small-content">
-                    <h4 className="ep-small-name">{product.name}</h4>
-                    {product.asking_amount && product.asking_equity && (
-                      <p className="ep-small-ask">
-                        {formatMoney(product.asking_amount)} for {product.asking_equity}%
-                      </p>
-                    )}
-                  </div>
-                  <div className={`ep-small-result-band ${showDeal ? (gotDeal ? 'deal revealed' : 'no-deal revealed') : 'hidden-result'}`}>
-                    {showDeal ? (
-                      <div className="ep-small-result-inner">
-                        {gotDeal && productSharks.length > 0 && (
-                          <div className="ep-small-shark-stack">
-                            {productSharks.slice(0, 2).map((sharkName, idx) => (
-                              sharkPhotos[sharkName] && (
-                                <div key={sharkName} className="ep-small-shark-item" style={{ zIndex: 2 - idx }}>
-                                  <Image
-                                    src={sharkPhotos[sharkName]}
-                                    alt={sharkName}
-                                    width={28}
-                                    height={28}
-                                    className="ep-small-shark-img"
-                                  />
-                                </div>
-                              )
-                            ))}
-                          </div>
-                        )}
-                        <span className={`ep-small-result-text ${gotDeal ? 'got-deal' : ''}`}>
-                          {gotDeal ? 'DEAL' : product.deal_outcome === 'no_deal' ? 'NO DEAL' : 'UNKNOWN'}
-                        </span>
-                        {gotDeal && product.royalty_deal && (
-                          <span className="ep-small-badge">+ROY</span>
-                        )}
-                      </div>
-                    ) : (
-                      <button
-                        className="ep-small-reveal-btn"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          setRevealed(prev => ({ ...prev, [product.id]: true }))
-                        }}
-                      >
-                        <span className="ep-small-reveal-icon">?</span>
-                      </button>
-                    )}
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
+                  {!isRevealed && <span className="ep-card-spoiler-hint">tap to reveal</span>}
+                </button>
+              </Link>
+            )
+          })}
         </div>
       </div>
     </section>
