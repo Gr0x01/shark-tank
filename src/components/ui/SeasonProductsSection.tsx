@@ -9,11 +9,12 @@ interface SeasonProductsSectionProps {
   products: ProductWithSharks[]
   season: number
   totalProducts: number
+  sharkPhotos: Record<string, string>
 }
 
 type DealFilter = 'all' | 'deal' | 'no_deal'
 
-export function SeasonProductsSection({ products, season, totalProducts }: SeasonProductsSectionProps) {
+export function SeasonProductsSection({ products, season, totalProducts, sharkPhotos }: SeasonProductsSectionProps) {
   const [filter, setFilter] = useState<DealFilter>('all')
 
   const filteredProducts = products.filter((product) => {
@@ -62,6 +63,9 @@ export function SeasonProductsSection({ products, season, totalProducts }: Seaso
             <ProductCardCommerce 
               key={product.id} 
               product={product}
+              sharkPhotos={sharkPhotos}
+              spoiler={true}
+              hideBadges={true}
             />
           ))}
         </div>

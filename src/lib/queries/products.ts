@@ -249,7 +249,10 @@ export async function getTrendingProducts(limit = 6): Promise<ProductWithSharks[
   return (data as ProductWithSharks[]) || []
 }
 
-export async function getSeasonProducts(season: number, limit = 24): Promise<ProductWithSharks[]> {
+export async function getSeasonProducts(season: number, limit = 24): Promise<{
+  products: ProductWithSharks[]
+  sharkPhotos: Record<string, string>
+}> {
   const supabase = await createClient()
   
   const { data, error } = await supabase
@@ -261,5 +264,26 @@ export async function getSeasonProducts(season: number, limit = 24): Promise<Pro
     .limit(limit)
   
   if (error) throw error
-  return (data as ProductWithSharks[]) || []
+  
+  const products = (data as ProductWithSharks[]) || []
+  const allSharkNames = [...new Set(products.flatMap(p => p.shark_names || []))]
+  
+  const sharkPhotos: Record<string, string> = {}
+  
+  if (allSharkNames.length > 0) {
+    const { data: sharks } = await supabase
+      .from('sharks')
+      .select('name, photo_url')
+      .in('name', allSharkNames)
+    
+    if (sharks) {
+      for (const shark of sharks as { name: string; photo_url: string | null }[]) {
+        if (shark.photo_url) {
+          sharkPhotos[shark.name] = shark.photo_url
+        }
+      }
+    }
+  }
+  
+  return { products, sharkPhotos }
 }

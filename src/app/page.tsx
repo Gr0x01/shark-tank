@@ -12,7 +12,7 @@ export default async function Home() {
   ])
 
   const currentSeason = latestEpisode.episode?.season || 17
-  const seasonProducts = await getSeasonProducts(currentSeason, 24)
+  const seasonData = await getSeasonProducts(currentSeason, 24)
 
   return (
     <main className="min-h-screen bg-[var(--warm-white)]">
@@ -47,9 +47,10 @@ export default async function Home() {
       )}
 
       <SeasonProductsSection
-        products={seasonProducts}
+        products={seasonData.products}
         season={currentSeason}
         totalProducts={stats.total}
+        sharkPhotos={seasonData.sharkPhotos}
       />
 
       <section className="season-browser">
