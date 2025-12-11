@@ -184,6 +184,47 @@ OPENAI_API_KEY=...
 UPDATE sharks SET is_retired = TRUE WHERE slug = 'shark-slug';
 ```
 
+## Page Template System (Built Dec 12)
+
+Standardized page generation for SEO content pages to ensure consistency and prevent implementation errors.
+
+**Problem Solved:** Coding agents were creating inconsistent page implementations with varying component structures, missing SEO metadata, and incorrect schema.org markup.
+
+**Solution Components:**
+- **Generator Script**: `scripts/create-seo-page.ts` enforces consistent page structure
+- **ArticlePage**: Component for editorial/guide content (2-col layout with optional sidebar)
+- **FilteredListingPage**: Component for product listings with narrative content
+- **Template Docs**: `.templates/` directory contains reference documentation
+
+**Creating New Pages:**
+```bash
+# Article pages (guides, how-tos)
+npx tsx scripts/create-seo-page.ts article "your-slug" "Your Title"
+
+# Listing pages (filtered products)
+npx tsx scripts/create-seo-page.ts listing "your-slug" "Your Title"
+
+# Then generate content
+npx tsx scripts/enrich-seo-pages.ts --page your-slug
+```
+
+**Example Pages:**
+- `/how-to-apply` - ArticlePage for application guide
+- `/success-stories` - ArticlePage with related products sidebar
+- `/still-in-business` - FilteredListingPage for active businesses
+- `/out-of-business` - FilteredListingPage for failed businesses
+
+**Key Patterns:**
+- Metadata generation (SEO, OpenGraph, Twitter)
+- Schema.org structured data (breadcrumb + article/collection)
+- SEOErrorBoundary for graceful error handling
+- DOMPurify HTML sanitization
+- Content loading via `loadSEOContent()` from `seo_pages` table
+
+**Documentation:** See `development/page-templates.md` for comprehensive guide
+
+**Template Files:** `.templates/README.md`, `.templates/NEW-PAGE-CHECKLIST.md`, `.templates/seo-page-template.md`
+
 ## Recent Migrations
 - `00005_deal_search_tracking.sql` - Adds `deal_search_attempts` column for daily cron
 - `00006_shark_co_investors_function.sql` - Function for shark partnership data

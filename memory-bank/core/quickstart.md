@@ -52,6 +52,16 @@ npx tsx scripts/enrich-narratives.ts --limit 10
 
 # Manually flag a product for narrative refresh (if needed):
 # SELECT flag_product_for_narrative_refresh('product-uuid');
+
+# === NEW SEO PAGES ===
+# Create a new article page (guides, how-tos)
+npx tsx scripts/create-seo-page.ts article "how-to-apply" "How to Apply"
+
+# Create a new listing page (filtered products)
+npx tsx scripts/create-seo-page.ts listing "biggest-deals" "Biggest Deals"
+
+# Then generate content
+npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
 ```
 
 **IMPORTANT**: Always use port 3004 for this project to avoid conflicts.
