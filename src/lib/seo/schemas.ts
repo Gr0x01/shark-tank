@@ -89,7 +89,46 @@ export function createTVEpisodeSchema(
   }
 }
 
+export function createArticleSchema(params: {
+  headline: string
+  description: string
+  url: string
+  datePublished: string
+  dateModified?: string
+  image?: string
+}) {
+  return {
+    '@context': SCHEMA_CONTEXT,
+    '@type': 'Article',
+    headline: params.headline,
+    description: params.description,
+    url: params.url,
+    datePublished: params.datePublished,
+    dateModified: params.dateModified || params.datePublished,
+    author: {
+      '@type': 'Organization',
+      name: SCHEMA_ORG_NAME,
+      url: SITE_URL,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SCHEMA_ORG_NAME,
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+    ...(params.image && {
+      image: {
+        '@type': 'ImageObject',
+        url: params.image,
+      },
+    }),
+  }
+}
+
 // Helper to safely inject JSON-LD (prevents XSS)
-export function escapeJsonLd(obj: any): string {
+export function escapeJsonLd(obj: unknown): string {
   return JSON.stringify(obj).replace(/</g, '\\u003c')
 }

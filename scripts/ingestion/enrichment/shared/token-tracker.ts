@@ -29,13 +29,17 @@ export class TokenTracker {
     return { ...this.totalUsage };
   }
 
-  estimateCost(): number {
-    const inputCostPer1M = 0.15;
-    const outputCostPer1M = 0.60;
-    
-    const inputCost = (this.totalUsage.prompt / 1_000_000) * inputCostPer1M;
-    const outputCost = (this.totalUsage.completion / 1_000_000) * outputCostPer1M;
-    
+  estimateCost(model: string = 'gpt-4.1-mini'): number {
+    const pricing: Record<string, { input: number; output: number }> = {
+      'gpt-4.1-mini': { input: 0.20, output: 0.80 },  // Flex tier
+      'gpt-5-mini': { input: 0.15, output: 0.60 },
+      'gpt-5-nano': { input: 0.04, output: 0.16 },
+    };
+
+    const modelPricing = pricing[model] || pricing['gpt-4.1-mini'];
+    const inputCost = (this.totalUsage.prompt / 1_000_000) * modelPricing.input;
+    const outputCost = (this.totalUsage.completion / 1_000_000) * modelPricing.output;
+
     return inputCost + outputCost;
   }
 
