@@ -28,15 +28,67 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const shark = await getSharkBySlug(slug)
-  
+  const [shark, stats] = await Promise.all([
+    getSharkBySlug(slug),
+    getSharkStats(slug),
+  ])
+
   if (!shark) {
     return { title: 'Shark Not Found' }
   }
 
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
+
+  // Enhanced title with stats
+  const title = shark.seo_title ||
+    `${shark.name} - ${stats?.total_deals || 0} Deals, ${stats?.success_rate || 0}% Success | Shark Tank`
+
+  // Rich description with stats
+  const description = shark.meta_description ||
+    `${shark.name} has made ${stats?.total_deals || 0} deals on Shark Tank with a ${stats?.success_rate || 0}% success rate. ${stats?.active_companies || 0} active companies. Explore portfolio, top investments, and partnerships.`
+
   return {
-    title: shark.seo_title || `${shark.name} | Shark Tank Products`,
-    description: shark.meta_description || `Explore ${shark.name}'s Shark Tank portfolio and investments`,
+    title,
+    description,
+
+    // OpenGraph for Facebook, LinkedIn
+    openGraph: {
+      title: `${shark.name} - Shark Tank Investor`,
+      description,
+      images: shark.photo_url ? [{
+        url: shark.photo_url,
+        width: 800,
+        height: 800,
+        alt: shark.name
+      }] : [],
+      type: 'profile',
+      siteName: 'Shark Tank Products',
+      url: `${SITE_URL}/sharks/${slug}`,
+    },
+
+    // Twitter Card
+    twitter: {
+      card: 'summary',
+      title: `${shark.name} - Shark Tank`,
+      description,
+      images: shark.photo_url ? [shark.photo_url] : [],
+    },
+
+    // Canonical URL (always base URL, even for filtered pages)
+    alternates: {
+      canonical: `/sharks/${slug}`,
+    },
+
+    // Keywords
+    keywords: [
+      shark.name,
+      `${shark.name} Shark Tank`,
+      `${shark.name} investments`,
+      `${shark.name} portfolio`,
+      `${shark.name} net worth`,
+      'Shark Tank investor',
+      ...(shark.investment_style ? [shark.investment_style] : [])
+    ],
   }
 }
 
@@ -104,9 +156,134 @@ export default async function SharkPage({ params, searchParams }: Props) {
   const categories: Category[] = categoriesData.data || []
   const currentSeason = 17 // TODO: Get from database or config
 
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sharktankproducts.com'
+
+  // Person Schema
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: shark.name,
+    description: shark.bio || shark.meta_description || `Shark Tank investor and entrepreneur`,
+    image: shark.photo_url,
+    url: `${SITE_URL}/sharks/${slug}`,
+    ...(shark.social_urls && Object.keys(shark.social_urls).length > 0 && {
+      sameAs: Object.values(shark.social_urls).filter(Boolean)
+    }),
+    jobTitle: 'Investor',
+    worksFor: {
+      '@type': 'TVSeries',
+      name: 'Shark Tank'
+    },
+    ...(stats && {
+      additionalProperty: [
+        {
+          '@type': 'PropertyValue',
+          name: 'Total Deals',
+          value: stats.total_deals
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'Success Rate',
+          value: `${stats.success_rate}%`
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'Active Companies',
+          value: stats.active_companies
+        },
+        ...(stats.total_invested ? [{
+          '@type': 'PropertyValue',
+          name: 'Total Invested',
+          value: stats.total_invested
+        }] : [])
+      ]
+    })
+  }
+
+  // Breadcrumb Schema
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: SITE_URL
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Sharks',
+        item: `${SITE_URL}/sharks`
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: shark.name,
+        item: `${SITE_URL}/sharks/${slug}`
+      }
+    ]
+  }
+
+  // FAQ Schema (optional but valuable for rich results)
+  const faqJsonLd = stats ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `How many deals has ${shark.name} made on Shark Tank?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `${shark.name} has made ${stats.total_deals} deals on Shark Tank.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `What is ${shark.name}'s success rate on Shark Tank?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `${shark.name} has a ${stats.success_rate}% success rate with ${stats.active_companies} active companies out of ${stats.total_deals} total deals.`
+        }
+      },
+      ...(stats.total_invested ? [{
+        '@type': 'Question',
+        name: `How much has ${shark.name} invested on Shark Tank?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `${shark.name} has invested approximately $${(stats.total_invested / 1000000).toFixed(1)} million on Shark Tank.`
+        }
+      }] : [])
+    ]
+  } : null
+
   return (
-    <main className="min-h-screen py-12 px-6">
-      <div className="max-w-5xl mx-auto">
+    <>
+      {/* JSON-LD Scripts */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personJsonLd).replace(/</g, '\\u003c')
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c')
+        }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c')
+          }}
+        />
+      )}
+
+      <main className="min-h-screen py-12 px-6">
+        <div className="max-w-5xl mx-auto">
         {/* Back link */}
         <div className="mb-8">
           <Link href="/sharks" className="text-sm text-[var(--cyan-600)] hover:underline underline-offset-4 font-display">
@@ -203,5 +380,6 @@ export default async function SharkPage({ params, searchParams }: Props) {
         <SharkTimeline timeline={timeline} sharkName={shark.name} />
       </div>
     </main>
+    </>
   )
 }

@@ -54,7 +54,7 @@ export function SharkImage({ src, name, size = 'md', className }: SharkImageProp
         fill
         className="object-cover"
         onError={() => setError(true)}
-        sizes="150px"
+        sizes="(max-width: 640px) 96px, (max-width: 1024px) 128px, 150px"
       />
     </div>
   )

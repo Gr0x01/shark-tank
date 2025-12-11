@@ -5,8 +5,38 @@ import { SharkImage } from '@/components/ui/SharkImage'
 import { SharkLeaderboard } from '@/components/ui/SharkLeaderboard'
 
 export const metadata: Metadata = {
-  title: 'The Sharks | Shark Tank Products',
-  description: 'Meet the Sharks and explore their investment portfolios. See success rates, total investments, and active companies.',
+  title: 'The Sharks - All Shark Tank Investors & Their Portfolios | Shark Tank Products',
+  description: 'Meet all Shark Tank investors. Compare Mark Cuban, Lori Greiner, Kevin O\'Leary, Barbara Corcoran, and Daymond John\'s deals, success rates, and active companies. See who invests in what and their partnership patterns.',
+
+  keywords: [
+    'Shark Tank investors',
+    'Mark Cuban deals',
+    'Lori Greiner portfolio',
+    'Kevin O\'Leary investments',
+    'Barbara Corcoran Shark Tank',
+    'Daymond John companies',
+    'Shark Tank cast',
+    'who are the sharks',
+    'Shark Tank net worth'
+  ],
+
+  openGraph: {
+    title: 'All Shark Tank Investors & Portfolios',
+    description: 'Compare Mark Cuban, Lori Greiner, Kevin O\'Leary, and all Shark Tank investors. See their deals, success rates, active companies, and investment patterns.',
+    type: 'website',
+    url: '/sharks',
+    siteName: 'Shark Tank Products',
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Sharks - Shark Tank Investors',
+    description: 'Meet all Shark Tank investors and explore their investment portfolios, success rates, and active companies.',
+  },
+
+  alternates: {
+    canonical: '/sharks',
+  },
 }
 
 export default async function SharksPage() {
