@@ -36,18 +36,6 @@ function formatStaleDate(date: string | null): string {
   return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
-function getStatusConfig(status: string) {
-  switch (status) {
-    case 'active':
-      return { label: 'Active', icon: '✓', className: 'status-active' }
-    case 'out_of_business':
-      return { label: 'Closed', icon: '✗', className: 'status-closed' }
-    case 'acquired':
-      return { label: 'Acquired', icon: '◆', className: 'status-acquired' }
-    default:
-      return { label: 'Unknown', icon: '?', className: 'status-unknown' }
-  }
-}
 
 export function ProductCardCommerce({ product, showTrending = false, rank, compact = false, spoiler = false, hideEpisodeInfo = false, hideBadges = false }: ProductCardCommerceProps) {
   const [imgError, setImgError] = useState(false)
@@ -55,9 +43,7 @@ export function ProductCardCommerce({ product, showTrending = false, rank, compa
   
   const showDealInfo = !spoiler || revealed
   
-  const hasShopLink = product.amazon_url || product.website_url
-  const shopUrl = product.amazon_url || product.website_url || `/products/${product.slug}`
-  const isExternal = product.amazon_url || product.website_url
+  const productPageUrl = `/products/${product.slug}`
   
   // Format asking amount for display
   const askingFormatted = product.asking_amount && product.asking_equity 
@@ -148,6 +134,10 @@ export function ProductCardCommerce({ product, showTrending = false, rank, compa
             {product.name}
           </h3>
           
+          {product.company_name && product.company_name !== product.name && (
+            <p className="company-name">{product.company_name}</p>
+          )}
+          
           {!compact && product.tagline && (
             <p className="product-tagline">{product.tagline}</p>
           )}
@@ -187,17 +177,13 @@ export function ProductCardCommerce({ product, showTrending = false, rank, compa
               )}
             </div>
             
-            {hasShopLink && (
-              <a 
-                href={shopUrl}
-                target={isExternal ? "_blank" : undefined}
-                rel={isExternal ? "noopener noreferrer" : undefined}
-                className="shop-link"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {product.amazon_url ? 'Amazon' : 'Buy Now'} →
-              </a>
-            )}
+            <Link 
+              href={productPageUrl}
+              className="shop-link"
+              onClick={(e) => e.stopPropagation()}
+            >
+              View →
+            </Link>
           </div>
         </div>
       </Link>

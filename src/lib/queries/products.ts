@@ -226,3 +226,18 @@ export async function getTrendingProducts(limit = 6): Promise<ProductWithSharks[
   if (error) throw error
   return (data as ProductWithSharks[]) || []
 }
+
+export async function getSeasonProducts(season: number, limit = 24): Promise<ProductWithSharks[]> {
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .eq('season', season)
+    .order('episode_number', { ascending: false })
+    .order('name', { ascending: true })
+    .limit(limit)
+  
+  if (error) throw error
+  return (data as ProductWithSharks[]) || []
+}

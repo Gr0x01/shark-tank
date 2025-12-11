@@ -1,49 +1,21 @@
 import Link from 'next/link'
-import { getProductStats, getRecentProducts, getLatestEpisodeProducts } from '@/lib/queries/products'
+import { getProductStats, getLatestEpisodeProducts, getSeasonProducts } from '@/lib/queries/products'
 import { getCategories } from '@/lib/queries/categories'
-import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { LatestEpisodeSection } from '@/components/ui/LatestEpisodeSection'
+import { SeasonProductsSection } from '@/components/ui/SeasonProductsSection'
 
 export default async function Home() {
-  const [stats, categories, products, latestEpisode] = await Promise.all([
+  const [stats, categories, latestEpisode] = await Promise.all([
     getProductStats(),
     getCategories(),
-    getRecentProducts(12),
     getLatestEpisodeProducts(4),
   ])
 
-  const currentSeason = latestEpisode.episode?.season || 16
+  const currentSeason = latestEpisode.episode?.season || 17
+  const seasonProducts = await getSeasonProducts(currentSeason, 24)
 
   return (
     <main className="min-h-screen bg-[var(--warm-white)]">
-      <section className="hero-search">
-        <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <h1 className="hero-headline">
-            Every Shark Tank Product.<br />
-            <span className="text-[var(--coral)]">Know What&apos;s Still in Business.</span>
-          </h1>
-          <p className="hero-subtext">
-            {stats.total} products tracked &middot; {stats.active} still active &middot; Updated weekly
-          </p>
-          <form action="/products" method="GET" className="hero-search-form">
-            <div className="hero-search-wrapper">
-              <svg className="hero-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                name="q"
-                placeholder="Search Scrub Daddy, Bombas, Ring..."
-                className="hero-search-input"
-              />
-              <button type="submit" className="hero-search-btn">
-                Search
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
       <section className="category-nav">
         <div className="max-w-6xl mx-auto px-6">
           <div className="category-nav-inner">
@@ -73,31 +45,11 @@ export default async function Home() {
         />
       )}
 
-      <section className="products-main">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="products-header">
-            <h2 className="products-title">Recently Aired</h2>
-            <Link href="/products" className="products-link">
-              View all {stats.total} →
-            </Link>
-          </div>
-          
-          <div className="products-grid-home">
-            {products.map((product) => (
-              <ProductCardCommerce 
-                key={product.id} 
-                product={product}
-              />
-            ))}
-          </div>
-
-          <div className="products-cta">
-            <Link href="/products" className="btn-browse">
-              Browse All Products
-            </Link>
-          </div>
-        </div>
-      </section>
+      <SeasonProductsSection
+        products={seasonProducts}
+        season={currentSeason}
+        totalProducts={stats.total}
+      />
 
       <section className="season-browser">
         <div className="max-w-6xl mx-auto px-6">
