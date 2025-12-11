@@ -68,21 +68,44 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
   return (data as ProductWithSharks[]) || []
 }
 
-export async function getProductBySlug(slug: string): Promise<ProductWithSharks | null> {
+export async function getProductBySlug(slug: string): Promise<{
+  product: ProductWithSharks
+  sharkPhotos: Record<string, string>
+} | null> {
   const supabase = await createClient()
-  
+
   const { data, error } = await supabase
     .from('products_with_sharks')
     .select('*')
     .eq('slug', slug)
     .single()
-  
+
   if (error) {
     if (error.code === 'PGRST116') return null
     throw error
   }
-  
-  return data as ProductWithSharks
+
+  const product = data as ProductWithSharks
+  const sharkNames = product.shark_names || []
+  const sharkPhotos: Record<string, string> = {}
+
+  // Fetch shark photos if there are sharks
+  if (sharkNames.length > 0) {
+    const { data: sharks } = await supabase
+      .from('sharks')
+      .select('name, photo_url')
+      .in('name', sharkNames)
+
+    if (sharks) {
+      for (const shark of sharks as { name: string; photo_url: string | null }[]) {
+        if (shark.photo_url) {
+          sharkPhotos[shark.name] = shark.photo_url
+        }
+      }
+    }
+  }
+
+  return { product, sharkPhotos }
 }
 
 export async function getProductsBySeason(season: number): Promise<ProductWithSharks[]> {
