@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type { ProductWithSharks, ProductStatus, DealOutcome, Category, Product } from '@/lib/supabase/types'
 
 export interface ProductFilters {
@@ -87,6 +87,22 @@ export async function getProductBySlug(slug: string): Promise<ProductWithSharks 
 
 export async function getProductsBySeason(season: number): Promise<ProductWithSharks[]> {
   return getProducts({ season })
+}
+
+/**
+ * Get product slugs for generateStaticParams (build-time, no cookies).
+ */
+export async function getProductSlugs(limit = 100): Promise<string[]> {
+  const supabase = createStaticClient()
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('slug')
+    .order('air_date', { ascending: false, nullsFirst: false })
+    .limit(limit)
+
+  if (error) throw error
+  return (data || []).map((p: { slug: string }) => p.slug)
 }
 
 export async function getActiveProducts(limit = 20): Promise<ProductWithSharks[]> {

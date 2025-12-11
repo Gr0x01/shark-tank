@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getProductBySlug, getProducts } from '@/lib/queries/products'
+import { getProductBySlug, getProductSlugs } from '@/lib/queries/products'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { ProductImage } from '@/components/ui/ProductImage'
 import { SharkImage } from '@/components/ui/SharkImage'
@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const products = await getProducts({ limit: 100 })
-  return products.map(p => ({ slug: p.slug }))
+  const slugs = await getProductSlugs(100)
+  return slugs.map(slug => ({ slug }))
 }
 
 export default async function ProductPage({ params }: Props) {

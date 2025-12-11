@@ -1,19 +1,36 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type { Episode, ProductWithSharks, Product } from '@/lib/supabase/types'
 
 export async function getSeasons(): Promise<number[]> {
   const supabase = await createClient()
-  
+
   const { data, error } = await supabase
     .from('episodes')
     .select('season')
     .order('season', { ascending: false })
-  
+
   if (error) throw error
-  
+
   const episodes = (data as Pick<Episode, 'season'>[]) || []
   const seasons = [...new Set(episodes.map(e => e.season))]
   return seasons
+}
+
+/**
+ * Get season numbers for generateStaticParams (build-time, no cookies).
+ */
+export async function getSeasonNumbers(): Promise<number[]> {
+  const supabase = createStaticClient()
+
+  const { data, error } = await supabase
+    .from('episodes')
+    .select('season')
+    .order('season', { ascending: false })
+
+  if (error) throw error
+
+  const episodes = (data as Pick<Episode, 'season'>[]) || []
+  return [...new Set(episodes.map(e => e.season))]
 }
 
 export async function getEpisodesBySeason(season: number): Promise<Episode[]> {

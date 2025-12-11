@@ -1,10 +1,8 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { getProducts, getProductStats } from '@/lib/queries/products'
 import { getCategories } from '@/lib/queries/categories'
 import { getSharks } from '@/lib/queries/sharks'
-import { StatusBadge } from '@/components/ui/StatusBadge'
-import { ProductImage } from '@/components/ui/ProductImage'
+import { ProductListCard } from '@/components/ui/ProductListCard'
 
 export const metadata: Metadata = {
   title: 'All Products | Shark Tank Products',
@@ -84,37 +82,7 @@ export default async function ProductsPage() {
           <div className="flex-1">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {products.map(product => (
-                <Link
-                  key={product.id}
-                  href={`/products/${product.slug}`}
-                  className="card group"
-                >
-                  <div className="flex gap-4">
-                    <ProductImage 
-                      src={product.photo_url} 
-                      alt={product.name}
-                      size="md"
-                      className="shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-1">
-                        <h2 className="font-display font-medium text-[var(--ink-900)] truncate group-hover:text-[var(--cyan-600)] transition-colors">
-                          {product.name}
-                        </h2>
-                        <StatusBadge status={product.status} />
-                      </div>
-                      {product.tagline && (
-                        <p className="text-sm text-[var(--ink-500)] mb-2 line-clamp-2">{product.tagline}</p>
-                      )}
-                      <div className="text-xs text-[var(--ink-400)] font-display">
-                        {product.season && <span>Season {product.season}</span>}
-                        {product.shark_names?.length > 0 && (
-                          <span className="text-[var(--cyan-600)]"> · {product.shark_names.join(', ')}</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+                <ProductListCard key={product.id} product={product} />
               ))}
             </div>
 

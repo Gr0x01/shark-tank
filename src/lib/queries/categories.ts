@@ -1,17 +1,32 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type { Category, ProductWithSharks, Product } from '@/lib/supabase/types'
 
 export async function getCategories(): Promise<Category[]> {
   const supabase = await createClient()
-  
+
   const { data, error } = await supabase
     .from('categories')
     .select('*')
     .is('parent_id', null)
     .order('name')
-  
+
   if (error) throw error
   return (data as Category[]) || []
+}
+
+/**
+ * Get category slugs for generateStaticParams (build-time, no cookies).
+ */
+export async function getCategorySlugs(): Promise<string[]> {
+  const supabase = createStaticClient()
+
+  const { data, error } = await supabase
+    .from('categories')
+    .select('slug')
+    .is('parent_id', null)
+
+  if (error) throw error
+  return (data || []).map((c: { slug: string }) => c.slug)
 }
 
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {

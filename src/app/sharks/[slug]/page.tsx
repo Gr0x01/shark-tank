@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getSharkBySlug, getSharkStats, getSharkProducts, getSharks } from '@/lib/queries/sharks'
+import { getSharkBySlug, getSharkStats, getSharkProducts, getSharkSlugs } from '@/lib/queries/sharks'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { SharkImage } from '@/components/ui/SharkImage'
 import { ProductImage } from '@/components/ui/ProductImage'
@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const sharks = await getSharks()
-  return sharks.map(s => ({ slug: s.slug }))
+  const slugs = await getSharkSlugs()
+  return slugs.map(slug => ({ slug }))
 }
 
 export default async function SharkPage({ params }: Props) {

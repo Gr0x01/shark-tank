@@ -1,17 +1,32 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type { Shark, SharkStats, ProductWithSharks } from '@/lib/supabase/types'
 
 export async function getSharks(): Promise<Shark[]> {
   const supabase = await createClient()
-  
+
   const { data, error } = await supabase
     .from('sharks')
     .select('*')
     .eq('is_guest_shark', false)
     .order('name')
-  
+
   if (error) throw error
   return data || []
+}
+
+/**
+ * Get shark slugs for generateStaticParams (build-time, no cookies).
+ */
+export async function getSharkSlugs(): Promise<string[]> {
+  const supabase = createStaticClient()
+
+  const { data, error } = await supabase
+    .from('sharks')
+    .select('slug')
+    .eq('is_guest_shark', false)
+
+  if (error) throw error
+  return (data || []).map((s: { slug: string }) => s.slug)
 }
 
 export async function getSharkBySlug(slug: string): Promise<Shark | null> {
