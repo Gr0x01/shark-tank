@@ -1,5 +1,6 @@
 import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type { ProductWithSharks, ProductStatus, DealOutcome, Category, Product } from '@/lib/supabase/types'
+import { sanitizeSearchQuery } from '@/lib/utils/search'
 
 export interface ProductFilters {
   status?: ProductStatus
@@ -50,8 +51,8 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
   }
   
   if (filters.search) {
-    const escapedSearch = filters.search.replace(/[%_\\]/g, '\\$&')
-    query = query.or(`name.ilike.%${escapedSearch}%,company_name.ilike.%${escapedSearch}%`)
+    const sanitizedSearch = sanitizeSearchQuery(filters.search)
+    query = query.or(`name.ilike.%${sanitizedSearch}%,company_name.ilike.%${sanitizedSearch}%`)
   }
   
   if (filters.limit) {

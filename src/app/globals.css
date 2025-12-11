@@ -1414,6 +1414,130 @@ h3, h4, h5, h6 {
   color: var(--ink-900);
 }
 
+/* Search Typeahead Results */
+.search-results {
+  margin-top: 1rem;
+  border-top: 1px solid var(--ink-100);
+}
+
+.search-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  color: var(--ink-500);
+  font-size: 0.875rem;
+}
+
+.search-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--ink-200);
+  border-top-color: var(--coral);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.search-results-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  border-bottom: 1px solid var(--ink-100);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover,
+.search-result-item.selected {
+  background-color: var(--cream);
+}
+
+.search-result-image {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--ink-100);
+}
+
+.search-result-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--ink-100);
+}
+
+.search-result-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-result-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--ink-900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-result-company {
+  font-size: 0.8125rem;
+  color: var(--ink-500);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 0.125rem;
+}
+
+.search-no-results {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.search-no-results p {
+  color: var(--ink-400);
+  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+}
+
+.search-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--coral);
+  background-color: var(--cream);
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.search-view-all:hover {
+  background-color: var(--coral);
+  color: var(--white);
+}
+
 .status-filters-section {
   padding: 2rem 0;
   background: var(--warm-white);

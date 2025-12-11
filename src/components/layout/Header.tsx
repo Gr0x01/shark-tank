@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 import clsx from 'clsx'
 import { useSpoilerContext } from '@/contexts/SpoilerContext'
+import { useSearchTypeahead } from '@/hooks/useSearchTypeahead'
 
 const navigation = [
   { name: 'Products', href: '/products' },
@@ -17,8 +19,11 @@ export function Header() {
   const router = useRouter()
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedIndex, setSelectedIndex] = useState(-1)
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
   const inputRef = useRef<HTMLInputElement>(null)
   const { spoilersHidden, toggleSpoilers } = useSpoilerContext()
+  const { results, isLoading, error } = useSearchTypeahead(searchQuery)
 
   useEffect(() => {
     if (searchOpen && inputRef.current) {
@@ -35,18 +40,59 @@ export function Header() {
       if (e.key === 'Escape') {
         setSearchOpen(false)
         setSearchQuery('')
+        setSelectedIndex(-1)
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  // Reset selected index when query changes or results become empty
+  useEffect(() => {
+    setSelectedIndex(-1)
+  }, [searchQuery, results.length])
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`)
+      if (selectedIndex >= 0 && results[selectedIndex]) {
+        // Navigate to selected product
+        router.push(`/products/${results[selectedIndex].slug}`)
+      } else {
+        // Navigate to full search results
+        router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`)
+      }
       setSearchOpen(false)
       setSearchQuery('')
+      setSelectedIndex(-1)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (results.length === 0) return
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      const newIndex = selectedIndex < results.length - 1 ? selectedIndex + 1 : selectedIndex
+      setSelectedIndex(newIndex)
+
+      // Scroll selected item into view
+      setTimeout(() => {
+        const element = document.querySelector(`[data-result-index="${newIndex}"]`)
+        element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+      }, 0)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      const newIndex = selectedIndex > -1 ? selectedIndex - 1 : -1
+      setSelectedIndex(newIndex)
+
+      // Scroll selected item into view
+      if (newIndex >= 0) {
+        setTimeout(() => {
+          const element = document.querySelector(`[data-result-index="${newIndex}"]`)
+          element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+        }, 0)
+      }
     }
   }
 
@@ -118,14 +164,100 @@ export function Header() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={handleKeyDown}
                       placeholder="Search Shark Tank products..."
                       className="search-input"
+                      role="combobox"
+                      aria-expanded={results.length > 0}
+                      aria-controls="search-results-list"
+                      aria-activedescendant={selectedIndex >= 0 ? `result-${selectedIndex}` : undefined}
+                      aria-autocomplete="list"
                     />
                     <button type="button" onClick={() => setSearchOpen(false)} className="search-close">
                       <kbd>ESC</kbd>
                     </button>
                   </div>
                 </form>
+
+                {/* Typeahead Results */}
+                {searchQuery.trim().length >= 2 && (
+                  <div className="search-results">
+                    {isLoading && (
+                      <div className="search-loading">
+                        <div className="search-spinner" />
+                        <span>Searching...</span>
+                      </div>
+                    )}
+
+                    {error && !isLoading && (
+                      <div className="search-no-results">
+                        <p className="text-sm text-red-600">{error}</p>
+                      </div>
+                    )}
+
+                    {!isLoading && !error && results.length > 0 && (
+                      <div id="search-results-list" role="listbox" className="search-results-list">
+                        {results.map((product, index) => (
+                          <Link
+                            key={product.slug}
+                            id={`result-${index}`}
+                            href={`/products/${product.slug}`}
+                            className={clsx('search-result-item', index === selectedIndex && 'selected')}
+                            role="option"
+                            aria-selected={index === selectedIndex}
+                            data-result-index={index}
+                            onClick={() => {
+                              setSearchOpen(false)
+                              setSearchQuery('')
+                              setSelectedIndex(-1)
+                            }}
+                          >
+                            <div className="search-result-image">
+                              {product.photo_url && !failedImages.has(product.slug) ? (
+                                <Image
+                                  src={product.photo_url}
+                                  alt={product.name}
+                                  width={40}
+                                  height={40}
+                                  className="object-cover"
+                                  onError={() => {
+                                    setFailedImages(prev => new Set(prev).add(product.slug))
+                                  }}
+                                />
+                              ) : (
+                                <div className="search-result-placeholder" />
+                              )}
+                            </div>
+                            <div className="search-result-text">
+                              <div className="search-result-name">{product.name}</div>
+                              {product.company_name && (
+                                <div className="search-result-company">{product.company_name}</div>
+                              )}
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+
+                    {!isLoading && !error && results.length === 0 && (
+                      <div className="search-no-results">
+                        <p>No products found</p>
+                        <Link
+                          href={`/products?q=${encodeURIComponent(searchQuery.trim())}`}
+                          className="search-view-all"
+                          onClick={() => {
+                            setSearchOpen(false)
+                            setSearchQuery('')
+                            setSelectedIndex(-1)
+                          }}
+                        >
+                          View all results for "{searchQuery}"
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="search-hints">
                   <span>Try: Scrub Daddy, Ring, Bombas, or browse by</span>
                   <Link href="/products?status=active" onClick={() => setSearchOpen(false)} className="search-hint-link">Still Active</Link>

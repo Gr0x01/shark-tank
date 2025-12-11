@@ -26,9 +26,20 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@200;300;500;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" 
-          rel="stylesheet" 
+        <link
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@200;300;500;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8G8CLL4K3F"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-8G8CLL4K3F');
+            `,
+          }}
         />
       </head>
       <body className="antialiased">

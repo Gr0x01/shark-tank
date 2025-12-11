@@ -8,10 +8,51 @@ import { FilterSidebar } from '@/components/ui/FilterSidebar'
 import { FilterChips } from '@/components/ui/FilterChips'
 import { MobileFilters } from '@/components/ui/MobileFilters'
 import type { ProductStatus, DealOutcome } from '@/lib/supabase/types'
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
+import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
-export const metadata: Metadata = {
-  title: 'All Products | Shark Tank Products',
-  description: 'Browse every product ever pitched on Shark Tank. Filter by status, shark, category, and more.',
+export async function generateMetadata(): Promise<Metadata> {
+  const title = 'All Products | tankd.io'
+  const description = 'Browse every product ever pitched on Shark Tank. Filter by status, shark, category, season, and deal outcome.'
+
+  return {
+    title,
+    description,
+    keywords: [
+      'Shark Tank products',
+      'all Shark Tank products',
+      'Shark Tank list',
+      'Mark Cuban deals',
+      'Lori Greiner products',
+      'still in business',
+      'got deal',
+      'no deal',
+      'by category',
+      'by shark'
+    ],
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/products`,
+      siteName: SITE_NAME,
+      images: [{
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: 'Browse All Shark Tank Products'
+      }],
+      type: 'website'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE]
+    },
+    alternates: {
+      canonical: `${SITE_URL}/products`
+    }
+  }
 }
 
 // Current season - update when new season starts
@@ -50,6 +91,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     season: parseSeasonParam(params.season),
     categorySlug: Array.isArray(categoryParam) ? categoryParam[0] : categoryParam,
     sharkSlug: Array.isArray(sharkParam) ? sharkParam[0] : sharkParam,
+    search: Array.isArray(params.q) ? params.q[0] : params.q,
     limit: 100,
   }
 
@@ -62,14 +104,42 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   ])
 
   // Check if any filters are active
-  const hasActiveFilters = filters.status || filters.dealOutcome || filters.season || filters.categorySlug || filters.sharkSlug
+  const hasActiveFilters = filters.status || filters.dealOutcome || filters.season || filters.categorySlug || filters.sharkSlug || filters.search
+
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Products' }
+  ])
+
+  const collectionSchema = createCollectionPageSchema(
+    'All Shark Tank Products',
+    'Complete directory of every product pitched on Shark Tank',
+    `${SITE_URL}/products`,
+    stats.total
+  )
 
   return (
-    <main className="min-h-screen py-12 px-6">
+    <>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: escapeJsonLd(collectionSchema) }}
+      />
+
+      <main className="min-h-screen py-12 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <p className="section-label mb-2">Browse</p>
           <h1 className="text-3xl md:text-4xl font-medium mb-2">All Products</h1>
+          {filters.search && (
+            <p className="text-sm text-[var(--ink-500)] mb-2">
+              Showing results for "<span className="font-medium text-[var(--ink-900)]">{filters.search}</span>"
+            </p>
+          )}
           <p className="text-[var(--ink-500)]">
             {hasActiveFilters ? (
               <>{products.length} results</>
@@ -122,5 +192,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         />
       </Suspense>
     </main>
+    </>
   )
 }
