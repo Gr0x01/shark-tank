@@ -173,6 +173,7 @@ export async function getSuccessStories(limit = 4): Promise<ProductWithSharks[]>
 export async function getLatestEpisodeProducts(limit = 4): Promise<{
   episode: { season: number; episode_number: number; air_date: string | null } | null
   products: ProductWithSharks[]
+  sharkPhotos: Record<string, string>
 }> {
   const supabase = await createClient()
   
@@ -187,7 +188,7 @@ export async function getLatestEpisodeProducts(limit = 4): Promise<{
     .single()
   
   if (episodeError || !latestProduct) {
-    return { episode: null, products: [] }
+    return { episode: null, products: [], sharkPhotos: {} }
   }
   
   const product = latestProduct as ProductWithSharks
@@ -201,13 +202,34 @@ export async function getLatestEpisodeProducts(limit = 4): Promise<{
   
   if (productsError) throw productsError
   
+  const typedProducts = (products as ProductWithSharks[]) || []
+  const allSharkNames = [...new Set(typedProducts.flatMap(p => p.shark_names || []))]
+  
+  const sharkPhotos: Record<string, string> = {}
+  
+  if (allSharkNames.length > 0) {
+    const { data: sharks } = await supabase
+      .from('sharks')
+      .select('name, photo_url')
+      .in('name', allSharkNames)
+    
+    if (sharks) {
+      for (const shark of sharks as { name: string; photo_url: string | null }[]) {
+        if (shark.photo_url) {
+          sharkPhotos[shark.name] = shark.photo_url
+        }
+      }
+    }
+  }
+  
   return {
     episode: {
       season: product.season as number,
       episode_number: product.episode_number as number,
       air_date: product.air_date
     },
-    products: (products as ProductWithSharks[]) || []
+    products: typedProducts,
+    sharkPhotos
   }
 }
 

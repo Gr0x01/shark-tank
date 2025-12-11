@@ -1947,6 +1947,510 @@ h3, h4, h5, h6 {
   text-decoration-color: var(--gold-light);
 }
 
+/* Featured + Small Cards Layout */
+.ep-featured-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .ep-featured-layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.ep-featured-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--ink-800);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.ep-featured-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.ep-featured-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--ink-700);
+}
+
+.ep-featured-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink-700);
+}
+
+.ep-featured-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+}
+
+.ep-featured-founders {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.02em;
+}
+
+.ep-featured-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+  transition: color 0.15s ease;
+}
+
+@media (min-width: 768px) {
+  .ep-featured-name {
+    font-size: 1.75rem;
+  }
+}
+
+.ep-featured-card:hover .ep-featured-name {
+  color: var(--coral);
+}
+
+.ep-featured-ask {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--coral);
+}
+
+/* Result Band - Full width footer with dramatic reveal */
+.ep-result-band {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.ep-result-band.deal {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+}
+
+.ep-result-band.no-deal {
+  background: var(--ink-700);
+}
+
+.ep-result-band.hidden-result {
+  background: var(--ink-800);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ep-result-band.revealed {
+  animation: resultReveal 0.4s ease-out;
+}
+
+@keyframes resultReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shark Stack - overlapping avatars, expands upward */
+.ep-shark-stack {
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  align-self: flex-end;
+  margin-bottom: -4px;
+}
+
+.ep-shark-stack-item {
+  position: relative;
+  margin-left: -12px;
+  margin-top: -2rem;
+}
+
+.ep-shark-stack-item:first-child {
+  margin-left: 0;
+}
+
+.ep-result-shark-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #10b981;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.ep-result-band.revealed .ep-result-shark-img {
+  animation: sharkBounce 0.5s ease-out 0.1s both;
+}
+
+.ep-shark-stack-item:nth-child(2) .ep-result-shark-img {
+  animation-delay: 0.15s;
+}
+
+.ep-shark-stack-item:nth-child(3) .ep-result-shark-img {
+  animation-delay: 0.2s;
+}
+
+@keyframes sharkBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ep-result-shark-placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ink-600);
+  border: 3px solid var(--ink-500);
+}
+
+.ep-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+}
+
+.ep-result-labels {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ep-result-label {
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #6ee7b7;
+  text-transform: uppercase;
+}
+
+.ep-result-badge {
+  font-family: var(--font-display);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.125rem 0.375rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.ep-result-badge.royalty {
+  background: var(--gold);
+  color: var(--ink-900);
+}
+
+.ep-result-amount {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.ep-result-equity {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ep-result-shark-name {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ep-result-no-deal {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink-300);
+  letter-spacing: 0.05em;
+}
+
+.ep-result-cta {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: auto;
+  transition: color 0.15s ease;
+}
+
+.ep-featured-card:hover .ep-result-cta {
+  color: var(--white);
+}
+
+.ep-reveal-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex: 1;
+}
+
+.ep-reveal-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold);
+  color: var(--ink-900);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  border-radius: 50%;
+  animation: pulse-icon 2s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.ep-reveal-label {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-400);
+  transition: color 0.15s ease;
+}
+
+.ep-reveal-trigger:hover .ep-reveal-label {
+  color: var(--gold);
+}
+
+/* Small Cards Stack */
+.ep-small-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ep-small-card {
+  display: flex;
+  align-items: stretch;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.ep-small-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ep-small-image {
+  position: relative;
+  width: 80px;
+  flex-shrink: 0;
+  background: var(--ink-700);
+}
+
+.ep-small-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink-700);
+}
+
+.ep-small-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+}
+
+.ep-small-name {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  transition: color 0.15s ease;
+}
+
+.ep-small-card:hover .ep-small-name {
+  color: var(--coral);
+}
+
+.ep-small-ask {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--ink-400);
+}
+
+/* Small Card Result Band */
+.ep-small-result-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.ep-small-result-band.deal {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+}
+
+.ep-small-result-band.no-deal {
+  background: var(--ink-700);
+}
+
+.ep-small-result-band.hidden-result {
+  background: var(--ink-800);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ep-small-result-band.revealed {
+  animation: smallResultReveal 0.3s ease-out;
+}
+
+@keyframes smallResultReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.ep-small-result-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+
+/* Small shark stack */
+.ep-small-shark-stack {
+  display: flex;
+  justify-content: center;
+}
+
+.ep-small-shark-item {
+  margin-left: -6px;
+}
+
+.ep-small-shark-item:first-child {
+  margin-left: 0;
+}
+
+.ep-small-shark-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #10b981;
+}
+
+.ep-small-result-band.revealed .ep-small-shark-img {
+  animation: sharkBounce 0.4s ease-out 0.1s both;
+}
+
+.ep-small-result-text {
+  font-family: var(--font-display);
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--ink-400);
+  text-align: center;
+}
+
+.ep-small-result-text.got-deal {
+  color: #6ee7b7;
+}
+
+.ep-small-badge {
+  font-family: var(--font-display);
+  font-size: 0.4375rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+}
+
+.ep-small-reveal-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.ep-small-reveal-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold);
+  color: var(--ink-900);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 800;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+
+.ep-small-reveal-btn:hover .ep-small-reveal-icon {
+  transform: scale(1.15);
+}
+
 .season-browser {
   padding: 3rem 0;
   background: var(--cream);

@@ -41,7 +41,8 @@ export default async function Home() {
       {latestEpisode.episode && (
         <LatestEpisodeSection 
           episode={latestEpisode.episode} 
-          products={latestEpisode.products} 
+          products={latestEpisode.products}
+          sharkPhotos={latestEpisode.sharkPhotos}
         />
       )}
 
