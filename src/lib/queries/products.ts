@@ -112,6 +112,24 @@ export async function getProductsBySeason(season: number): Promise<ProductWithSh
   return getProducts({ season })
 }
 
+export async function getProductsByEpisode(
+  season: number,
+  episodeNumber: number,
+  excludeSlug: string
+): Promise<ProductWithSharks[]> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .eq('season', season)
+    .eq('episode_number', episodeNumber)
+    .neq('slug', excludeSlug)
+
+  if (error) throw error
+  return (data as ProductWithSharks[]) || []
+}
+
 /**
  * Get product slugs for generateStaticParams (build-time, no cookies).
  */
@@ -293,7 +311,7 @@ export async function getSeasonProducts(season: number, limit = 24): Promise<{
   sharkPhotos: Record<string, string>
 }> {
   const supabase = await createClient()
-  
+
   const { data, error } = await supabase
     .from('products_with_sharks')
     .select('*')
@@ -301,20 +319,20 @@ export async function getSeasonProducts(season: number, limit = 24): Promise<{
     .order('episode_number', { ascending: false })
     .order('name', { ascending: true })
     .limit(limit)
-  
+
   if (error) throw error
-  
+
   const products = (data as ProductWithSharks[]) || []
   const allSharkNames = [...new Set(products.flatMap(p => p.shark_names || []))]
-  
+
   const sharkPhotos: Record<string, string> = {}
-  
+
   if (allSharkNames.length > 0) {
     const { data: sharks } = await supabase
       .from('sharks')
       .select('name, photo_url')
       .in('name', allSharkNames)
-    
+
     if (sharks) {
       for (const shark of sharks as { name: string; photo_url: string | null }[]) {
         if (shark.photo_url) {
@@ -323,6 +341,25 @@ export async function getSeasonProducts(season: number, limit = 24): Promise<{
       }
     }
   }
-  
+
   return { products, sharkPhotos }
+}
+
+export async function getSharkPhotos(): Promise<Record<string, string>> {
+  const supabase = await createClient()
+
+  const { data: sharks } = await supabase
+    .from('sharks')
+    .select('name, photo_url')
+    .not('photo_url', 'is', null)
+
+  const sharkPhotos: Record<string, string> = {}
+  if (sharks) {
+    for (const shark of sharks as { name: string; photo_url: string | null }[]) {
+      if (shark.photo_url) {
+        sharkPhotos[shark.name] = shark.photo_url
+      }
+    }
+  }
+  return sharkPhotos
 }

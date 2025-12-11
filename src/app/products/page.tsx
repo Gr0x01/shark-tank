@@ -1,99 +1,126 @@
 import { Metadata } from 'next'
-import { getProducts, getProductStats } from '@/lib/queries/products'
+import { Suspense } from 'react'
+import { getProducts, getProductStats, getSharkPhotos } from '@/lib/queries/products'
 import { getCategories } from '@/lib/queries/categories'
 import { getSharks } from '@/lib/queries/sharks'
-import { ProductListCard } from '@/components/ui/ProductListCard'
+import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
+import { FilterSidebar } from '@/components/ui/FilterSidebar'
+import { FilterChips } from '@/components/ui/FilterChips'
+import { MobileFilters } from '@/components/ui/MobileFilters'
+import type { ProductStatus, DealOutcome } from '@/lib/supabase/types'
 
 export const metadata: Metadata = {
   title: 'All Products | Shark Tank Products',
   description: 'Browse every product ever pitched on Shark Tank. Filter by status, shark, category, and more.',
 }
 
-export default async function ProductsPage() {
-  const [products, stats, categories, sharks] = await Promise.all([
-    getProducts({ limit: 50 }),
+// Current season - update when new season starts
+const CURRENT_SEASON = 17
+
+/**
+ * Parse and validate season parameter
+ * Returns undefined for invalid values (NaN, out of range, etc.)
+ */
+function parseSeasonParam(param: string | string[] | undefined): number | undefined {
+  if (!param) return undefined
+  const value = Array.isArray(param) ? param[0] : param
+  const parsed = parseInt(value, 10)
+  // Validate: must be a number between 1 and current season
+  if (isNaN(parsed) || parsed < 1 || parsed > CURRENT_SEASON) return undefined
+  return parsed
+}
+
+interface ProductsPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const params = await searchParams
+
+  // Parse filter params
+  const statusParam = params.status
+  const dealParam = params.deal
+  const categoryParam = params.category
+  const sharkParam = params.shark
+
+  // Build filters object with validated season
+  const filters = {
+    status: (Array.isArray(statusParam) ? statusParam[0] : statusParam) as ProductStatus | undefined,
+    dealOutcome: (Array.isArray(dealParam) ? dealParam[0] : dealParam) as DealOutcome | undefined,
+    season: parseSeasonParam(params.season),
+    categorySlug: Array.isArray(categoryParam) ? categoryParam[0] : categoryParam,
+    sharkSlug: Array.isArray(sharkParam) ? sharkParam[0] : sharkParam,
+    limit: 100,
+  }
+
+  const [products, stats, categories, sharks, sharkPhotos] = await Promise.all([
+    getProducts(filters),
     getProductStats(),
     getCategories(),
     getSharks(),
+    getSharkPhotos(),
   ])
+
+  // Check if any filters are active
+  const hasActiveFilters = filters.status || filters.dealOutcome || filters.season || filters.categorySlug || filters.sharkSlug
 
   return (
     <main className="min-h-screen py-12 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-10">
+        <div className="mb-8">
           <p className="section-label mb-2">Browse</p>
           <h1 className="text-3xl md:text-4xl font-medium mb-2">All Products</h1>
           <p className="text-[var(--ink-500)]">
-            {stats.total} products · {stats.gotDeal} deals · {stats.active} still active
+            {hasActiveFilters ? (
+              <>{products.length} results</>
+            ) : (
+              <>{stats.total} products · {stats.gotDeal} deals · {stats.active} still active</>
+            )}
           </p>
         </div>
 
+        {/* Active Filter Chips */}
+        <Suspense fallback={null}>
+          <FilterChips sharks={sharks} categories={categories} />
+        </Suspense>
+
         <div className="flex gap-10">
-          <aside className="w-56 shrink-0 hidden lg:block">
-            <div className="sticky top-24 space-y-8">
-              <div>
-                <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Status</h3>
-                <div className="space-y-2 text-sm">
-                  <label className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
-                    <input type="checkbox" className="rounded border-[var(--ink-300)]" /> Active ({stats.active})
-                  </label>
-                  <label className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
-                    <input type="checkbox" className="rounded border-[var(--ink-300)]" /> Out of Business ({stats.outOfBusiness})
-                  </label>
-                </div>
-              </div>
+          {/* Desktop Sidebar */}
+          <Suspense fallback={null}>
+            <FilterSidebar
+              stats={stats}
+              sharks={sharks}
+              categories={categories}
+              currentSeason={CURRENT_SEASON}
+            />
+          </Suspense>
 
-              <div>
-                <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Deal</h3>
-                <div className="space-y-2 text-sm">
-                  <label className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
-                    <input type="checkbox" className="rounded border-[var(--ink-300)]" /> Got a Deal ({stats.gotDeal})
-                  </label>
-                  <label className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
-                    <input type="checkbox" className="rounded border-[var(--ink-300)]" /> No Deal ({stats.noDeal})
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
-                <div className="space-y-2 text-sm">
-                  {sharks.map(shark => (
-                    <label key={shark.id} className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
-                      <input type="checkbox" className="rounded border-[var(--ink-300)]" /> {shark.name}
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Category</h3>
-                <div className="space-y-2 text-sm max-h-48 overflow-y-auto">
-                  {categories.map(cat => (
-                    <label key={cat.id} className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
-                      <input type="checkbox" className="rounded border-[var(--ink-300)]" /> {cat.name}
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </aside>
-
+          {/* Product Grid */}
           <div className="flex-1">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="products-grid-home">
               {products.map(product => (
-                <ProductListCard key={product.id} product={product} />
+                <ProductCardCommerce key={product.id} product={product} sharkPhotos={sharkPhotos} />
               ))}
             </div>
 
             {products.length === 0 && (
               <div className="text-center py-16 text-[var(--ink-400)] card">
-                <p className="font-display">No products found. Run the seed script to populate data.</p>
+                <p className="font-display">No products match your filters.</p>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter Button + Drawer */}
+      <Suspense fallback={null}>
+        <MobileFilters
+          stats={stats}
+          sharks={sharks}
+          categories={categories}
+          currentSeason={CURRENT_SEASON}
+        />
+      </Suspense>
     </main>
   )
 }
