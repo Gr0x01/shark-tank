@@ -1,13 +1,14 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getProductBySlug, getProductSlugs } from '@/lib/queries/products'
+import { getProductBySlug, getProductSlugs, getProductsByEpisode, getSharkPhotos } from '@/lib/queries/products'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { ProductImage } from '@/components/ui/ProductImage'
 import { DealRevealSection } from '@/components/ui/DealRevealSection'
 import { MidPageCTA } from '@/components/ui/MidPageCTA'
 import { WhereToBuySection } from '@/components/ui/WhereToBuySection'
 import { StickyCTABar } from '@/components/ui/StickyCTABar'
+import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -91,9 +92,17 @@ export default async function ProductPage({ params }: Props) {
     notFound()
   }
 
-  const { product, sharkPhotos } = result
+  const { product } = result
   const narrative = product.narrative_content as NarrativeContent | null
   const hasNarrative = narrative && Object.values(narrative).some(v => v)
+
+  // Fetch related products and all shark photos in parallel
+  const [relatedProducts, sharkPhotos] = await Promise.all([
+    product.season && product.episode_number
+      ? getProductsByEpisode(product.season, product.episode_number, slug)
+      : Promise.resolve([]),
+    getSharkPhotos(),
+  ])
 
   // Build sharks array for DealRevealSection
   const sharks = (product.shark_names || []).map((name, i) => ({
@@ -178,7 +187,7 @@ export default async function ProductPage({ params }: Props) {
 
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="product-hero" data-deal-status={product.deal_outcome}>
+        <section className="product-hero">
           <div className="max-w-6xl mx-auto px-6 py-12 md:py-16">
             {/* Breadcrumb Navigation */}
             <nav aria-label="Breadcrumb" className="mb-6">
@@ -412,16 +421,19 @@ export default async function ProductPage({ params }: Props) {
         </section>
       )}
 
-      {/* Episode Link */}
-      {product.season && (
-        <section className="product-episode-section">
-          <div className="max-w-3xl mx-auto px-6">
-            <Link href={`/seasons/${product.season}`} className="product-episode-link">
-              <span className="product-episode-link-label">More from this episode</span>
-              <span className="product-episode-link-title">
-                Season {product.season}{product.episode_number ? `, Episode ${product.episode_number}` : ''}
-              </span>
-              <span className="product-episode-link-arrow">→</span>
+      {/* More From This Episode */}
+      {product.season && relatedProducts.length > 0 && (
+        <section className="product-related-section">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="related-heading">More from This Episode</h2>
+            <div className="related-products-grid">
+              {relatedProducts.map(p => (
+                <ProductCardCommerce key={p.id} product={p} sharkPhotos={sharkPhotos} />
+              ))}
+            </div>
+
+            <Link href={`/seasons/${product.season}`} className="btn-cta-primary mt-6">
+              View All Season {product.season} Products
             </Link>
           </div>
         </section>

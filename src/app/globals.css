@@ -3084,6 +3084,57 @@ h3, h4, h5, h6 {
   transform: translateX(4px);
 }
 
+/* Related Products Section */
+.product-related-section {
+  padding: 3rem 0;
+  background: var(--cream);
+  border-top: 1px solid var(--ink-100);
+}
+
+.related-heading {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink-900);
+  margin-bottom: 1.25rem;
+}
+
+.related-products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+/* Single card - center it */
+.related-products-grid:has(> :only-child) {
+  grid-template-columns: 1fr;
+  max-width: 320px;
+}
+
+@media (min-width: 1024px) {
+  .related-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .related-products-grid:has(> :only-child) {
+    max-width: 280px;
+  }
+}
+
+.related-view-all {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--coral);
+  transition: color 0.15s ease;
+}
+
+.related-view-all:hover {
+  color: var(--coral-dark, #d63e3e);
+}
+
 /* ==========================================
    PRODUCT PAGE - Conversion Optimization
    ========================================== */
