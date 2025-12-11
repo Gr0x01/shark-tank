@@ -15,6 +15,32 @@ const BUCKET_NAME = 'product-photos';
 const CONCURRENCY = 25;
 const TIMEOUT_MS = 15000;
 
+async function searchTavilyImages(productName: string): Promise<string[]> {
+  const apiKey = process.env.TAVILY_API_KEY || process.env.TAVILY;
+  if (!apiKey) return [];
+
+  try {
+    const response = await fetch('https://api.tavily.com/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: apiKey,
+        query: `${productName} Shark Tank product`,
+        search_depth: 'basic',
+        include_images: true,
+        max_results: 5,
+      }),
+    });
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    return data.images || [];
+  } catch {
+    return [];
+  }
+}
+
 interface ScrapedProduct {
   name: string;
   url: string;
@@ -228,6 +254,28 @@ async function scrapeProductPhoto(product: Product): Promise<{ success: boolean;
     }
   }
   
+  const tavilyImages = await searchTavilyImages(product.name);
+  for (const imageUrl of tavilyImages) {
+    try {
+      const imageData = await downloadImage(imageUrl);
+      if (!imageData) continue;
+      
+      const publicUrl = await uploadToStorage(product.slug, imageData.buffer, imageData.contentType);
+      if (!publicUrl) continue;
+      
+      const { error } = await supabase
+        .from('products')
+        .update({ photo_url: publicUrl })
+        .eq('id', product.id);
+      
+      if (error) continue;
+      
+      return { success: true, source: 'tavily' };
+    } catch {
+      continue;
+    }
+  }
+  
   return { success: false };
 }
 
@@ -298,7 +346,7 @@ async function batchScrapePhotos(options: { limit?: number; dryRun?: boolean }) 
   let scraped = 0;
   let failed = 0;
   let processed = 0;
-  const sourceCount: Record<string, number> = { website: 0, allsharktank: 0 };
+  const sourceCount: Record<string, number> = { website: 0, allsharktank: 0, tavily: 0 };
 
   for (let i = 0; i < products.length; i += CONCURRENCY) {
     const batch = products.slice(i, i + CONCURRENCY);
@@ -330,6 +378,7 @@ async function batchScrapePhotos(options: { limit?: number; dryRun?: boolean }) 
   console.log(`   Failed: ${failed}`);
   console.log(`   From website: ${sourceCount.website}`);
   console.log(`   From allsharktank: ${sourceCount.allsharktank}`);
+  console.log(`   From tavily: ${sourceCount.tavily}`);
   console.log('━'.repeat(60) + '\n');
 }
 
