@@ -56,9 +56,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = product.meta_description || product.pitch_summary || product.tagline ||
     `${product.name} appeared on Shark Tank Season ${product.season}. Find out what happened and where to buy.`
 
+  // Generate SEO keywords
+  const keywords = [
+    product.name,
+    'Shark Tank',
+    `Season ${product.season}`,
+    ...(product.shark_names || []),
+    product.deal_outcome === 'deal' ? 'got deal' : product.deal_outcome === 'no_deal' ? 'no deal' : '',
+    product.status === 'active' ? 'still in business' : product.status === 'out_of_business' ? 'out of business' : '',
+    'where to buy',
+    'update',
+  ].filter(Boolean).join(', ')
+
   return {
     title,
     description,
+    keywords,
     openGraph: {
       title: `${product.name} - Shark Tank`,
       description: product.pitch_summary || product.tagline || '',
