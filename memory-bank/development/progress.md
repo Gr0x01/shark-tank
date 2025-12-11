@@ -34,6 +34,7 @@ Status: Phase 3 Complete - Production Ready
 | 15 | Search & Filters | Dec 12 | ✅ Complete |
 | 16 | Shark Narrative Enrichment | Dec 12 | ✅ Complete |
 | 17 | SEO & Structured Data | Dec 12 | ✅ Complete |
+| 18 | Auto Narrative Refresh System | Dec 12 | ✅ Complete |
 
 ## Current Status (as of Dec 12, 2025)
 
@@ -209,6 +210,19 @@ Scripts for ingesting new Shark Tank episodes as they air:
 - 5 narrative sections: biography, investment_philosophy, shark_tank_journey, notable_deals, beyond_the_tank
 - Same Tavily + OpenAI gpt-4.1-mini pipeline as products
 - Usage: `npx tsx scripts/enrich-shark-narratives.ts --shark "Mark Cuban"`
+
+### Automatic Narrative Refresh System (Dec 12)
+- Migration `00007_narrative_refresh_on_status_change.sql` - Database trigger for auto-flagging
+- **Problem Solved**: Product narratives became stale when business status changed (e.g., "still in business" text when company closed)
+- **Solution**: PostgreSQL trigger automatically sets `narrative_version = 0` when `products.status` changes
+- **Flow**: Status change → Trigger flags → Run enrichment script → Fresh narrative generated
+- **Benefits**:
+  - Fully automatic (works from any update source: scripts, admin, SQL)
+  - Only flags when status actually changes
+  - Batch processing keeps costs predictable (~$0.001/product)
+- **Helper Function**: `flag_product_for_narrative_refresh(product_id)` for manual flagging
+- **Documentation**: Comprehensive ops guide in `development/content-enrichment.md`
+- **Pattern**: Documented in `architecture/patterns.md` as reusable cache invalidation pattern
 
 ## Phase 4: Future Enhancements
 

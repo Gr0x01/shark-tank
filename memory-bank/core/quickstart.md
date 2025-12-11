@@ -41,6 +41,17 @@ npx tsx scripts/batch-enrich.ts --concurrency 20
 npx tsx scripts/enrich-narratives.ts --limit 10              # Product narratives
 npx tsx scripts/enrich-shark-narratives.ts --shark "Mark"    # Shark narratives
 npx tsx scripts/enrich-shark-narratives.ts --all             # All sharks
+
+# === CONTENT MAINTENANCE ===
+# When product status changes, narrative is auto-flagged for refresh (database trigger)
+# Run this to regenerate narratives for flagged products:
+npx tsx scripts/enrich-narratives.ts --limit 10
+
+# Check which products need narrative refresh:
+# SELECT id, name, status FROM products WHERE narrative_version = 0;
+
+# Manually flag a product for narrative refresh (if needed):
+# SELECT flag_product_for_narrative_refresh('product-uuid');
 ```
 
 **IMPORTANT**: Always use port 3004 for this project to avoid conflicts.
@@ -58,6 +69,8 @@ npx tsx scripts/enrich-shark-narratives.ts --all             # All sharks
 - [Tech Stack](../architecture/techStack.md)
 - [Active Context](../development/activeContext.md)
 - [Progress Log](../development/progress.md)
+- [Content Enrichment Guide](../development/content-enrichment.md)
+- [Architecture Patterns](../architecture/patterns.md)
 
 ## Database Status
 - **Products**: 589 total (279 deals, 238 no deal, 67 fell through)

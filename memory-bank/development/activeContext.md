@@ -11,6 +11,16 @@ Status: Phase 3 Complete - Ready for Launch
 - **Mode**: Production ready - all core features shipped
 - **Focus**: Launch preparation, SEO optimization, monitoring
 
+## Narrative Refresh System (Built Dec 12)
+
+Database trigger automatically flags products for narrative re-enrichment when status changes:
+- **Trigger**: `trigger_narrative_refresh_on_status_change` sets `narrative_version = 0` when `status` column changes
+- **Helper**: `flag_product_for_narrative_refresh(product_id)` for manual flagging
+- **Enrichment**: Run `npx tsx scripts/enrich-narratives.ts --limit 10` to regenerate flagged narratives
+- **Cost**: ~$0.001/product for narrative refresh with gpt-4.1-mini
+
+This ensures product narratives stay accurate when business status changes (active → out_of_business).
+
 ## New Episode Workflow (Built Dec 11)
 
 Scripts for ingesting new episodes as they air on Fridays:
@@ -160,3 +170,4 @@ OPENAI_API_KEY=...
 - `00005_deal_search_tracking.sql` - Adds `deal_search_attempts` column for daily cron
 - `00006_shark_co_investors_function.sql` - Function for shark partnership data
 - `00006_shark_narrative_content.sql` - Adds narrative fields to sharks table
+- `00007_narrative_refresh_on_status_change.sql` - Auto-flags narrative refresh on status change

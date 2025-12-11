@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-10
+Last-Updated: 2025-12-12
 Maintainer: RB
 Status: Active
 ---
@@ -79,6 +79,78 @@ const ProductSchema = z.object({
   deal_amount: z.number().nullable(),
 });
 ```
+
+### Database Triggers for Data Consistency
+Use PostgreSQL triggers to maintain data integrity and automate related updates.
+
+**Pattern: Automatic Cache Invalidation**
+
+When source data changes, automatically flag dependent cached/generated content for refresh.
+
+**Example: Narrative Refresh on Status Change**
+
+Problem: Product narrative content becomes stale when business status changes (e.g., active → out_of_business).
+
+Solution: Database trigger automatically flags narratives for regeneration.
+
+```sql
+-- Migration: 00007_narrative_refresh_on_status_change.sql
+
+CREATE OR REPLACE FUNCTION flag_narrative_refresh_on_status_change()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Only flag if status actually changed and narrative exists
+    IF NEW.status IS DISTINCT FROM OLD.status AND OLD.narrative_version > 0 THEN
+        NEW.narrative_version := 0;
+        RAISE NOTICE 'Product % status changed from % to %. Flagging narrative for refresh.',
+            NEW.name, OLD.status, NEW.status;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_narrative_refresh_on_status_change
+    BEFORE UPDATE ON products
+    FOR EACH ROW
+    EXECUTE FUNCTION flag_narrative_refresh_on_status_change();
+```
+
+**How It Works:**
+
+1. **Status Update**: Any update to `products.status` triggers the function
+2. **Condition Check**: Only flags if status actually changed AND narrative exists (version > 0)
+3. **Flag for Refresh**: Sets `narrative_version = 0` to mark as needing regeneration
+4. **Batch Regeneration**: Run enrichment script to process flagged products
+
+**Usage:**
+
+```bash
+# Status change automatically flags product
+UPDATE products SET status = 'out_of_business' WHERE slug = 'scrub-daddy';
+
+# Query flagged products
+SELECT id, name, status, narrative_version
+FROM products
+WHERE narrative_version = 0;
+
+# Regenerate narratives for flagged products
+npx tsx scripts/enrich-narratives.ts --limit 10
+
+# Manual flagging (if needed)
+SELECT flag_product_for_narrative_refresh('product-uuid-here');
+```
+
+**Benefits:**
+- **Automatic**: No manual tracking of what needs updating
+- **Consistent**: Works from any update source (scripts, admin panel, direct SQL)
+- **Efficient**: Only flags when status actually changes
+- **Cost-effective**: Batch processing keeps LLM costs predictable (~$0.001/product)
+
+**When to Use This Pattern:**
+- Generated/cached content depends on source data
+- Content generation is expensive (time/cost) so you want batching
+- Changes are infrequent enough that real-time regeneration isn't needed
+- Multiple update paths exist (can't rely on application-level hooks)
 
 ## Anti-Patterns to Avoid
 
