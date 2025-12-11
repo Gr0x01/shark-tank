@@ -1,8 +1,7 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { getSharks, getAllSharkStats, getLeaderboardSharks } from '@/lib/queries/sharks'
-import { SharkImage } from '@/components/ui/SharkImage'
 import { SharkLeaderboard } from '@/components/ui/SharkLeaderboard'
+import { SharkFilter } from '@/components/ui/SharkFilter'
 
 export const metadata: Metadata = {
   title: 'The Sharks - All Shark Tank Investors & Their Portfolios | Shark Tank Products',
@@ -39,6 +38,23 @@ export const metadata: Metadata = {
   },
 }
 
+// Investment style color mapping
+const styleColors: Record<string, { bg: string; text: string }> = {
+  'Brand Builder': { bg: 'var(--coral)', text: 'white' },
+  'Product Queen': { bg: 'var(--gold)', text: 'var(--ink-900)' },
+  'Tech Investor': { bg: 'var(--cyan-600)', text: 'white' },
+  'Fashion & Lifestyle': { bg: 'var(--coral-dark)', text: 'white' },
+  'Deal Maker': { bg: 'var(--success)', text: 'white' },
+  'Marketing Maven': { bg: 'var(--gold-light)', text: 'var(--ink-900)' },
+  'Mr. Wonderful': { bg: 'var(--ink-800)', text: 'var(--gold)' },
+  'Straight Shooter': { bg: 'var(--shark-blue)', text: 'white' },
+  'People & Brands': { bg: 'var(--coral)', text: 'white' },
+  'Fashion Icon': { bg: 'var(--ink-900)', text: 'white' },
+  'Strategic Partner': { bg: 'var(--cyan-600)', text: 'white' },
+  'Value Investor': { bg: 'var(--success)', text: 'white' },
+  'Venture Capitalist': { bg: 'var(--shark-blue-dark)', text: 'white' },
+}
+
 export default async function SharksPage() {
   const [sharks, stats, leaderboard] = await Promise.all([
     getSharks(),
@@ -46,7 +62,10 @@ export default async function SharksPage() {
     getLeaderboardSharks(),
   ])
 
-  const statsMap = new Map(stats.map(s => [s.slug, s]))
+  // Calculate max values for progress bars
+  const maxDeals = Math.max(...stats.map(s => s.total_deals || 0), 1)
+  const maxActive = Math.max(...stats.map(s => s.active_companies || 0), 1)
+  const maxSuccess = Math.max(...stats.map(s => s.success_rate || 0), 1)
 
   return (
     <main className="min-h-screen py-12 px-6">
@@ -66,61 +85,14 @@ export default async function SharksPage() {
           biggestInvestor={leaderboard.biggestInvestor}
         />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sharks.map(shark => {
-            const sharkStats = statsMap.get(shark.slug)
-            
-            return (
-              <Link
-                key={shark.id}
-                href={`/sharks/${shark.slug}`}
-                className="card group"
-              >
-                <div className="flex items-center gap-4 mb-5">
-                  <SharkImage 
-                    src={shark.photo_url}
-                    name={shark.name}
-                    size="lg"
-                    className="group-hover:border-[var(--cyan-600)]"
-                  />
-                  <div>
-                    <h2 className="text-xl font-display font-medium text-[var(--ink-900)] group-hover:text-[var(--cyan-600)] transition-colors">
-                      {shark.name}
-                    </h2>
-                    {shark.investment_style && (
-                      <p className="text-sm text-[var(--ink-500)]">{shark.investment_style}</p>
-                    )}
-                  </div>
-                </div>
-
-                {sharkStats && (
-                  <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="bg-[var(--off-white)] rounded p-2.5">
-                      <div className="font-display font-medium text-lg text-[var(--ink-900)]">{sharkStats.total_deals}</div>
-                      <div className="text-[var(--ink-400)] text-xs font-display uppercase tracking-wide">Deals</div>
-                    </div>
-                    <div className="bg-[var(--off-white)] rounded p-2.5">
-                      <div className="font-display font-medium text-lg text-[var(--success)]">{sharkStats.active_companies}</div>
-                      <div className="text-[var(--ink-400)] text-xs font-display uppercase tracking-wide">Active</div>
-                    </div>
-                    <div className="bg-[var(--off-white)] rounded p-2.5">
-                      <div className="font-display font-medium text-lg text-[var(--ink-900)]">
-                        {sharkStats.success_rate ? `${sharkStats.success_rate}%` : '—'}
-                      </div>
-                      <div className="text-[var(--ink-400)] text-xs font-display uppercase tracking-wide">Success</div>
-                    </div>
-                  </div>
-                )}
-              </Link>
-            )
-          })}
-        </div>
-
-        {sharks.length === 0 && (
-          <div className="text-center py-16 text-[var(--ink-400)] card">
-            <p className="font-display">No sharks found. Run migrations to seed shark data.</p>
-          </div>
-        )}
+        <SharkFilter
+          sharks={sharks}
+          stats={stats}
+          maxDeals={maxDeals}
+          maxActive={maxActive}
+          maxSuccess={maxSuccess}
+          styleColors={styleColors}
+        />
       </div>
     </main>
   )

@@ -3123,80 +3123,234 @@ h3, h4, h5, h6 {
 }
 
 /* ================================================
-   SHARK NARRATIVE SECTIONS - Editorial Profile
+   SHARK PROFILE PAGES - Sidebar Layout
    ================================================ */
 
+/* Main Layout: Sidebar + Content Grid */
+.shark-profile-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 1024px) {
+  .shark-profile-layout {
+    grid-template-columns: 1fr 320px;
+  }
+}
+
+/* Sidebar */
+.shark-sidebar {
+  order: 2;
+}
+
+@media (min-width: 1024px) {
+  .shark-sidebar {
+    order: 1;
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+    height: fit-content;
+    z-index: 10; /* Below header (z-50) but above content */
+  }
+}
+
+.shark-main-content {
+  order: 1;
+}
+
+@media (min-width: 1024px) {
+  .shark-main-content {
+    order: 2;
+  }
+}
+
+/* Sidebar Cards */
+.sidebar-card {
+  background: var(--white);
+  border: 1px solid var(--ink-100);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+.sidebar-card-label {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--cyan-600);
+  margin-bottom: 1rem;
+}
+
+.sidebar-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.sidebar-stat {
+  text-align: center;
+}
+
+.sidebar-style-card {
+  background: linear-gradient(135deg, var(--cyan-50) 0%, var(--white) 100%);
+  border-color: var(--cyan-200);
+}
+
+.sidebar-style-text {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--cyan-700);
+  line-height: 1.4;
+}
+
+/* Shark Narrative - Product Page Style */
 .shark-narrative {
-  padding: 5rem 0;
-  background: linear-gradient(to bottom, var(--white) 0%, var(--cream) 100%);
+  padding: 4rem 0;
+  background: var(--warm-white);
   margin: 3rem 0;
-  border-top: 1px solid var(--ink-100);
-  border-bottom: 1px solid var(--ink-100);
 }
 
-.shark-narrative-container {
-  max-width: 56rem;
-  margin: 0 auto;
-  padding: 0 2rem;
+/* Adopt product page narrative styles */
+.shark-narrative .narrative-section {
+  margin-bottom: 3rem;
 }
 
-.shark-narrative-section {
-  margin-bottom: 4.5rem;
-  position: relative;
-}
-
-.shark-narrative-section:last-child {
+.shark-narrative .narrative-section:last-child {
   margin-bottom: 0;
 }
 
-.shark-narrative-number {
+.shark-narrative .narrative-heading {
   font-family: var(--font-display);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  color: var(--cyan-600);
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-  opacity: 0.7;
-}
-
-.shark-narrative-heading {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 1.375rem;
   font-weight: 700;
   color: var(--ink-900);
   letter-spacing: -0.02em;
-  margin-bottom: 1.5rem;
-  line-height: 1.2;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
 }
 
-.shark-narrative-text {
+.shark-narrative .narrative-heading::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.25em;
+  width: 3px;
+  height: 1em;
+  background: var(--cyan-600);
+}
+
+.shark-narrative .narrative-text {
   font-family: var(--font-body);
   font-size: 1.0625rem;
   font-weight: 300;
   color: var(--ink-700);
-  line-height: 1.85;
-  text-align: left;
+  line-height: 1.8;
 }
 
-/* Two-column layout for wider screens */
-@media (min-width: 768px) {
-  .shark-narrative-text {
-    columns: 2;
-    column-gap: 3rem;
-    text-align: justify;
-  }
+/* Notable Deals Callout */
+.shark-narrative .narrative-callout {
+  background: var(--white);
+  padding: 2rem;
+  border: 1px solid var(--ink-100);
+  border-left: 4px solid var(--cyan-600);
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
 
-  .shark-narrative-heading {
-    font-size: 2rem;
+.shark-narrative .narrative-callout .narrative-heading {
+  padding-left: 0;
+}
+
+.shark-narrative .narrative-callout .narrative-heading::before {
+  display: none;
+}
+
+/* Top Deals Horizontal Cards */
+.top-deals-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .top-deals-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Three-column for very wide screens */
-@media (min-width: 1200px) {
-  .shark-narrative-container {
-    max-w: 1200px;
+@media (min-width: 1024px) {
+  .top-deals-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
+}
+
+.top-deal-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--white);
+  border: 1px solid var(--ink-100);
+  padding: 1.25rem;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.top-deal-card:hover {
+  border-color: var(--cyan-600);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.12);
+}
+
+.top-deal-image-wrapper {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.top-deal-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.top-deal-name {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink-900);
+  margin-bottom: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.top-deal-amount {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--success);
+  letter-spacing: -0.02em;
+}
+
+.top-deal-arrow {
+  flex-shrink: 0;
+  color: var(--cyan-600);
+  opacity: 0.5;
+  transition: all 0.25s ease;
+}
+
+.top-deal-card:hover .top-deal-arrow {
+  opacity: 1;
+  transform: translateX(4px);
 }
 
 /* Revenue Section */
@@ -4114,5 +4268,27 @@ h3, h4, h5, h6 {
   .btn-cta-secondary,
   .retailer-cta {
     transition: none;
+  }
+}
+
+/* Fade-in animation for shark filter */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn {
+    animation: none;
   }
 }
