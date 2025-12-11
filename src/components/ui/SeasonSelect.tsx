@@ -22,14 +22,14 @@ export function SeasonSelect({ value, onChange, currentSeason }: SeasonSelectPro
   return (
     <Listbox value={value} onChange={onChange}>
       <div className="relative">
-        <ListboxButton className="w-full flex items-center justify-between px-3 py-2 text-sm font-display bg-white border border-[var(--ink-200)] rounded-lg text-[var(--ink-700)] hover:border-[var(--cyan-600)] focus:outline-none focus:ring-2 focus:ring-[var(--cyan-500)] focus:border-transparent transition-colors">
+        <ListboxButton className="w-full flex items-center justify-between px-3 py-2 text-sm font-display bg-white border border-[var(--ink-200)] rounded-none text-[var(--ink-700)] hover:border-[var(--cyan-600)] focus:outline-none focus:ring-2 focus:ring-[var(--cyan-500)] focus:border-transparent transition-colors">
           <span>{selectedSeason.label}</span>
           <svg className="w-4 h-4 text-[var(--ink-400)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </ListboxButton>
 
-        <ListboxOptions className="absolute z-50 w-full mt-1 max-h-60 overflow-auto bg-[var(--cream)] border border-[var(--ink-200)] rounded-lg shadow-lg focus:outline-none">
+        <ListboxOptions className="absolute z-50 w-full mt-1 max-h-60 overflow-auto bg-white border border-[var(--ink-200)] rounded-none shadow-lg focus:outline-none">
           {seasons.map((season) => (
             <ListboxOption
               key={season.value}

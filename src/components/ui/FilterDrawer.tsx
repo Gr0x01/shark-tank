@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { useFilterParams } from '@/hooks/useFilterParams'
 import { SeasonSelect } from './SeasonSelect'
+import { SharkSelect } from './SharkSelect'
 import type { Shark, Category } from '@/lib/supabase/types'
 
 interface FilterDrawerProps {
@@ -31,13 +32,14 @@ export function FilterDrawer({
   const { toggleFilter, setFilter, isChecked, clearAll, getFilterValue, getFilterValues } = useFilterParams()
 
   const currentSeasonFilter = getFilterValue('season')
+  const currentSharkFilter = getFilterValue('shark')
 
   // Count active filters
   const activeCount =
     (currentSeasonFilter ? 1 : 0) +
     getFilterValues('status').length +
     getFilterValues('deal').length +
-    getFilterValues('shark').length +
+    (currentSharkFilter ? 1 : 0) +
     getFilterValues('category').length
 
   return (
@@ -96,6 +98,16 @@ export function FilterDrawer({
                   />
                 </div>
 
+                {/* Shark */}
+                <div>
+                  <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
+                  <SharkSelect
+                    sharks={sharks}
+                    value={currentSharkFilter}
+                    onChange={(value) => setFilter('shark', value)}
+                  />
+                </div>
+
                 {/* Status */}
                 <div>
                   <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Status</h3>
@@ -143,24 +155,6 @@ export function FilterDrawer({
                       />
                       <span>No Deal ({stats.noDeal})</span>
                     </label>
-                  </div>
-                </div>
-
-                {/* Shark */}
-                <div>
-                  <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
-                  <div className="space-y-3 max-h-48 overflow-y-auto">
-                    {sharks.map(shark => (
-                      <label key={shark.id} className="flex items-center gap-3 text-[var(--ink-600)] cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="w-5 h-5 rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
-                          checked={isChecked('shark', shark.slug)}
-                          onChange={() => toggleFilter('shark', shark.slug)}
-                        />
-                        <span>{shark.name}</span>
-                      </label>
-                    ))}
                   </div>
                 </div>
 

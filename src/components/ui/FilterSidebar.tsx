@@ -2,6 +2,7 @@
 
 import { useFilterParams } from '@/hooks/useFilterParams'
 import { SeasonSelect } from './SeasonSelect'
+import { SharkSelect } from './SharkSelect'
 import type { Shark } from '@/lib/supabase/types'
 import type { Category } from '@/lib/supabase/types'
 
@@ -22,10 +23,11 @@ export function FilterSidebar({ stats, sharks, categories, currentSeason }: Filt
   const { toggleFilter, setFilter, isChecked, getFilterValue } = useFilterParams()
 
   const currentSeasonFilter = getFilterValue('season')
+  const currentSharkFilter = getFilterValue('shark')
 
   return (
     <aside className="w-56 shrink-0 hidden lg:block">
-      <div className="sticky top-24 space-y-8">
+      <div className="sticky top-24 space-y-8 max-h-[calc(100vh-8rem)] overflow-y-auto">
         {/* Season */}
         <div>
           <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Season</h3>
@@ -36,23 +38,33 @@ export function FilterSidebar({ stats, sharks, categories, currentSeason }: Filt
           />
         </div>
 
+        {/* Shark */}
+        <div>
+          <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
+          <SharkSelect
+            sharks={sharks}
+            value={currentSharkFilter}
+            onChange={(value) => setFilter('shark', value)}
+          />
+        </div>
+
         {/* Status */}
         <div>
           <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Status</h3>
-          <div className="space-y-2 text-sm">
-            <label className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
+          <div className="space-y-3">
+            <label className="flex items-center gap-3 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
               <input
                 type="checkbox"
-                className="rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
+                className="w-5 h-5 rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
                 checked={isChecked('status', 'active')}
                 onChange={() => toggleFilter('status', 'active')}
               />
               Active ({stats.active})
             </label>
-            <label className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
+            <label className="flex items-center gap-3 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
               <input
                 type="checkbox"
-                className="rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
+                className="w-5 h-5 rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
                 checked={isChecked('status', 'out_of_business')}
                 onChange={() => toggleFilter('status', 'out_of_business')}
               />
@@ -64,20 +76,20 @@ export function FilterSidebar({ stats, sharks, categories, currentSeason }: Filt
         {/* Deal */}
         <div>
           <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Deal</h3>
-          <div className="space-y-2 text-sm">
-            <label className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
+          <div className="space-y-3">
+            <label className="flex items-center gap-3 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
               <input
                 type="checkbox"
-                className="rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
+                className="w-5 h-5 rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
                 checked={isChecked('deal', 'deal')}
                 onChange={() => toggleFilter('deal', 'deal')}
               />
               Got a Deal ({stats.gotDeal})
             </label>
-            <label className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
+            <label className="flex items-center gap-3 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
               <input
                 type="checkbox"
-                className="rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
+                className="w-5 h-5 rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
                 checked={isChecked('deal', 'no_deal')}
                 onChange={() => toggleFilter('deal', 'no_deal')}
               />
@@ -86,33 +98,15 @@ export function FilterSidebar({ stats, sharks, categories, currentSeason }: Filt
           </div>
         </div>
 
-        {/* Shark */}
-        <div>
-          <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
-          <div className="space-y-2 text-sm max-h-48 overflow-y-auto">
-            {sharks.map(shark => (
-              <label key={shark.id} className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
-                <input
-                  type="checkbox"
-                  className="rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
-                  checked={isChecked('shark', shark.slug)}
-                  onChange={() => toggleFilter('shark', shark.slug)}
-                />
-                {shark.name}
-              </label>
-            ))}
-          </div>
-        </div>
-
         {/* Category */}
         <div>
           <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Category</h3>
-          <div className="space-y-2 text-sm max-h-48 overflow-y-auto">
+          <div className="space-y-3 max-h-64 overflow-y-auto">
             {categories.map(cat => (
-              <label key={cat.id} className="flex items-center gap-2 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
+              <label key={cat.id} className="flex items-center gap-3 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
                 <input
                   type="checkbox"
-                  className="rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
+                  className="w-5 h-5 rounded border-[var(--ink-300)] text-[var(--coral)] focus:ring-[var(--coral)]"
                   checked={isChecked('category', cat.slug)}
                   onChange={() => toggleFilter('category', cat.slug)}
                 />
