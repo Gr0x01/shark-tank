@@ -1,0 +1,590 @@
+"id","name","season","episode","deal_outcome","deal_amount","deal_equity","asking_amount","asking_equity"
+"7edf32f3-587c-42cc-9fd2-cb2043e71bd3","Kalyx Sports Bras",1,6,"no_deal",,,120000.00,20.00
+"00059e91-2cba-46fa-96a1-cdc56dc9ad9c","Pork Barrel BBQ Sauce",1,6,"deal",50000.00,50.00,50000.00,10.00
+"03f5bc84-67ce-483b-920e-0497660cd2ff","The Fizz Ice Cream Floats",1,6,"no_deal",,,125000.00,25.00
+"3502dbae-2b83-46af-b0d4-8ed32cc1df9d","Boogie Box Fitness",1,7,"no_deal",,,700000.00,70.00
+"d25b9b93-2416-46ae-8a4e-77c02ae46014","Funhouse Amusement Park",1,7,"no_deal",,,300000.00,20.00
+"6bed9c4c-4fd9-44aa-a356-642c5ce5997c","Grill Charms",1,7,"deal",50000.00,25.00,50000.00,25.00
+"1f9555f9-2313-46ba-906f-694a1d63cd89","Soy-Yer-Dough",1,7,"deal",300000.00,51.00,125000.00,25.00
+"5618e21d-696a-41df-8d0f-8317a2f605b5","Throx Socks Sold in Threes",1,8,"no_deal",,,3000000.00,
+"d234e9e6-4593-425d-8332-1f08d3a99a89","Treasure Chest Pets Toys with Hidden Compartments",1,8,"deal",150000.00,60.00,150000.00,20.00
+"d58d2f0b-3c88-4cd5-b427-054c91234f51","Washed Up Hollywood Belts & Buckles",1,8,"no_deal",,,500000.00,25.00
+"be4bcbc1-735d-44c5-a266-64763162ae6b","Chill Soda",1,9,"deal",50000.00,20.00,50000.00,10.00
+"cd5456f7-53fd-4e5c-898e-d582ff4b7ed7","Gayla Bentley Fashion",1,9,"deal",250000.00,50.00,250000.00,20.00
+"dcf4d32d-2817-4f3a-a740-f0fa0485f45a","Virtusphere VR Platform",1,9,"no_deal",,,1500000.00,10.00
+"eb1251b5-3049-48f7-984e-8c491be98d29","Mr. Poncho Earbuds Holder",1,10,"no_deal",,,50000.00,25.00
+"26604c03-1f09-4110-bd32-9062863fc190","The Bobble Place Bobbleheads",1,10,"no_deal",,,75000.00,18.00
+"62e2e732-bc19-4658-a331-92d0231cd45f","The Uro Club",1,10,"deal_fell_through",25000.00,70.00,25000.00,51.00
+"4d1515cb-2725-4185-88a6-ce1f9a800798","Chef in Black",1,11,"deal_fell_through",50000.00,35.00,50000.00,10.00
+"d15f746b-55fa-4ea3-a882-9d2860d1d42c","Hell’s Bells Helmets",1,11,"deal_fell_through",,,500000.00,20.00
+"04887e32-a842-4811-8ab7-b0b90cae8c0b","Romp and Roll",1,11,"no_deal",,,300000.00,10.00
+"c3862df1-06a8-4ad1-93ac-e19a824a4e06","The Twister Golf Ball Cleaner",1,11,"no_deal",,,85000.00,40.00
+"0f55ce1b-2d40-40a0-b45c-d09753f7d77b","Grease Monkey Wipes",1,12,"deal",40000.00,40.00,40000.00,40.00
+"12528f6e-1e19-4554-b356-1f61816cdbf4","PODillow",1,12,"no_deal",,,250000.00,33.00
+"355ef430-b73c-4bc6-b8d4-b0ba6a47f5c1","The Factionist",1,12,"no_deal",,,30000.00,20.00
+"6f8e48cc-9fe4-403f-99e2-4b6505b52c25","Wee Can Shop",1,12,"no_deal",,,200000.00,30.00
+"65ffdee7-1afe-464d-861b-dbe3577e0586","Caffeindicator",1,13,"deal_fell_through",200000.00,50.00,200000.00,25.00
+"610dcfef-9a0f-4e0c-82e5-4e6c626bf01f","Captain Ice Cream",1,13,"no_deal",,,48000.00,25.00
+"e3d1efa0-24c8-4aaa-81fa-e2132ee47a46","Lipstix Remix",1,13,"deal",105000.00,50.00,105000.00,30.00
+"a34b55ad-281d-46c7-a33a-9840b418872f","Llama Brew – Plant Food Made From Llama Manure",1,14,"no_deal",,,125000.00,10.00
+"8f314ce9-8cb0-4082-8dad-72555fdc3e62","Nubrella Hands Free Umbrella",1,14,"deal_fell_through",200000.00,51.00,200000.00,25.00
+"c03c3c59-3259-4697-9399-031f7f0528ff","Pillars of Slippers",1,14,"no_deal",,,150000.00,15.00
+"093aa850-083d-4ce6-b8ad-2d9f1dc2766a","Qubits – Educational Toy",1,14,"no_deal",90000.00,51.00,90000.00,51.00
+"b4cf329a-2eb4-4d5c-80de-6007fee064b6","Coverplay Play Yard Slip Cover",1,15,"deal",350000.00,40.00,350000.00,15.00
+"94a028af-641f-40dd-bcc2-394280d16f31","Gift Card Rescue",1,15,"deal",200000.00,50.00,150000.00,30.00
+"27a5811f-6696-4c1e-ada8-751892e22e27","Soul’s Calling Inspirational Gifts",1,15,"no_deal",,,150000.00,25.00
+"dff524c8-f158-4468-8344-0c60d1e453c4","Copa Di Vino",2,1,"no_deal",,,300000.00,5.00
+"31246b47-eebd-4e1f-8a87-ae7e384a772d","The Original Shrimp Burger",2,1,"no_deal",,,200000.00,25.00
+"425f5339-ae3c-46e2-a9fa-51935eb7437d","Tippi Toes – Children’s Dance Songs",2,1,"deal",125000.00,10.00,125000.00,10.00
+"3fa6db88-881c-46db-9ed1-9c3e45e9faec","Wurking Stiffs Magnetic Collar Stay",2,1,"deal",100000.00,40.00,85000.00,10.00
+"029fe172-a525-4375-a13f-4751a0053c30","First Defense Nasal Screens",2,2,"deal_fell_through",750000.00,30.00,500000.00,10.00
+"0637b327-25f5-44cf-bd68-28ab1cfb5a55","Toygaroo – Rental Service for Toys",2,2,"deal",200000.00,35.00,100000.00,10.00
+"1e68401c-7b60-4175-9e6b-c40b1e4e13cb","Vurtego Pogo Sticks",2,2,"no_deal",,,500000.00,20.00
+"3554ceaf-56be-4166-b3ba-80ef545e33bd","Wake n’ Bacon – Bacon Cooking Alarm Clock",2,2,"no_deal",,,40000.00,20.00
+"9ddc021a-79f2-4c52-9160-2a6153872055","Fitness Stride Resistance Bands",2,3,"no_deal",,,140000.00,15.00
+"eb85e93d-db5d-4992-b3ce-90bb6243aa7a","Flipoutz – Customizable and Trackable Bracelets",2,3,"deal",100000.00,33.00,100000.00,20.00
+"16e14593-359f-41d5-b5d7-26e80edfed6b","Mod Mom – Furniture and Toy Boxes",2,3,"deal_fell_through",90000.00,33.00,90000.00,25.00
+"2c4badcf-8b8b-494a-be3c-9d7af94f55ad","Pure Ayre",2,3,"no_deal",225000.00,100.00,150000.00,10.00
+"ee7077df-7de2-44a5-b557-cc5fa42e052f","Broccoli Wad",2,4,"deal_fell_through",50000.00,40.00,50000.00,20.00
+"3002257c-26ff-402b-b5ad-2f258e8e7117","Hillbilly Brand",2,4,"no_deal",75000.00,100.00,50000.00,25.00
+"f5a1283c-5e5d-409b-a3c6-a779acc2463e","Ride-On Carry-On – Child Seat Meets Luggage",2,4,"deal",50000.00,25.00,50000.00,25.00
+"fe0fd9d4-d90d-4618-a268-f8f4e1192a9d","Uncle Zip’s Beef Jerky",2,4,"no_deal",,,25000.00,20.00
+"504bd91c-10ab-4d69-80a6-c41bf8b0c47f","Clip N Go by New Era Brands",2,5,"no_deal",,,500000.00,30.00
+"406c6142-ef8b-4bed-ad6e-2f4ff5f0ab7c","Thin Gloss",2,5,"no_deal",,,80000.00,20.00
+"ca29a39e-b3be-4859-9af9-a2dd40d361c4","Carsik Bib",2,7,"no_deal",,,30000.00,15.00
+"9e66dff9-539f-4c10-8e59-0a013da666c3","Ecomower",2,7,"no_deal",,,90000.00,20.00
+"c5736a81-8c4c-427d-a566-5f4610cde529","Games2U – Mobile Entertainment",2,7,"no_deal",,,500000.00,10.00
+"21513119-e522-4230-a890-452f03502f66","Hydromax Wearable Water Bottle",2,7,"deal",50000.00,50.00,50000.00,25.00
+"413e53c4-14b0-48db-91b5-c42be69657ba","Hy-conn Water Hose Connector",2,8,"deal_fell_through",1250000.00,100.00,500000.00,40.00
+"ab7875e0-9026-493b-89e8-6f8bd5f6aef5","Man Candles With Manly Scents",2,8,"no_deal",,,50000.00,25.00
+"ec410447-202f-41ec-bd78-9d0f6fa6d8cb","OrigAudio – Turn Anything into a Speaker",2,8,"deal",150000.00,15.00,150000.00,15.00
+"fa571135-246e-4632-b589-b273406fad3d","Aldo Orta Jewelry",2,9,"no_deal",180000.00,50.00,180000.00,45.00
+"f04fa0cd-371d-41ad-ac6f-8d0f7ae50081","Caddyswag",2,9,"no_deal",,,60000.00,20.00
+"8be731a3-5706-47d1-bced-54684520c3cd","Daisy Cakes – Mail Order Cake",2,9,"deal",50000.00,25.00,50000.00,25.00
+"32dc67ba-5fc9-40ce-b547-4645fd91863e","Hot Mama Gowns",2,9,"no_deal",,,30000.00,20.00
+"15573305-32dc-4fed-8355-e40beaf619e7","Onesole – The Original Interchangeable Shoes",2,9,"deal",500000.00,35.00,500000.00,20.00
+"164431bd-1165-45fa-8c09-d004a8260c47","Samson Martin Maternity Clothes",2,9,"no_deal",,,50000.00,15.00
+"6b99b044-72a9-4bcd-aa01-723fdebeb7aa","SweepEasy – Broom and Scraper",2,9,"no_deal",80000.00,25.00,40000.00,25.00
+"fd0aeb4a-f5ac-4e8e-b6e6-f514337cca1a","Fridge Fronts Appliance Cover",2,15,"deal_fell_through",100000.00,50.00,100000.00,30.00
+"684d81bd-d71f-4dca-aace-2e341567164c","Power Decal – Light Up Stickers",2,15,"deal",100000.00,5.00,100000.00,5.00
+"a6752b09-d34b-4db5-ba75-37aa847a1975","Invis-A-Rack",3,2,"no_deal",,,100000.00,10.00
+"d19bf20b-d740-4325-9ca5-46ad4c3f523c","Liquid Money – Money Scented Perfume and Cologne",3,3,"no_deal",,,100000.00,80.00
+"d527ce44-3980-4736-9b6a-f7b93089787a","You Smell Soap",3,3,"deal_fell_through",55000.00,30.00,55000.00,20.00
+"2a9e97c3-2e49-4365-9b4f-290038a8e9b6","Talbott Teas",3,5,"deal",250000.00,35.00,250000.00,20.00
+"33da742e-21a2-4fc6-9840-b69f1c2c334b","The Last Lid",3,5,"deal",40000.00,60.00,40000.00,20.00
+"43d1cfdc-71b4-4c34-91dc-579628f313a8","Readerest Clip For Glasses",3,6,"deal",150000.00,65.00,150000.00,15.00
+"f720eccf-c71a-436f-b49a-03d8a209073e","The Painted Pretzel",3,6,"deal",100000.00,25.00,100000.00,25.00
+"966dc125-a51f-4984-9627-8bf0e8661104","Kisstixx Lip Balm",3,7,"deal",200000.00,40.00,200000.00,20.00
+"49bdbf29-ec25-46e1-bdc1-33605e231d93","ScotteVest Technology Enabled Clothing",3,7,"no_deal",,,500000.00,15.00
+"fe31e89e-5838-46a7-83d6-80cdb2ac484c","The Heat Helper – Dryer Attachment that Saves Money",3,7,"no_deal",,,100000.00,50.00
+"d2d8a54f-d7fe-41f9-85be-542969116d03","The Smart Baker – Innovative Kitchen Tools",3,7,"deal_fell_through",75000.00,40.00,75000.00,25.00
+"e0dbc04c-192c-43e9-bb3e-418e7acbc48b","Skinnies Instant Lifts",3,9,"no_deal",,,100000.00,25.00
+"bbbdf490-709b-41bd-8ef1-cb6a0a8dfdcb","Tower Paddle Boards",3,9,"deal",150000.00,30.00,150000.00,30.00
+"e29f0b7e-abbd-43bb-b989-937e5a6f0140","Vinamor Wine Aerator",3,9,"no_deal",,,75000.00,30.00
+"0980442d-5fba-4313-9a35-fd65a153be31","Brewer’s Cow Ice Cream",3,10,"no_deal",,,125000.00,15.00
+"61b31495-cef8-4290-abe1-82bdc5d0e896","GoGo Gear Motorcycle Riding Apparel",3,10,"deal",1000000.00,30.00,300000.00,15.00
+"8b861d07-f567-4385-a4b6-62b037aabe1c","The Ave Custom Printed Apparel",3,10,"no_deal",,,125000.00,15.00
+"ad20a5b0-57ad-4f28-8447-dc3064c12a93","Blondie’s Cookies",3,11,"no_deal",,,200000.00,3.00
+"9ab5602f-a68c-4d74-b9b7-60211884ec89","Copa Di Vino (2nd appearance)",3,11,"no_deal",,,300000.00,5.00
+"712b0c66-0b7e-4659-98b7-b4a9c275d9b8","Sullivan Generator",3,11,"no_deal",,,1000000.00,10.00
+"0b6165c3-0958-432b-a45f-baf8e0f661b8","Viewsport Sweat Activated Workout Gear",3,11,"no_deal",,,500000.00,20.00
+"f7e8f9f9-99bf-44dd-9e30-f48a58220c5f","Debbie Brooks Handbags and Accesories",3,12,"no_deal",,,540000.00,20.00
+"6b277e09-39d6-471c-8e26-9eb85c1d8486","Lollacup Sippy Cups",3,12,"deal",100000.00,40.00,100000.00,15.00
+"13557fb4-3def-4add-9e83-3e9a4761ed83","Nail Pak Nail Polish Kits",3,12,"deal",50000.00,40.00,50000.00,20.00
+"9fc385b1-84e3-4816-a3f0-9ccf7331ab90","AirBedz Truck Mattress",3,13,"no_deal",,,250000.00,25.00
+"e9899d52-bf95-4978-a09b-3b3445f4044b","Boot Illusions",3,13,"deal_fell_through",100000.00,55.00,100000.00,30.00
+"696ea92a-4a67-4278-aa18-4f7bd32e5af7","SkyRide",3,13,"no_deal",,,3000000.00,20.00
+"289ff34e-7e46-4504-8088-adf2f1c53e99","Villy Custom Bicycles",3,13,"deal",500000.00,42.00,500000.00,33.00
+"5b8d86b6-5233-471f-a1f3-31201965efb5","Billy Blanks Jr.’s Dance With Me",3,14,"deal",100000.00,50.00,100000.00,20.00
+"f0339500-b1be-400b-af4e-d7e45ea4dce3","Cab20 – Rock Band",3,14,"no_deal",,,200000.00,20.00
+"015502c9-2ffb-4009-aab2-06e1938ed770","Mix Bikini",3,14,"deal",50000.00,25.00,50000.00,5.00
+"1758b32b-3e6c-4e2e-9e4e-5eb912f2669f","Squirrel Nut Butter",3,14,"no_deal",,40.00,50000.00,10.00
+"e2fc4cdf-984e-42bc-88c2-5ab4fe3170f8","Clean Bottle",3,15,"deal",60000.00,8.00,60000.00,8.00
+"b412b1f3-ff40-4d46-86a4-577b1dae361b","Cougar Energy Drinks",3,15,"no_deal",,,150000.00,30.00
+"7b3007a6-10b9-46d0-b379-5205efca3ff3","Nardo’s Natural Organic Skin Care",3,15,"deal",,,75000.00,12.00
+"384d87bf-1484-4aa0-974b-f4a050564aff","Nitroforce Home Gym",3,15,"no_deal",,,250000.00,10.00
+"31d70ffa-5e3f-481f-b172-8d4779d937ad","Remyxx Recyclable Sneakers (ReKixx)",3,15,"deal_fell_through",50000.00,80.00,50000.00,10.00
+"2e0239d8-7507-4584-beae-b7fd8257fe5e","UniKey – Bluetooth Enabled Deadbolt Lock",3,15,"deal_fell_through",,,500000.00,33.00
+"a52d5554-62db-42f3-aac2-7f2bb965ed10","Xero Shoes Barefootware",4,14,"no_deal",,,400000.00,8.00
+"9571e0ac-eda3-4c38-a56e-12332d24ddc2","CordaRoys Convertible Beanbag Chairs",4,15,"deal",200000.00,58.00,200000.00,20.00
+"144e9b33-4dc6-4f96-91d7-9696f02ec91f","Green Garmento – EcoFriendly Laundry Bag",4,15,"no_deal",,,300000.00,20.00
+"918e3d77-816f-4e5a-adbf-7017c7afece9","Grinds Coffee Pouches",4,15,"no_deal",,,75000.00,10.00
+"01fee863-de20-4b4c-9f1c-97d06f6088dd","HoodiePillow – A Pillow With a Hood",4,15,"deal",90000.00,20.00,90000.00,15.00
+"e3c5c154-ff8f-4380-8e70-63e89aaa7015","KaZAM Bikes – Balance Bicycle with No Pedals",4,15,"deal",300000.00,32.00,300000.00,20.00
+"d8aca327-b92c-4933-a44e-a82bef6f718f","Mistobox – Coffee Subscription Service",4,15,"deal",75000.00,30.00,75000.00,15.00
+"d406e895-f1ff-4d16-964d-012979083dcd","Squirrel Boss Bird Feeder",4,15,"no_deal",,,130000.00,40.00
+"a6f32f30-f72d-47b6-b5ed-2741b4ef2917","Vermont Butcher Blocks",4,15,"no_deal",,,400000.00,25.00
+"b33d55aa-74dc-4d10-9411-6041292d8c56","JesKa Shoe Co.",4,18,"deal",70000.00,70.00,70000.00,30.00
+"6f7bc985-6982-4f37-af9a-28d1c3f54b44","Neo Innovations Tattoo Removal",4,18,"no_deal",,,80000.00,20.00
+"cc84ba32-7b9f-4f0e-b1fd-d7c3723bd4ee","Nuts n More High Protein Spreads",4,18,"deal",250000.00,35.00,250000.00,20.00
+"5d7d9f3f-76ad-41df-8246-a3d745359584","Psi Bands Acupressure Wristbands",4,18,"no_deal",,,250000.00,10.00
+"923465b5-9d36-4e27-811a-94538eca374b","Baby Loves Disco",4,19,"no_deal",,,150000.00,10.00
+"f23c83fe-907a-4bff-a15e-de55d91eab74","Cell Helmet Phone Cases",4,19,"no_deal",,,160000.00,20.00
+"c813b5b6-07c0-45cb-a45c-c8c76ea2508f","Lose 12 Inches With Any 12 Workouts",4,19,"deal",120000.00,25.00,120000.00,25.00
+"4e25750a-4d13-4fd4-9dc2-0d2ebafdab21","CoolWraps Gift Wrap",4,20,"deal",250000.00,100.00,100000.00,40.00
+"e226c49a-edfa-4142-8839-ecc04528dc0e","Drop Stop Car Seat Gap Filler",4,20,"deal",300000.00,20.00,300000.00,15.00
+"720d6c37-d478-47ae-a8d2-4c5a1f3d0c02","Simple Sugars Skin Care Products",4,20,"deal",100000.00,33.00,100000.00,10.00
+"68825a46-3c92-4d7f-9b04-5fa9e39cca04","Traditional Fisheries Lionfish",4,20,"no_deal",,,225000.00,25.00
+"c274faf4-6f5e-453e-80fb-aeccac842a15","Echo Valley Meats",4,21,"deal",150000.00,25.00,150000.00,20.00
+"08e8e2c1-58c3-4afd-a9f2-1097ed9da71b","Gobie H2O – Filtered Water Bottle",4,21,"deal",300000.00,40.00,300000.00,10.00
+"956a4461-d19e-4a14-8d4a-ae5c29ccde82","LiddUp Cooler With Lights",4,21,"deal",100000.00,33.33,100000.00,10.00
+"b3bf6634-7876-49ee-928f-8fc7aeb7de71","RootSuit Spandex Body Suit",4,21,"no_deal",,,100000.00,15.00
+"ba584003-a388-44a6-a744-0573c1d908d7","Mission Belt – Ratcheting Belt Buckle",4,22,"deal",50000.00,37.50,50000.00,20.00
+"e24281f2-c30b-4b42-8ed4-c5bedaac9230","nPower PEG – Human Generated Electricity",4,22,"no_deal",,,2000000.00,22.00
+"f17a441e-e051-436c-a888-d11dced2ae01","Shell Bobbers – Shotgun Shell Fishing Bobbers",4,22,"deal",80000.00,33.00,80000.00,20.00
+"1925f52d-73ee-4009-8ea3-f9fc7d72f3fe","Wicked Good Cupcakes in a Jar",4,22,"deal",75000.00,,75000.00,20.00
+"6e3a2f9e-b183-4be8-abf9-008783eb1ffa","Mee-Ma’s Gumbo Brick",4,23,"deal_fell_through",200000.00,50.00,200000.00,20.00
+"c920c2dc-199d-4ec5-ab9f-288de2ad763b","Baby’s Bad Ass Burgers",4,24,"no_deal",,,250000.00,30.00
+"0fe7d9ad-d3aa-4083-96fb-022aa56fb80c","Track Days Racing Movie",4,24,"no_deal",,,5000000.00,34.00
+"f99b60e7-7533-4d9c-b5cf-53869b92fce7","Geek Chic Gaming Furniture",4,25,"deal_fell_through",300000.00,25.00,100000.00,5.00
+"b20e6f6f-2216-442e-9ddb-8d5006d85d00","Jones Scones",4,25,"no_deal",,,100000.00,25.00
+"7d337a21-95f6-4bfc-b4b5-a5b151036ed8","Stella Valle Jewelry",4,25,"deal",150000.00,35.00,150000.00,25.00
+"429add8c-ef2b-4013-8ea7-f7139c76e599","Tom and Chee Grilled Cheese",4,26,"deal_fell_through",600000.00,15.00,600000.00,10.00
+"c177a490-c000-49be-9b53-7b9616d2bd3d","Chapul – Cricket Flour Energy Bar",5,15,"deal",50000.00,10.00,50000.00,5.00
+"83d7e1ab-a756-4297-a75d-9f903e3ae494","Fort Magic – Fort Building Kits",5,15,"no_deal",,,500000.00,10.00
+"6a00e8ef-cce9-4281-b858-3c79f9e53aef","Ilumi – World’s Smartest Lightbulb",5,15,"deal",350000.00,25.00,350000.00,15.00
+"b8c7d867-13f8-4156-8444-8a580eefcac6","Kodiak Cakes",5,15,"no_deal",,,500000.00,10.00
+"f6f2fc39-4fa8-4089-b7bd-8876d5ae54ec","Monkey Mat – Compact Ground Covering",5,15,"deal",100000.00,30.00,100000.00,30.00
+"d50751ce-56ce-4215-bcc4-9fc227f2768d","MorningHead Cap for Messy Morning Hair",5,15,"no_deal",,,25000.00,20.00
+"3d0472ad-27d7-4df7-8b3c-1d60c553fa8a","Paint Brush Cover",5,15,"deal",200000.00,10.00,200000.00,10.00
+"faa9716e-8126-4447-b62b-d405a12f2b84","Winedoctor – Wine Stoppers",5,15,"no_deal",,,250000.00,10.00
+"657b5947-b54e-4f70-a835-1c5b3eeeab14","Southern Culture Artisan Foods",5,17,"deal_fell_through",100000.00,38.00,100000.00,25.00
+"ada687f6-242a-4d6c-a0de-13b65995aa3e","Buzzy – Takes the Sting out of Shots",5,18,"no_deal",,,500000.00,5.00
+"f4966788-eecd-423f-a267-e29eeb638ac4","Buffer Bit for Polishing Shoes and More",5,19,"no_deal",,,75000.00,25.00
+"5e29a8ea-8341-49b3-a76b-486c895d4ad1","Revolights – Bicycle Lighting System",5,19,"deal",300000.00,10.00,150000.00,10.00
+"508d3189-16fe-4100-ab85-9429bd1aacc5","Squeeky Knees – Knee Pads for Toddlers",5,19,"no_deal",,,80000.00,20.00
+"4e98c160-077f-44d9-ada1-029a8f2f1d99","Define Bottle – Fruit Infusing Water Bottle",5,20,"no_deal",,,100000.00,20.00
+"02342284-dbb7-4f4f-881e-1155d38fbb7c","Henrys Humdingers – Flavored Honey",5,20,"no_deal",300000.00,75.00,150000.00,25.00
+"0898a603-3651-498e-93fd-f1e64784c8b1","Happy Feet – Earth’s Most Comfortable Slipper",5,23,"deal",550000.00,30.00,375000.00,15.00
+"b9c4650f-ceac-4387-b16c-8ade2409bf8b","Hold Your Haunches Shapewear",5,23,"deal",75000.00,40.00,75000.00,20.00
+"d2da5123-db25-488d-b56f-f178bd452bca","Lord Nut Levington Gourmet Peanuts",5,23,"no_deal",,,500000.00,30.00
+"6a683a74-1e53-4ead-8e7c-5c1d730bf1a2","Fun Time Express Mall Train Ride",5,24,"deal_fell_through",125000.00,20.00,125000.00,20.00
+"99a1498a-8e39-46fa-9bda-1235a664b1d1","Power Pot – Cooking Vessel and Electric Generator",5,24,"deal",250000.00,12.00,250000.00,10.00
+"e4dcc2e7-4da5-4871-ab93-467e6f209344","Quickstop Fire Sprinkler Tools",5,24,"no_deal",,,150000.00,10.00
+"ddd7dc75-52fa-4fdf-9340-1c698512db5f","Taylor Robinson Music Lessons",5,24,"no_deal",,,100000.00,10.00
+"e3c5ec07-d049-4213-9d46-aed1e2126339","Zoobean Curated Reading (Beanstack)",5,25,"deal",250000.00,25.00,250000.00,15.00
+"171918c8-bd4e-4925-82dc-48cc7e0d646c","Cerebral Success Supplement Pills",5,26,"deal",75000.00,40.00,75000.00,20.00
+"13b88a24-ee95-4929-8d18-a05499fdc509","Crio Bru – Superfood Coffee Alternative",5,26,"no_deal",,,1000000.00,10.00
+"43ad2da3-4d7b-41f0-87d4-7cac65731101","Mo’s Bows Bow Ties",5,26,"no_deal",,,50000.00,20.00
+"02c182a3-dab8-4275-8a79-981668635016","Rugged Maniac Obstacle Course",5,26,"deal",1750000.00,25.00,1000000.00,10.00
+"5be46127-3de3-4b93-9ae4-09098d8e9c55","Angellift Reduces Facial Wrinkles",5,27,"deal_fell_through",500000.00,15.00,500000.00,10.00
+"a25190b3-cbf8-48a5-8278-682ccaae61d6","HangEase Folding Hangers",5,27,"deal_fell_through",80000.00,30.00,80000.00,30.00
+"beb01250-210e-4f01-af25-81d0d2d01d3b","Susty Party – Eco-Friendly Disposable Party Supplies",5,27,"deal",500000.00,8.00,250000.00,10.00
+"dbc4e726-4dbe-47ee-833e-ba9be1e948f4","The Bouqs Company – Flowers Shipped From a Volcano",5,27,"no_deal",1100000.00,,285000.00,3.00
+"7d838fbf-ff62-4fd8-9d48-17afc30a274d","Bon Affair Wine Spritzer",5,28,"deal",150000.00,35.00,150000.00,35.00
+"ffa01d0f-014c-4b40-af46-184efe392cbc","Cinnaholic Cinnamon Roll Dessert Shop",5,28,"deal_fell_through",200000.00,40.00,200000.00,20.00
+"b5b2c1eb-90b9-4986-afe9-1e27eb6c712e","Oru Kayak – Fold Up Boat",5,28,"deal_fell_through",500000.00,25.00,500000.00,12.00
+"ad933aca-dbe2-444a-a0b5-f1d20bf44c20","Baker’s Edge – Kitchen Innovations",5,29,"no_deal",,,400000.00,20.00
+"41623578-9504-4ce3-bb77-514ccafc13fd","BZ Box – Flat Folding Storage Box",5,29,"deal",50000.00,40.00,50000.00,20.00
+"b90f1b84-ab2f-4291-b442-fafedece8334","Tie-Not – Water Balloon Tool",5,29,"deal",125000.00,25.00,125000.00,10.00
+"8702dffb-bd15-4f11-865a-646fd801a067","Beneath The Ink – Embeddable Content for ebooks",6,15,"no_deal",,,350000.00,10.00
+"3653129c-a6e1-402c-8a0f-0987c910c20d","Buck Mason – American Made Clothing",6,15,"no_deal",,,200000.00,18.00
+"2e9cefda-a9ae-4d4c-a69c-ef8693a8a9d0","Melni Connectors – Quick Electrical Connectors",6,15,"deal",500000.00,12.00,500000.00,5.00
+"94c74425-6a4c-49b6-927b-988806219357","NeatCheeks – Flavored Face Wipes",6,15,"no_deal",,,150000.00,20.00
+"734c06ab-f63b-43e0-8e60-53cab67af105","Noene – Shock Absorbing Shoe Insoles",6,15,"deal_fell_through",200000.00,30.00,100000.00,10.00
+"38079236-848c-40fb-b860-1bfa097f97d5","Pitt Moss – Peat Moss Alternative",6,15,"deal",600000.00,35.00,600000.00,25.00
+"0db213d4-6768-458f-8b1a-15473c1bd4c2","Sunscreen Mist Sunblock Spray Booth",6,15,"no_deal",,,400000.00,15.00
+"81b6a375-7bd1-420b-9657-13c4e57b8be2","Syndaver Labs Synthetic Model Body",6,15,"deal_fell_through",3000000.00,25.00,3000000.00,10.00
+"d2bcfb71-8224-4626-b78d-98e30ef531d1","You Kick Ass – Customized Action Figures",6,15,"deal_fell_through",100000.00,10.00,100000.00,10.00
+"0622cafd-1141-4ac4-85ae-3bc48571a4a7","ZinePack – Music Fan Memorabilia",6,15,"deal",725000.00,17.50,725000.00,5.00
+"27429bc2-41bb-482c-b91a-8c10cbc0a555","FunBites Shaped Food Cutters",6,18,"deal",75000.00,25.00,75000.00,20.00
+"7b9e122d-a383-4f32-b5c4-e8a434d6e5bc","Lip Bar Lipstick",6,18,"no_deal",,,125000.00,20.00
+"62a02980-e702-480b-a668-b4b4d34c4b9a","LuminAid – Inflatable Floating Solar Light",6,20,"deal",,,,
+"98a59031-f551-448c-89af-611b93511728","BedRyder – Truck Bed Seating",6,21,"no_deal",,,200000.00,15.00
+"72cc169b-5c65-4d76-8290-a8edcd5c45ff","Coco Jack – Coconut Opening Tool",6,21,"no_deal",,,125000.00,10.00
+"95663ed0-3524-4545-9e7d-01c39d45e790","Frill Clothing Sorority Dresses",6,21,"deal",100000.00,30.00,100000.00,20.00
+"a2594617-1bf8-451f-97d1-85612f4acfd9","Twin Z Pillow",6,21,"deal_fell_through",75000.00,15.00,75000.00,10.00
+"48c63636-5c89-4e1f-8550-2baaa9a91139","Aqua Vault Lockbox Safe",6,22,"deal",75000.00,25.00,75000.00,12.00
+"393a1686-094b-4c96-a3eb-9a32b0b7c527","Echo Valley Meats (2nd Appearance)",6,22,"deal",150000.00,25.00,150000.00,20.00
+"b3f7b98f-820d-4c31-a5b5-30a2228a2abf","EmazingLights",6,22,"deal",650000.00,5.00,650000.00,5.00
+"802c3543-93f6-4ebd-89bb-e1b9420efeca","Naja – Luxurious Lingerie",6,22,"no_deal",,,500000.00,5.00
+"48336ddb-b681-4eec-86e9-e0a3dcd6105c","BeeSweet Lemonade Saves the Bees",6,23,"deal",60000.00,25.00,60000.00,10.00
+"d68b47ca-5400-4ec4-98d1-4bb19dc555b9","BrandYourself – Online Reputation Management",6,23,"no_deal",,,2000000.00,13.50
+"710699db-e044-411c-8da4-96b326d3ef26","The Home T – Share and Wear Your Roots",6,23,"no_deal",,,250000.00,5.00
+"9be83c29-c04d-448c-811d-ca4cb5f332d2","Bee Thinking – Beekeeping Supplies",6,24,"unknown",,,400000.00,10.00
+"1aff5e27-0546-41ab-9aaf-e1e64ec734c4","Budsies Custom Plush Animals",6,24,"no_deal",600000.00,,600000.00,
+"dd7e0593-7fe4-48d1-88a4-5ae0b9dc2556","Forus Athletic Shoes",6,24,"no_deal",,,200000.00,15.00
+"64f53cf9-c695-4f84-b5bd-a53b8f090b98","PullyPalz – Interactive Pacifier Toy",6,24,"deal",100000.00,28.00,100000.00,20.00
+"7b60b2f5-c842-438b-af22-deca005451e6","Frameri – Interchangeable Eyeglass Frames",6,27,"no_deal",,,150000.00,3.50
+"a6c150fa-50f1-4f01-88ec-b6a316d6b0ca","The Paleo Diet Bar",6,27,"no_deal",,,150000.00,20.00
+"f72e677b-a728-401b-b565-fc804e5bed7f","The World Record Striper Company – Fishing Lures",6,27,"deal",80000.00,33.00,75000.00,20.00
+"be3cadf8-83c8-46c0-9b06-a45d1686558e","Zero Pollution Motors – Air Powered Car",6,27,"deal_fell_through",5000000.00,50.00,5000000.00,50.00
+"bda9bc16-f08b-4084-b8e3-ae4e767fbcd5","Gato Café – Café with Cats",6,29,"no_deal",,,100000.00,20.00
+"aa13fe1c-0029-4cde-a0e9-fa7cf66f999c","Spikeball",6,29,"deal_fell_through",500000.00,20.00,500000.00,20.00
+"5eb7d17a-7f06-49ae-b278-b9cdd6c7a31c","Sway Motorsports – Three-Wheeled Electric Vehicles",6,29,"deal_fell_through",,,300000.00,10.00
+"5883289e-72b5-46d5-b0fa-e2fe2c5e06d9","The Shark Wheel – Square Skateboard Wheels",6,29,"deal",225000.00,7.50,100000.00,5.00
+"1d30d6d1-a332-4f98-894f-4c12a42cd5c7","BetterBack Support Belt for Back Pain",7,20,"deal",750000.00,8.00,750000.00,7.50
+"22dfc572-912f-499a-bac1-134195e8d6c4","GLACÉ Cryotherapy",7,20,"deal_fell_through",100000.00,30.00,100000.00,20.00
+"d26efd7f-5494-4fd0-8a68-087776d576d1","LINKA – Smart Bluetooth Bike Lock",7,20,"no_deal",,,250000.00,10.00
+"76c2c28c-b84c-40f3-a304-c116829c65cc","TEASPRESSA – Concentrated Tea Served Like Coffee",7,20,"no_deal",,,50000.00,10.00
+"854ffb80-1ef8-4530-8a67-507dd6b08cac","Beloved Shirts – Clothing with Full Coverage Printing",7,21,"deal",175000.00,25.00,175000.00,5.00
+"17b59b96-8124-4420-b294-9bc43c96e1a1","IllumiBowl – Toilet Night Light",7,21,"deal",100000.00,25.00,100000.00,15.00
+"f93da871-d9dc-452f-b9c4-538669e5339c","Mobcraft Beer Crowdfunded Beer",7,21,"no_deal",,,400000.00,16.00
+"c36bde08-112f-4d23-a7ac-84c0c93364b5","Beer Blizzard – Beer Can Ice Cube",7,22,"deal",100000.00,25.00,100000.00,20.00
+"c1feb165-43f7-49b7-84c9-7573224c43f6","The Good Promise – Health Drinks, Smoothies & Sauces",7,22,"no_deal",,,100000.00,20.00
+"596d9098-992a-4ec8-9b59-8d34230b87b4","Vengo – Mini Touchscreen Vending Machines",7,22,"deal_fell_through",,4.00,2000000.00,12.50
+"6e4a124f-3328-448b-ae38-ff88c9619ca0","Coolbox – Smart Toolbox",7,23,"deal_fell_through",500000.00,15.00,500000.00,10.00
+"41e36305-e8be-4e6e-a303-50a0c43ad8d1","The NoPhone – Fake Phone For Cell Phone Addicts",7,23,"no_deal",,,25000.00,25.00
+"bfa3b0d0-13eb-4ecb-a99d-5ef7053e6e33","FRENDS Designer Headphones",7,24,"no_deal",,,1000000.00,7.60
+"9e117451-403c-43e4-a7b6-354037090abb","PopSlate Phone Case With Screen",7,24,"no_deal",,,500000.00,5.00
+"a73c5db6-db74-4991-a5f5-f5f7c74f5858","Slyde Handboards – Bodysurfing Gear",7,24,"deal",200000.00,22.00,200000.00,15.00
+"316d58da-2731-4038-8dda-491dbd92c57d","InchBug Orbit Label Name Bands",7,25,"no_deal",400000.00,5.00,400000.00,10.00
+"b8d28d1f-33b5-48b4-a8b2-35c1cc72ecba","Jarrett and Raja – The Magic and Piano Guys",7,25,"no_deal",,,750000.00,40.00
+"1c3ce276-9faf-46be-8985-a5d044bd3afa","Kidrunner Stroller Built for Jogging",7,25,"no_deal",,,500000.00,20.00
+"278999ed-a317-4a00-b9ec-e17e0bda5b96","The Drip Drop – Collar for Ice Cream Cones",7,25,"deal_fell_through",50000.00,33.30,50000.00,20.00
+"69ba479c-350f-4d73-bcf2-41895d10b872","FashionTap – Social Network That Pays Users",7,26,"no_deal",,,100000.00,10.00
+"60b120b0-7828-41f8-a478-7b3f973a5294","My Fruity Faces – Edible Stickers",7,26,"no_deal",,,200000.00,10.00
+"33e40670-be16-4977-b019-9a3a7f6677b2","CreaClip for Home Hair Cuts",7,27,"no_deal",200000.00,22.50,200000.00,10.00
+"36efb365-dcae-466a-ab41-e6c6562b058e","Dollop Gourmet Frosting",7,27,"deal",75000.00,25.00,75000.00,25.00
+"ff5cf117-49d1-4d9b-a4cc-5d46e530e39a","Spooner Boards – Balance Board and Downhill Rider",7,27,"deal_fell_through",400000.00,16.00,400000.00,16.00
+"bf873018-c38a-4fde-a8a1-9c3ace8d1c93","Yourself Expression Interchangeable Snap Jewelry",7,27,"no_deal",,,50000.00,20.00
+"7e61d07a-077e-4fa5-8803-2987a3db2c44","Camp No Counselors – Summer Party Camp for Adults",7,28,"no_deal",,,300000.00,7.50
+"b63d754a-9906-494f-8bda-1d6f929ade49","EVP – Flood Protection Bag for Cars",7,28,"deal",50000.00,33.30,50000.00,20.00
+"1913eec2-68f1-4ad7-83b9-8d754d13cfff","Gladiator Lacrosse – Training Equipment",7,28,"no_deal",,,100000.00,15.00
+"71270eca-5d7e-4c64-a78f-d3c1b91db4d9","VPcabs Virtual Pinball Machines",7,28,"deal",200000.00,25.00,200000.00,30.00
+"05fe5093-c753-46bb-bad7-e273a7892b9f","Pete and Pedro Men’s Hair Products",7,29,"deal",100000.00,10.00,100000.00,10.00
+"3a228440-ccb3-4fec-bb8b-99e484d86732","PMS Bites Relieve Symptoms of PMS",7,29,"no_deal",,,50000.00,20.00
+"a0149a15-12d9-4395-bc64-7bd0322df25e","Dbest Products – Collapsible Carts",8,15,"no_deal",350000.00,20.00,350000.00,20.00
+"e080b984-1be7-4809-919d-5c5c1d53240a","Little Nomad Play Mats",8,15,"no_deal",,,80000.00,15.00
+"cdc25d96-5720-444d-8f38-594922d28a4f","RinseKit Portable Shower & Sprayer",8,15,"deal",250000.00,7.50,250000.00,5.00
+"ad485e39-b13f-4c6b-b730-78f1ced4fcc4","The Kooler – Cooler Within a Cooler",8,15,"deal",50000.00,33.30,50000.00,15.00
+"9e64ed39-684a-47a4-ae03-b5a40494704f","Doc Spartan – Skin Care And Ointment",8,16,"deal",75000.00,25.00,75000.00,15.00
+"8e1663d4-e730-437e-bad5-1cb1f4d20ea7","Firefighter Turnout Bags",8,16,"deal",250000.00,50.00,250000.00,33.30
+"760e51a9-0bb7-432b-b624-7ddc39ffc773","Peaceful Fruits – Acai Beery Fruit Snacks",8,16,"no_deal",,,75000.00,20.00
+"794b673f-f9cb-4673-9b14-b0072f8e16a2","Tranquilo – Vibrating Baby Mat",8,16,"deal_fell_through",200000.00,15.00,100000.00,10.00
+"04bbb3d4-18ed-4048-826d-17d25b5c0fc8","ēdn Automated Indoor Gardens",8,17,"no_deal",,,150000.00,10.00
+"8d707fc9-71f8-4191-aec4-adf3ad96ea30","Toymail Plush Toy and Message App For Kids",8,17,"deal_fell_through",600000.00,5.00,250000.00,2.50
+"b6aea459-8dff-49a0-a865-af0f8a6cbad7","Ora Organics Plant Based Supplements",8,18,"no_deal",,,375000.00,5.00
+"9c61d5c6-9b9d-4ce4-ab01-c0dec32e7958","Sand Cloud Beach Towels",8,18,"deal",200000.00,15.00,200000.00,15.00
+"f3533204-cce7-43f4-ac34-5699fcee4063","The Elephant Pants",8,18,"deal",500000.00,15.00,500000.00,10.00
+"b7f5ae41-d18c-4b01-9edb-fc917d327d64","Blendtique – Create Your Own Wine Blend",8,19,"deal_fell_through",250000.00,10.00,250000.00,10.00
+"c50fa33d-0824-44fb-abb5-0759d0a86d7b","MealEnders Curb Food Cravings",8,19,"no_deal",,,350000.00,8.00
+"c4ebd711-b3a1-47cc-9205-093cbd829ffd","Rareform Bags Made From Billboards",8,19,"deal",150000.00,5.00,300000.00,10.00
+"924bba2b-7226-451f-9687-f0143764e113","The Sleep Styler",8,19,"deal",75000.00,25.00,75000.00,20.00
+"44ede4a8-0b35-4cc5-85b0-f77207942c99","Cropsticks Bamboo Chopsticks With Built-in Rest",8,20,"no_deal",,,75000.00,12.50
+"a40a43b0-c3ea-4002-9666-39202066a44e","Seedsheets Garden Kits",8,20,"deal",500000.00,20.00,500000.00,10.00
+"6d578476-6e46-4771-885d-d85e36da4eae","Under The Weather Pop-up Tents",8,20,"deal",600000.00,15.00,600000.00,10.00
+"d1f86592-8e63-4dee-a84d-e2743c3906a9","Guard Llama Personal Safety Device Calls 911",8,21,"deal",100000.00,18.00,100000.00,5.00
+"70d054fa-4092-4301-af5b-363fc256a241","Guardian Bikes – World’s Safest Bicycles",8,21,"deal",500000.00,15.00,500000.00,10.00
+"5b2ce4a4-89fa-4496-833f-8d52d7ed2092","Booty Queen Apparel",8,22,"deal",250000.00,33.30,250000.00,20.00
+"85ac4676-c0d2-4b1e-9218-5fdac52b0fdb","Goverre Sippy Cup For Wine",8,22,"deal",200000.00,33.30,200000.00,13.00
+"eea03976-9cd1-4ca5-af42-ccc25e6a9ada","Loctote Theft Resistant Bags",8,22,"deal",150000.00,10.00,150000.00,5.00
+"f4e5a084-f1dc-4378-aae6-1be62376e695","See/Rescue Streamer Safety Signal Device",8,22,"no_deal",,,200000.00,20.00
+"f2a2e5a1-f0d4-4d35-8e0c-25245acbc213","All-In-One Scooping Bowl",8,23,"deal",75000.00,33.30,75000.00,25.00
+"0fe980cb-8359-4e8d-bfa4-14b301de05a4","Rumi Spice Saffron",8,23,"deal_fell_through",250000.00,15.00,250000.00,5.00
+"d489a476-80a9-40a0-9a3d-09adc42ebfe8","Thompson Sweat Proof Undershirts",8,23,"deal_fell_through",,,700000.00,7.00
+"c3071de4-9059-48f6-a95a-feb9ec3f48a0","Wallet Buckle",8,23,"no_deal",,,500000.00,10.00
+"9f5ae9b2-1872-4e84-b91f-7cdb42dd1116","Bridal Buddy",8,24,"deal_fell_through",75000.00,30.00,75000.00,10.00
+"6f59accb-e9a2-4eba-9bd8-9d3d1dbd904a","Laid Brand Pheromone Infused Hair Care",8,24,"no_deal",,,30000.00,30.00
+"8a67d524-5e2a-4273-ac02-4b61f57f23af","RocketBook Reusable Notebook",8,24,"no_deal",,,400000.00,10.00
+"0e867448-1e49-49d8-a723-8b1b695f262c","Wine and Design Painting Classes",8,24,"deal",500000.00,10.00,500000.00,10.00
+"db9ed25a-ec05-4b78-b066-5e129a43d2cc","EverlyWell Home Health Tests",9,12,"deal",1000000.00,5.00,1000000.00,5.00
+"c27e6ffb-f835-4ff1-83c2-0c0100c1c6dd","Birddogs Shorts & Trunks",9,14,"no_deal",,,250000.00,1.50
+"1251d95b-2aba-49e2-b55d-92b24f0e398b","Elliptical Stroller",9,14,"no_deal",,,500000.00,40.00
+"9f365f41-7e84-46db-9c45-d82f926d04a8","Frywall – Splatter Guard For Frying Pans",9,14,"deal",100000.00,10.00,100000.00,10.00
+"3afbf32c-a5ed-4a64-92b5-02621a90d28e","Inirv React Smart Stove Kit",9,14,"no_deal",,,800000.00,8.00
+"11aed3a1-eb05-4ac0-af54-b3282fbba244","DudeRobe Bathrobe For Men",9,16,"no_deal",,,150000.00,18.00
+"e2d07664-9076-4fcb-9e14-0b8233ed0a8b","Joe’s Gourmet Fish Fry",9,16,"deal",150000.00,25.00,150000.00,15.00
+"a5dad903-4010-4bf2-b351-d9d8bd425bbf","The Longhairs Men’s Hair Products",9,16,"deal",100000.00,20.00,95000.00,10.00
+"ecb4668c-c8ff-4000-88fc-07ed48a60213","Alice’s Table Flower Arranging Events",9,17,"deal",250000.00,10.00,250000.00,6.50
+"d6b0b4ff-64d6-46d8-aad9-785394411648","Boobie Bars – Herbal Lactation Bars",9,17,"deal",150000.00,20.00,150000.00,10.00
+"7e3bce49-97be-4bd4-be2d-ed6fd65ae896","ZUP Watersports Board",9,17,"no_deal",,,300000.00,10.00
+"7c293790-bf40-4a87-a313-1dfa9e42a5ed","Bouquet Bar Gift Boxes",9,18,"deal",150000.00,25.00,150000.00,10.00
+"88d90240-5b36-405d-8d33-5ac1dc456c70","The Pop Pacifier Stays Clean When Dropped",9,18,"deal",250000.00,10.00,250000.00,10.00
+"24713a44-7573-4da9-8a5c-329ee38a4ced","The Wingman Inflatable Life Jacket",9,18,"no_deal",,,200000.00,12.50
+"abfb97e7-b445-42f7-a8ce-9e6ccef7eb99","Zuvaa African Marketplace",9,18,"no_deal",460000.00,10.00,460000.00,10.00
+"e9ad7848-6986-4bf4-9789-1633fee0f59a","Brush Hero – Water Powered Detail Brush",9,19,"no_deal",,,500000.00,10.00
+"70237488-6e9a-4948-a391-5c06b65a0451","Guzzle Buddy Wine Bottle Glass",9,19,"deal_fell_through",400000.00,25.00,400000.00,10.00
+"f9cf77f3-148a-465a-a0f7-d90d5a52d1d9","Rounderbum Body Shaping Underwear",9,19,"deal",150000.00,5.00,150000.00,10.00
+"91189a82-93fa-4e34-b591-ee6201e67d37","SnapClips Barbell Collar For Weights",9,20,"deal",150000.00,30.00,150000.00,15.00
+"ac44e26b-5d33-4e32-9ec0-948bed3f96f7","The Dough Bar Donuts",9,20,"deal",300000.00,20.00,300000.00,15.00
+"fe1badb8-6e74-46cf-a2ec-333ddaad0857","The Shower Pill Body Wipes",9,20,"no_deal",,,300000.00,10.00
+"a37452b0-dfbb-4774-b69e-faefe8cae31f","Everytable Meal Delivery Service",9,21,"deal_fell_through",1000000.00,10.00,1000000.00,10.00
+"50841b56-2fda-4bb2-ab10-56436eee2bdd","Radiate Portable Campfire",9,21,"deal",100000.00,25.00,50000.00,20.00
+"5c75770a-e04f-4630-8a46-fadc1d8819e0","SAP! Maple Based Beverages",9,21,"no_deal",,,600000.00,12.00
+"de071e97-83e5-4e90-a20e-2ff5f6ebfd3d","Gunnar Computer Glasses for Eye Strain",9,22,"deal",750000.00,8.00,750000.00,5.00
+"757d4e97-18c6-4488-888f-619f4505c950","SolSource Solar Cooker by One Earth Designs",9,22,"deal",500000.00,4.00,500000.00,3.00
+"51aedffe-ab6e-4c25-a65f-b95190d8b3ad","Sunniva Super Coffee",9,22,"no_deal",,,500000.00,4.50
+"6fe0f77d-f307-4efa-b4e6-4afaaaada1ce","The Avocaderia  – Avocado Bar",9,22,"deal_fell_through",400000.00,20.00,300000.00,10.00
+"ace09d9f-2ea5-44a4-a6af-cebae3dd8985","Coolpeds Briefcase Electric Scooter",9,23,"no_deal",,,250000.00,5.00
+"bfddf8be-6921-47dc-96e6-fc6372379522","Hugo’s Amazing Tape",9,23,"deal",100000.00,100.00,50000.00,50.00
+"c0670c4b-2c7a-418c-8dd5-a1d5228353c4","The Eggmazing Egg Decorator",9,23,"deal",350000.00,10.00,350000.00,7.00
+"b6d968df-c1cd-40d6-91b6-e5c839687903","Bermies Swim Trunks",9,24,"no_deal",,,200000.00,20.00
+"c23dd247-48da-4139-80e1-ef9a11f3cb69","Lace Your Face Mask By Dermovia",9,24,"deal",350000.00,15.00,350000.00,10.00
+"5920542e-6148-4fbf-ada7-eb1bdd6bc5bb","OA Foods – Quinoa, Chia, Palmini",9,24,"deal",300000.00,25.00,300000.00,10.00
+"6ca30555-c75e-4ecd-8309-615b9c3961f3","Thrive+ Hangover Remedy",9,24,"no_deal",,,400000.00,10.00
+"b9eacbf4-dcd2-48bb-9dde-e3e259e51678","CurlMix Beauty Products For Curly Hair",10,14,"no_deal",,,400000.00,10.00
+"f833841e-59ad-4532-98cd-a5831d03f1ea","GOGA Goat Yoga",10,14,"no_deal",,,500000.00,15.00
+"3c4cedcc-0dcc-4c7d-aad4-297450821d83","Shower Toga Portable Public Shower",10,14,"deal",80000.00,40.00,80000.00,33.00
+"39df4d1a-0d92-44a5-a112-c3bdca615c80","Moink Meat Subscription Box",10,15,"deal",400000.00,20.00,250000.00,10.00
+"dd599f75-60a1-4615-a29d-f3d823af1f2a","ToyBox 3D Printer For Kids",10,15,"deal_fell_through",150000.00,5.00,150000.00,5.00
+"c27e8b38-e294-45ec-b84d-41ba845b79da","Kudo Banz Rewards For Kids",10,16,"no_deal",,,150000.00,10.00
+"5b4dacf6-3fdd-454c-8c56-cf9e5e1cd571","Urban Float Sensory Deprivation Therapy",10,16,"deal_fell_through",500000.00,12.50,500000.00,5.00
+"0c28c975-cc6d-4862-a593-e4aead1a1bda","Dare-U-Go Bib, Plate & Food Container",10,17,"deal",350000.00,35.00,350000.00,10.00
+"68784025-518c-4ab7-a1f8-19ec4acea24d","Pickup Pools For Truck Bed",10,17,"deal",100000.00,33.30,100000.00,25.00
+"10d5c9b5-3af3-4942-a467-26ad500898ed","Press Waffle Co.",10,17,"deal",300000.00,15.00,300000.00,15.00
+"c6bd5dab-f900-4877-88ee-47ac7cd6a96f","SilkRoll Fashion Trading Platform",10,17,"no_deal",,,250000.00,3.00
+"6df72d99-48ff-483a-9c1f-8153ff4e449c","CertifiKID Family Activities",10,18,"deal",600000.00,19.00,600000.00,8.00
+"90d5cde1-0120-4ff6-b569-473b9bebd4af","Haven Door Lock",10,18,"no_deal",,,500000.00,6.00
+"e9851cf4-6aaa-4c03-bb12-9369922d6d4f","Kanga Koozie Cooler For Cases",10,18,"deal",100000.00,20.00,100000.00,10.00
+"918f88de-b322-405c-8ea1-aa0cc4e3df08","Nuchas Empanada",10,18,"no_deal",,,2000000.00,8.00
+"790810f9-594f-4022-8a56-390d84bfa1fe","Flip It Cap Empties Bottles Upside Down",10,19,"no_deal",,,500000.00,10.00
+"9630f171-44a6-4f3a-9911-459ddd440d6e","Hydroviv Water Filters",10,19,"deal_fell_through",400000.00,20.00,400000.00,10.00
+"491bd92d-f4d0-4046-8dae-9f1b38169e14","Luma Soda",10,19,"no_deal",,,500000.00,20.00
+"1f399082-748f-4e75-a9dd-7039143d89c8","Pricetitution Card Game",10,19,"deal",100000.00,40.00,100000.00,20.00
+"5a50e3e3-d516-4d8a-84f2-7f161526fd8a","Maven’s Creamery Macaron Ice Cream Sandwiches",10,20,"deal_fell_through",400000.00,25.00,400000.00,10.00
+"c839ed31-5897-469c-b68a-416fc66af1b0","Somnifix Mouth Tape",10,20,"deal_fell_through",500000.00,20.00,500000.00,10.00
+"db694436-381a-46d5-be1a-afc06c70e062","Swoveralls Sweat Pants + Overalls",10,20,"no_deal",,,150000.00,15.00
+"8a191479-bbe3-407e-8165-83d92637e2ba","Kymera Electric Body Board",10,21,"deal",500000.00,10.00,250000.00,5.00
+"f5fb90d2-d859-49fc-86f2-2ae9f76438ba","The Bang Shack Chicken Dip",10,21,"no_deal",,,80000.00,20.00
+"0b1ccdd8-7933-46f2-ae99-96c95d0ca386","The Best Pocket Square Holder",10,21,"deal_fell_through",200000.00,,200000.00,15.00
+"9c222d94-0486-490c-a024-6841c3ee1f2c","Cubicall Office Privacy Booths",10,22,"deal",350000.00,10.00,350000.00,10.00
+"9b7561e4-fcf9-43a0-9c40-d848dcf66213","DeskView Window Mounted Standing Desk",10,22,"deal",150000.00,20.00,150000.00,7.50
+"bbcc8e66-8b08-454d-9395-e556e2c0f8bc","DoughP Cookie Dough",10,22,"no_deal",500000.00,,450000.00,10.00
+"82d77631-50f6-472c-8474-d52063ad62ba","Saucemoto Dip Clip Car Sauce Holder",10,22,"no_deal",45000.00,25.00,45000.00,15.00
+"1b46b986-7d6e-4bd5-a409-b0eb553877c2","BatBnB Bat Houses",10,23,"deal",100000.00,33.30,100000.00,16.00
+"1b13b5fa-dd6b-447e-897f-055928fe3d0a","Fat Shack Late Night Food",10,23,"deal",250000.00,15.00,250000.00,7.50
+"d524672f-1a99-48bf-b6fc-f6146f5efdaa","Quickflip Hoodie Backpack",10,23,"no_deal",500000.00,5.00,500000.00,5.00
+"d9776196-1c23-47ea-a173-7bfee3223ff9","Bertello Pizza Ovens",11,15,"deal",120000.00,25.00,120000.00,10.00
+"9794fe03-4b13-4d1f-a503-520b787155ed","KidsLuv Vitamin Infused Flavored Water",11,15,"no_deal",,,200000.00,8.00
+"cde6db3b-0a26-4685-a32f-36e4f05dedaf","Space Traveler Kid’s Car Seat Cover",11,15,"deal",100000.00,33.30,100000.00,33.30
+"19a21b05-4167-4024-b9ba-b7cfce521b30","Swimply Swimming Pool Rental",11,15,"no_deal",,,300000.00,5.00
+"1de372b3-5733-4d6b-825c-952892632b2f","Bohana Popped Water Lily Seeds",11,16,"deal",200000.00,8.00,200000.00,10.00
+"407f1728-148d-415c-b34d-daab05cbb886","Boho Camper Vans",11,16,"deal",150000.00,10.00,300000.00,10.00
+"0526246b-8acf-48bd-9c75-3474bbf84e3e","Grouphug Solar Panels For Windows",11,16,"deal",150000.00,25.00,150000.00,10.00
+"59b5dd1a-c472-4831-b354-aee4155627f6","Safety Nailer",11,16,"no_deal",100000.00,33.00,100000.00,14.00
+"d8b02994-9902-48c4-b533-eb45d19df559","Critter Pricker Raccoon Deterrent",11,17,"deal_fell_through",115000.00,15.00,115000.00,15.00
+"540e1ef9-c897-4013-b77b-41254ac3dde0","Goumi Kids & Baby Clothes",11,17,"deal_fell_through",1000000.00,10.00,1000000.00,80.00
+"48c2e502-009e-4172-8b00-746b6899db98","Pasta by Hudson",11,17,"deal",150000.00,30.00,150000.00,10.00
+"0ac63cb6-c1a5-42e4-8d5b-75624f21438a","The Frozen Farmer Ice Cream",11,17,"deal",125000.00,30.00,125000.00,20.00
+"d8a4cfa5-9293-48ff-819d-163699a7ee8c","Bad Birdie Golf Shirts",11,18,"deal",300000.00,25.00,300000.00,10.00
+"61d41b31-d6f5-409d-8ebf-8b98a9380fe3","Beddley Duvet Covers",11,18,"no_deal",,,150000.00,10.00
+"519327a1-9d74-49e9-9fa9-13df221275bf","Muvez Footwear Slipper Shoes",11,18,"deal",200000.00,25.00,200000.00,15.00
+"429212d1-3147-4512-9a54-43bf691007dc","First Saturday Lime Insect Repellent",11,19,"deal",100000.00,25.00,100000.00,10.00
+"e3e6fae1-cd03-446c-84bf-2d06844357a7","Just The Cheese Snack Bars",11,19,"no_deal",,,500000.00,5.00
+"3e22b592-a837-4318-ac09-0c017c80ade7","Neuro Energy Gum",11,19,"no_deal",,,750000.00,5.00
+"f4c665d8-b8ff-47ba-a359-8de18313ff80","Seriously Slime",11,19,"no_deal",,,90000.00,15.00
+"3e91f94f-88ff-413a-bd15-b8ab86d4f597","Fried Green Tomatoes",11,20,"deal",200000.00,30.00,200000.00,15.00
+"50d25aa3-06cf-4b17-a515-4a2b1913896a","JiggAerobics Exercise",11,20,"no_deal",,,50000.00,12.00
+"27443e19-4c8d-41df-a7ae-4cec098c9301","The Little Burros Wheelbarrow Tool Holder",11,20,"no_deal",250000.00,7.00,250000.00,10.00
+"1d10e507-424a-4bcb-9bf8-6acb6a1b3b1f","ABii Educational Robot",11,21,"no_deal",,,300000.00,10.00
+"fe480b4c-1c10-4722-a426-3fc49c911f7b","PROVEN Skincare",11,21,"no_deal",,,500000.00,5.00
+"fe7c6efe-72c5-473b-8dfe-fcd240e859fe","Tanoshi Kids Computer",11,21,"deal",500000.00,20.00,500000.00,8.00
+"d1d3d7a4-8431-4760-8070-6ab486688d85","UnBuckle Me Child’s Car Seat Tool",11,21,"deal",100000.00,10.00,100000.00,10.00
+"3f117545-9e64-489e-9c1b-9dd045d1ddef","Lord von Schmitt Crochet Clothing",11,22,"no_deal",,,100000.00,10.00
+"ec2bf4b1-37e1-42e6-a96f-2b995987810d","Potty Safe Child Proof Potty Training Toilet",11,22,"deal_fell_through",50000.00,20.00,50000.00,15.00
+"3dde5e5a-4adb-4051-8571-97bb15c4c6ed","The DadWare Bondaroo",11,22,"no_deal",100000.00,20.00,100000.00,20.00
+"c903e5d3-00a4-4d96-a4c9-a142e51b3e4c","Tough Apparel Machine-Washable Ties",11,22,"deal",100000.00,35.00,100000.00,15.00
+"ea14e065-f3a5-47ce-86a4-57ccee86c11f","mcSquares Dry Erase Whiteboard Tiles",11,23,"deal",50000.00,11.00,300000.00,10.00
+"b609dd29-a1ce-42f9-bff5-06c52304207c","Rescue Ready Window Escape Ladder",11,23,"no_deal",,,75000.00,15.00
+"c68538b2-9dc0-46cb-8435-1ded7b2cc890","Salted Restaurant Delivery",11,23,"no_deal",,,500000.00,5.00
+"c68be338-9be1-4cbc-a5a8-d608cf86b23a","Slate Chocolate Milk",11,23,"no_deal",,,400000.00,10.00
+"e30a8d80-2872-49c9-af3a-8f79413a4228","Dreamland Baby Weighted Sleep Sack",11,24,"deal_fell_through",100000.00,22.50,100000.00,10.00
+"1958d6ee-6cbd-42cc-b513-699282f20785","RollinGreens Plant Based Wings and Tots",11,24,"deal_fell_through",500000.00,20.00,500000.00,10.00
+"b92f836a-24cb-4eab-b2f5-2af8b98d4070","The Mad Optimist Soap & Bath Products",11,24,"deal",60000.00,20.00,60000.00,10.00
+"60d6e6f8-c50b-4675-b4d8-47887db7959b","Yellow Leaf Hammocks",11,24,"deal",1000000.00,,400000.00,7.00
+"f373078c-cf5a-4797-87a2-dc71144789ca","Sleep Pod Blanket by Hug Sleep",12,3,"deal",150000.00,10.00,150000.00,10.00
+"eb9aa51e-29e6-41d9-b1bd-6f85e4956263","Busy Baby Mat Placemat",12,16,"no_deal",,,250000.00,5.00
+"45d046c9-f295-4688-9a30-4e583a1cb7d7","Muff Waders Beer Cooler Overalls",12,16,"no_deal",,,25000.00,25.00
+"b10753b1-66b0-46ad-ba21-d52941a645f6","Pinch Me Therapy Dough",12,16,"deal",300000.00,20.00,300000.00,7.00
+"88b5cd0f-6ff9-41d1-8959-c7fdd6446ee7","Simply Good Jars",12,16,"deal",500000.00,10.00,500000.00,7.00
+"bd3c6149-04a0-4368-bb14-e4ff42607f70","Chill Systems Beverage Cooler",12,17,"no_deal",,,150000.00,15.00
+"48c087a7-eed8-4672-952e-9d473eaae011","Misfit Foods Meats With Added Veggies",12,17,"deal_fell_through",300000.00,15.00,250000.00,5.00
+"7988f5f4-bc36-4b9c-a9fb-ce993f641d23","Tandm Surf (Tandem Boogie) Body Board for Two",12,17,"deal",100000.00,35.00,100000.00,10.00
+"72355657-37a2-48b5-9d4e-208baea91297","Totes Babies Car Seat Carrier",12,17,"deal",100000.00,25.00,100000.00,10.00
+"c1ea8041-7693-4579-abbd-49be8d6202b4","Bunch Bikes Electric Cargo Bikes for Families",12,18,"deal",100000.00,15.00,250000.00,10.00
+"2daa454f-e3f9-4e08-838c-b92b6bf6958b","Hairy Grabster Shower Hair Trap",12,18,"no_deal",,,75000.00,20.00
+"18a7fa18-d2f0-4bd0-a231-8e51ea02fcc7","Mad Rabbit Tattoo Balm",12,18,"deal",500000.00,12.00,500000.00,5.00
+"1b9776dc-c4f7-4326-81e7-a1e28dea1bb1","Numilk Dairy-Free Milk",12,18,"deal",2000000.00,10.00,1000000.00,5.00
+"451697cc-b7b0-4dae-b73d-0d2179da11cc","DynoSafe Delivery Lockbox",12,19,"deal_fell_through",150000.00,25.00,150000.00,15.00
+"f95c3022-16d3-47bb-bf5c-cc7404d96055","Phoozy Insulated Phone Cases",12,19,"deal",500000.00,8.00,500000.00,10.00
+"7cbabebf-5992-4dcf-86be-432db7651b2e","Probiotic Maker",12,19,"no_deal",,,150000.00,7.00
+"6bb358d7-0dce-4439-8d16-f684c188e87d","StepNpull Door Opener",12,19,"deal",300000.00,6.00,300000.00,3.00
+"3d06b637-1647-4642-b9b1-8a813320e654","FurZapper Laundry Pet Hair Remover",12,20,"deal",600000.00,15.00,600000.00,15.00
+"c69333fa-5d91-4fb6-a44f-28cec8fbb8d0","OpulenceMD Beauty Magnetic Eyelashes",12,20,"deal",100000.00,20.00,75000.00,5.00
+"b63c81b8-05ce-40bd-a6b1-97d513c44b2f","The Cheese Chopper",12,20,"no_deal",,,75000.00,10.00
+"2e7736ba-3eb0-4391-b777-7efa534cfadd","The Matte Makeup Organizer",12,20,"deal_fell_through",100000.00,33.30,100000.00,20.00
+"7f43c82a-5d04-4108-86aa-5d5b58f691de","LARQ Self Cleaning Water Bottle",12,21,"deal_fell_through",1000000.00,4.00,500000.00,1.00
+"4152a92e-eba6-4ab4-9960-ce0817d30a8a","Salad Sling Drying Towel",12,21,"no_deal",,,100000.00,20.00
+"20083669-43c2-4517-b412-87929b44c29f","Suds2Go Hand Washing Bottle",12,21,"deal",200000.00,15.00,200000.00,10.00
+"00bdb134-f3af-40d1-ad95-0e50a55ffbde","Truffle Shuffle",12,21,"deal",501000.00,18.00,500000.00,5.00
+"ad39a395-ccc6-4ab6-adea-6aee1b5b0bdd","JIGGY Jigsaw Puzzles",12,22,"deal",500000.00,15.00,500000.00,5.00
+"5547d4c6-2516-4141-81f6-3d9e34e4919d","The Bumbling Bee Vegan Junk Food & Burger Bar",12,22,"no_deal",,,150000.00,10.00
+"6f295b2a-bf40-43c8-918e-81eabb3f373e","The Scrubbie Faucet Sponge Attachment",12,22,"no_deal",,,100000.00,10.00
+"3e7d8c44-3324-4562-aca3-76c42e2a6cc3","XTorch Solar Flashlight & Charger",12,22,"no_deal",,,150000.00,10.00
+"9405054a-1c6f-4b60-b8cf-eab53b813b39","BEERMKR Home Beer Brewing",12,23,"no_deal",,,500000.00,2.00
+"cf70f6fb-3f5c-4803-81a4-8916d133c67f","Creation Nation Protein Bar & Energy Bites",12,23,"no_deal",,,300000.00,12.00
+"93c411c5-44a1-40cc-b72d-5507322ebece","GRIND Basketball Shooting Machine",12,23,"deal",250000.00,25.00,250000.00,5.00
+"6ace5109-0762-4148-a683-b63deed5f4c0","SneakERASERS Shoe Cleaner",12,23,"deal",200000.00,20.00,200000.00,8.00
+"d1fccff0-803d-4cd9-9b29-6819db3ecaa7","Fling Golf",12,24,"no_deal",300000.00,25.00,300000.00,10.00
+"26a71c34-5489-45e2-bec9-637553f6c630","Float ‘N’ Grill",12,24,"deal",100000.00,22.50,200000.00,20.00
+"a4f0d74c-145b-4d9a-806d-d5d866eb6983","Pluto Pillow Personalized Pillows",12,24,"no_deal",,,400000.00,5.00
+"04a95332-b158-4d01-89d8-7132d9b8ed02","The Original Stretchlace Elastic Shoelaces",12,24,"deal",100000.00,30.00,100000.00,15.00
+"20779164-9bdf-4793-ad0a-2bf47f2b19fe","Copper Cow Coffee",12,25,"deal_fell_through",600000.00,8.00,600000.00,4.00
+"89b30ac4-f39c-4357-9eb4-716e3e20213b","Dino Don Animatronic Dinosaurs",12,25,"deal",500000.00,25.00,500000.00,25.00
+"0ed955fc-fc1f-4db4-81c1-c13f3e65661d","Lit Handlers Koozies",12,25,"deal",200000.00,20.00,200000.00,10.00
+"2e4129f9-a66b-467a-81a8-7d93d35d53f3","Super Potty Trainer",12,25,"deal_fell_through",,,300000.00,10.00
+"6687e346-b938-41ec-b175-a3ab94c9ec9a","Ade + Ayo Children’s Clothing",13,15,"deal",500000.00,33.30,175000.00,10.00
+"782b97d9-d1a9-4605-a48e-7319896d9f24","Behave Bras",13,15,"deal",150000.00,20.00,150000.00,15.00
+"d983989d-f125-4d40-9629-26965716a197","Curie Deodorant & Skincare",13,15,"deal",300000.00,10.00,300000.00,5.00
+"0500b034-05a9-4621-871c-570be742659d","Noggin Boss Hats",13,15,"deal",50000.00,30.00,50000.00,25.00
+"00ad7fda-fc2f-41ea-9298-507a3592387b","Do Amore Jewelry",13,16,"deal",600000.00,15.00,600000.00,6.00
+"ff24fb8a-c07e-4361-9967-265785830647","ootBox Moveable Workspaces",13,16,"deal",300000.00,10.00,300000.00,5.00
+"681c04e3-b834-45e9-a811-386e0e5098d4","Prepdeck Meal Prep Station",13,16,"no_deal",750000.00,5.00,750000.00,7.50
+"5c7cc185-5972-4312-8182-9b99eb3496eb","Sunflow Beach Chairs",13,16,"deal_fell_through",1000000.00,5.00,1000000.00,6.00
+"6fb326bd-fb2d-44a1-a8f1-bfb0c3ae39d4","Magic Dates Snack Bites",13,17,"deal",150000.00,33.30,150000.00,10.00
+"2c6502f3-5615-41b2-9aeb-cb26917feef8","Round21",13,17,"deal",250000.00,10.00,250000.00,3.00
+"526ea423-a943-42de-bf9b-8617e4e59841","Young King Hair Care",13,17,"no_deal",,,225000.00,2.50
+"3214d79e-5613-4e0b-9246-06213af1338c","Apolla Compression Socks",13,18,"deal_fell_through",300000.00,25.00,300000.00,15.00
+"b0ade047-d81a-4002-a4f9-efa00ac301f0","FORT Magnetic Pillow Fort",13,18,"no_deal",,,500000.00,10.00
+"bf4c6e33-873d-4ac6-949c-06eda206972a","No Limbits Adaptive Clothing",13,18,"deal",100000.00,10.00,100000.00,6.00
+"42592d1e-13a3-40e7-9665-4d0ad1f4937f","Umaro Foods Seaweed-Based Bacon",13,18,"deal",1000000.00,7.00,500000.00,2.00
+"d97c20ad-f38a-496a-963e-01e25f8bedac","BusyBox Do Not Disturb Sign",13,19,"no_deal",,,200000.00,15.00
+"0642f8b0-4ea9-4bb4-8f9d-57f25c20d0da","LUCY Drawing Tool",13,19,"deal",300000.00,15.00,300000.00,10.00
+"d9d910c1-43b0-47b8-8e85-659b6e85bd2f","The Dirty Cookie Shot Glass",13,19,"deal",500000.00,25.00,500000.00,5.00
+"cc0cbd50-f3d4-46a7-b9b5-e90e2c02c4b8","Browndages Skin Tone Bandages",13,20,"deal",100000.00,25.00,75000.00,7.50
+"020919b4-872e-48d4-bd36-d28d782db441","HairFin Haircut Guide",13,20,"deal",25000.00,30.00,25000.00,20.00
+"1f785b0f-40a4-4acd-9750-2c6204b38752","Lil ADVENTS Potty Training Game",13,20,"no_deal",,,300000.00,15.00
+"c45e6a9f-d1af-45df-80e0-a0070a4f6431","Cupbop Korean BBQ",13,21,"deal",1000000.00,5.00,1000000.00,3.00
+"cf37741c-48af-4c8d-b854-1e568d27e607","Hampton Adams Athletic Tape",13,21,"no_deal",,,500000.00,10.00
+"4e788a65-1784-456a-958d-e0ad0a16349c","Handy Pan",13,21,"deal",10000.00,20.00,10000.00,20.00
+"28c85fc3-1545-416b-9178-766a466f7018","Plunge Cold Water Immersion",13,21,"no_deal",1200000.00,12.00,1200000.00,5.00
+"09c71122-fed3-482d-8a16-132e9a131161","Kawaii Lighting Ring Lights",13,22,"deal",100000.00,22.00,88000.00,22.00
+"32da138f-2303-48c5-a286-5b5709bccd19","Ooakshell Headbands",13,22,"deal",150000.00,20.00,150000.00,10.00
+"b88bdf15-f31d-4cc7-8e94-4c71b9f47276","Pricklee Cactus Water",13,22,"deal",200000.00,20.00,200000.00,5.00
+"ea005f5b-0043-4478-8162-d56f570aeda4","Pulp Pantry Veggie Chips",13,22,"deal",500000.00,17.00,500000.00,10.00
+"28491525-96d4-40e0-8640-f4cdae5c91f7","Chill-N-Reel Fishing Can Koozie",13,23,"no_deal",,,300000.00,10.00
+"cd9635c1-cae1-4c54-bb0d-21b65809c1d3","Driftline Boardshorts",13,23,"no_deal",,,100000.00,10.00
+"5dd37afa-32a1-4504-96d2-2eb2a30bcb15","Stryx Cosmetics & Skincare for Men",13,23,"deal_fell_through",600000.00,10.00,600000.00,5.00
+"78e3c331-eb87-4e7f-8a7d-02543d242fb2","Project Pollo Vegan Chicken",13,24,"no_deal",,,2500000.00,5.00
+"cb1ff124-bf42-41aa-86c6-5711df971837","The Aqua Boxing Glove",13,24,"no_deal",,,100000.00,10.00
+"1f3f0b15-0ae4-41b5-a887-f78c96ca7058","The Players Trunk",13,24,"no_deal",,,650000.00,5.00
+"e3f10a65-bc80-41da-a782-dbb6d6b3861a","The Transformation Factory Sea Moss",13,24,"deal",600000.00,20.00,500000.00,5.00
+"9aab914c-1e2b-46ae-9e1b-6e3ec4cd5af4","The Woobles Crochet Kits",14,2,"deal",450000.00,6.00,250000.00,5.00
+"3d799f7a-3965-465d-bd49-0b8a36e1b2a7","Anytongs Turn Your Flatware Into Kitchen Tongs",14,13,"deal",150000.00,49.00,150000.00,20.00
+"bc5354bd-7038-45bc-998d-7992c5958b21","Copy Keyboard Copy & Paste Computer Keypad",14,13,"no_deal",,,40000.00,25.00
+"51f1ef2b-a2b9-4744-affc-7731dedab7a4","FryAway Cooking Oil Solidifier",14,13,"deal",250000.00,22.00,250000.00,10.00
+"ad047e2c-2875-46f3-a480-e7092815dc0a","Slick Barrier Pest Control",14,13,"deal",500000.00,15.00,500000.00,15.00
+"0f076df2-84d8-46e8-8808-783613a4a10c","FunkkOFF! Teeth Cleaner",14,14,"deal",250000.00,12.00,250000.00,5.00
+"2c4bdab6-7b55-4868-a197-efba0eeec5a7","Kahawa 1893 African Coffee",14,14,"deal",350000.00,8.00,350000.00,5.00
+"570cc465-e18e-4313-8c6e-3a920f3c0b04","The Chub Rub Patch",14,14,"no_deal",,,200000.00,30.00
+"7fd53f5a-95a4-43e2-b547-8b9bc8bf9edb","Big Mouth Toothbrush",14,15,"deal",150000.00,20.00,150000.00,10.00
+"b7727cc7-b567-4ee7-b416-5911cdef3f0c","Eat Your Flowers Edible Flower Bakery",14,15,"deal",250000.00,15.00,250000.00,12.00
+"4198b423-c2b5-4287-b376-83b73a365b65","Surf Band Pro Sunscreen Dispenser",14,15,"no_deal",,,150000.00,10.00
+"556b9ee0-0430-4c11-9dc2-8f0d722a95a1","YouthForia Makeup",14,15,"deal",400000.00,8.00,400000.00,5.00
+"018f7fa7-58b9-4d8e-981f-7d083e6edc86","Flated Inflatable Cargo Storage",14,16,"deal",350000.00,8.00,350000.00,5.00
+"ed74ddb1-442e-4f6e-974f-6c97e438a54e","Pluie Self-sanitizing Diaper Changing Table",14,16,"no_deal",,,500000.00,5.00
+"31c489a4-52ea-4d6c-8bf7-2c4409d6afd5","SweetKiwi Frozen Whipped Greek Yogurt",14,16,"deal",250000.00,16.00,250000.00,5.00
+"955061d3-c7cc-4edb-8960-15337f2db4a0","Chubby Buttons Wearable Remote for Phone",14,17,"no_deal",250000.00,10.00,250000.00,8.00
+"a58054b5-4f70-4ce8-8ccf-bdceef614411","Crispy Cones Pastry Dough Ice Cream Cones",14,17,"deal",200000.00,20.00,200000.00,10.00
+"618c054e-d884-402f-924e-8a54cbc910b1","Tngnt Ski Bikes",14,17,"deal",200000.00,40.00,200000.00,20.00
+"442bd0fe-931f-45a7-b555-17662f951ae0","Bleni Blends Smoothie Vending Machines",14,18,"deal",250000.00,35.00,250000.00,6.00
+"2db3ea88-93ac-4bd1-89b7-9b148a5488ba","Happi Floss Flossers",14,18,"no_deal",,,200000.00,10.00
+"3523713e-1b52-4530-a74a-cd9aa9cecc4e","Lavabox Portable Campfire",14,18,"deal_fell_through",200000.00,12.50,200000.00,10.00
+"143e62c7-17f7-4607-88d1-e7ef91cf69c7","The Ice Cream Canteen",14,18,"deal",300000.00,25.00,100000.00,5.00
+"cbc48a0d-c381-4f47-a086-07f323c09069","Burlap and Barrel Spices",14,19,"no_deal",,,500000.00,5.00
+"a939aea7-202d-4763-9f42-9211c63f2804","Cincha Travel Belts & Bags",14,19,"deal",100000.00,33.00,200000.00,15.00
+"fd4da9b7-785e-4241-8bf5-85b5a571e693","Milkify Freeze Dried Breast Milk",14,19,"deal",400000.00,20.00,400000.00,10.00
+"cceb05ea-50b3-4bed-8a9a-9ddbd7b7c8ce","Dapper Boi Body-Inclusive Fashion",14,20,"no_deal",,,250000.00,5.00
+"586561e1-b049-4ddd-a2a3-43e611c8120c","Honey Bunchies Honey Bars",14,20,"no_deal",,,200000.00,10.00
+"0c1956ab-2cb1-4092-a421-3b0f0cfed791","Play Maysie Portable Dollhouses",14,20,"deal",150000.00,20.00,150000.00,10.00
+"51f3ace3-5598-4eca-8a81-ee424720a928","Tia Lupita Foods",14,20,"deal",500000.00,5.00,500000.00,5.00
+"c552bd0c-b12a-499c-9cd8-72f298eab091","Nature’s Wild Berry Miracle Berries",14,21,"deal",80000.00,20.00,80000.00,15.00
+"85041978-188d-4e85-9f6c-b3b4002e50cd","Noshi Food Paint for Kids",14,21,"deal",250000.00,25.00,250000.00,17.00
+"d0f12992-f612-4972-92f4-2535dffc1b85","See the Way I See Clothing",14,21,"no_deal",,,250000.00,10.00
+"e4c53e50-f4a7-4f2b-be8e-f698ec5b0b73","You Go Natural Hair Accessories for Textured Hair",14,21,"deal",400000.00,10.00,400000.00,5.00
+"cb6f1f6e-f8d6-4582-9765-a2082742a4e2","Eyewris Folding Reading Glasses",14,22,"deal",125000.00,20.00,25000.00,5.00
+"1aacc12c-a4b0-4322-a060-7aa6c01789b6","Influencers in the Wild Board Game",14,22,"no_deal",,,500000.00,10.00
+"bfa1c68c-94d9-4ac0-92d4-6feb65183d14","Tones of Melanin Collegiate Wear",14,22,"deal",300000.00,12.00,300000.00,5.00
+"8ed9300c-b785-4526-83c5-49341c08f48a","Tucky Belt",14,22,"deal",70000.00,39.00,70000.00,30.00
+"3658ec31-2ff4-47e8-af74-88789175fb54","Meat the Mushroom Shroomacon",15,12,"deal",150000.00,33.30,150000.00,7.50
+"a7d8269b-740c-4d24-b2ab-ed8f888d2354","AU Baby Blankets",15,13,"deal",80000.00,35.00,80000.00,25.00
+"a8c0947f-8ab2-44ce-bffa-c5c6acb95365","Modern Picnic Lunchbox Bags",15,13,"no_deal",,,400000.00,6.50
+"417dc9fb-4734-4bfc-8c43-4174e1d79eaf","Flora Smart Plant Monitor",15,14,"deal",300000.00,15.00,300000.00,10.00
+"708356cb-7139-4ab8-bd43-8b3bb356747c","How to be a Redhead",15,14,"deal",350000.00,15.00,350000.00,10.00
+"f73bdee0-0a66-425c-9379-c95c8cbf962f","Splashzen Bathtub Splash Guard",15,14,"deal",100000.00,14.00,100000.00,10.00
+"7a2cef7e-fdca-42e3-ac05-96ff73ea0290","Coldest Water Bottles",15,15,"no_deal",,,600000.00,2.00
+"c054d29b-3c72-487c-98cb-c4f0a578995a","Cup-a-Bug Insect Catcher",15,15,"deal",75000.00,20.00,50000.00,10.00
+"e56049fa-20d7-4c61-827b-cc9b883b65ae","Psyonic Bionic Hand",15,15,"deal",1000000.00,6.00,1000000.00,2.00
+"5d51e9e2-80da-4f7a-a9fa-738f4cb89a55","Da Vinci Eye AR Drawing Tools",15,16,"no_deal",350000.00,7.00,350000.00,5.00
+"f5395f83-c557-49eb-ad6d-889cb34ecf8e","Fila Manila Filipino Sauces",15,16,"deal",250000.00,20.00,250000.00,5.00
+"8e13d5af-fb8a-4bc0-8bc7-09120fdf1536","Funky Mello Marshmellow Creme",15,16,"deal",50000.00,15.00,50000.00,15.00
+"a35f26c0-5d2f-490a-944f-1a324e79ab44","Boona Tandem Shower Heads",15,17,"no_deal",,,400000.00,10.00
+"49a0a8ec-6bd5-4617-bb35-ffd25321a2f3","Chefee Robotic Chef",15,17,"deal",500000.00,15.00,500000.00,4.00
+"d9d525df-eeb4-445c-aa89-2341f48229b7","Let Them Eat Candles Edible Candles",15,17,"deal",250000.00,18.00,250000.00,10.00
+"d9b0c8c7-47c1-4477-a23a-73ef2f9997b6","The Lady Alpha Nursing Cover",15,17,"deal",100000.00,10.00,100000.00,10.00
+"ee656f9a-b068-49df-9b03-430dc4b977fc","Nourish and Bloom Grocery and Bistro",15,18,"no_deal",,,400000.00,5.00
+"872c9c67-940e-4892-9e62-928173be2717","Nowhere Bakery Plant Based Cookies",15,18,"deal",200000.00,12.50,200000.00,5.00
+"df8cec3c-71c0-4fa3-a35c-0a819e7697fe","The Murder Mystery Co",15,18,"deal",350000.00,10.00,350000.00,5.00
+"ddde22c0-0d8c-4880-8253-0e5ac90ac240","Hibear Insulated Bottle",15,19,"no_deal",,,150000.00,5.00
+"4de8c837-e869-46b4-91a7-5ccfee21596e","Richualist Hair Styling Tools",15,19,"deal",150000.00,15.00,150000.00,10.00
+"5193f944-eba8-4e47-90c0-5adfbd4a481f","Splash Swim Goggles",15,19,"deal",200000.00,10.00,200000.00,5.00
+"3362d33c-f2ef-4db3-8f64-dd520ccfb8bc","Veba Baby Bottle",15,19,"no_deal",,,150000.00,15.00
+"9fddf40a-f7b0-424e-b06e-102259f45138","Blinger Hair Gems",15,20,"deal",200000.00,25.00,200000.00,5.00
+"daa97d2a-77fb-4073-b025-cc0818cdb6ca","Sorsoap Massage Bar Soap",15,20,"deal",100000.00,20.00,100000.00,10.00
+"2f017d99-2d6b-496d-8b63-33066824ef0b","VSeat Bicycle Seat",15,20,"deal",200000.00,,150000.00,5.00
+"f9eab7f0-a856-4e4e-b961-5e2fc1b05ed1","Hood Baseball Caps",15,21,"no_deal",,,500000.00,5.00
+"9de915fb-5742-423c-91cb-4b30229fbdc1","HYPD Footwear",15,21,"deal",350000.00,25.00,125000.00,5.00
+"730206ff-aaa0-4c7d-a685-3442b8ba7988","K3 Shooting Band for Jump Shots",15,21,"deal",100000.00,40.00,100000.00,20.00
+"76d510b7-a829-43ff-a4af-02550172bb5b","Roboburger Burger Vending Machine",15,21,"deal",1500000.00,9.00,1500000.00,5.00
+"f89a9eae-a608-4c80-961b-97c42fd0f2bf","Arber Plant Care",15,22,"no_deal",,,500000.00,4.00
+"ccf0d9dc-0000-4be9-b860-04b816ea6b4f","Flaus Electric Flosser",15,22,"deal",250000.00,8.00,250000.00,5.00
+"291e693d-a8e9-4b41-b984-7ca9511b5b96","Mosh Protein Bars",15,22,"deal",500000.00,3.50,500000.00,2.00
+"b6958ff9-5a7d-435d-beeb-54aca55e0845","Sip Herbals Coffee Alternative",15,22,"no_deal",,,100000.00,10.00
+"35ba8ca3-5832-47f5-a906-1a35dd2a3c9c","Bumpeez Bumper Cars",16,11,"deal",100000.00,15.00,100000.00,10.00
+"ad2985a1-1a4e-4416-9b85-48d6f14b5e47","FlaminGO Phone Charger",16,11,"deal",100000.00,22.00,100000.00,22.00
+"fe57247b-d7d3-4a2d-8cb6-68f02655d6be","Joyebells Pies",16,11,"no_deal",,,600000.00,10.00
+"2ead3f28-399e-4dc4-8192-00d5122c52ba","Lectic Electric Skateboard & Scooter Kits",16,11,"deal",100000.00,15.00,100000.00,10.00
+"fcbb92c3-4b18-4365-85fa-871cde8b69c0","GoodLove Foods Gluten-free Baked Goods",16,12,"deal",150000.00,18.00,150000.00,5.00
+"d44d6e62-b564-4d47-b8b6-38693e3643d0","Happy Birdwatcher Birdseed",16,12,"no_deal",,,150000.00,10.00
+"afc2a3b2-7824-4350-92d3-1faedaf62586","Kiid Coffee for Kids",16,12,"deal",50000.00,15.00,50000.00,5.00
+"5805f5e5-b8bb-4090-9338-dc3f0a1ff12c","Dig World Construction Equipment for Kids",16,13,"deal",200000.00,10.00,200000.00,10.00
+"5def1a3f-f5f2-4da4-98a4-2e5827aebbe1","Domedock Hat Rack",16,13,"deal",100000.00,15.00,100000.00,5.00
+"8d1f8ee2-96ca-4bb5-8b27-1f096fbd2faa","Hella Awkward by Awkward Games",16,13,"deal",200000.00,10.00,200000.00,10.00
+"cee0bbb4-d0fd-4fbe-9753-5b2b73148ad8","Riverbend Resources Poultry Care",16,13,"deal",300000.00,20.00,300000.00,10.00
+"b4413b26-c208-41fe-b991-e881680c5ef4","BAM Plant-based Milk",16,14,"no_deal",,,250000.00,10.00
+"5701f6f6-e47a-4d78-be67-e4a09e9d5f34","Blackdot Automatic Tattooing Device",16,14,"no_deal",,,1500000.00,5.00
+"e9ef33a8-683d-42c8-bf2c-544e8df8e44c","Duzter Cut Resistant Hockey Apparel",16,14,"deal",200000.00,10.00,200000.00,10.00
+"b71d0167-a6bb-4352-9ccc-aa2ca8564e42","Firefly Workout Recovery Device",16,14,"deal",500000.00,5.00,500000.00,2.50
+"03cb55fc-ee6f-4734-aefa-054e69402a4b","Cowpots Biodegradable Pots",16,15,"deal",200000.00,20.00,200000.00,10.00
+"ca75ef6f-1bf2-470e-af2b-73ee99990af6","Future Circus Mixed Reality",16,15,"no_deal",,,500000.00,5.00
+"15240823-2bc5-48ba-9dfc-e6849eb47552","Paper Tacos Greeting Cards",16,15,"deal",120000.00,25.00,120000.00,10.00
+"4909b7eb-cf69-4148-81f8-1a26944b68bc","Airtulip Air Purifying Headboard",16,16,"no_deal",,,400000.00,4.00
+"3828c8e3-5b21-43dc-a14b-de2b9a613d31","Sock Candy Women’s Socks",16,16,"deal",150000.00,10.00,150000.00,5.00
+"9ed0c4bd-28a5-4331-bee9-6fe7bb6a3d9d","Essence Aromatherapy Ring",16,17,"unknown",,,,
+"1bb2b400-71f3-4a62-8cb4-0f31dd2e23b5","Frame Your Feline",16,17,"no_deal",,,100000.00,10.00
+"a0b7ea7a-e750-40aa-9d5d-c5b7a647940c","Go Nutz Razor",16,17,"deal",120000.00,30.00,100000.00,15.00
+"20c35ce3-65d2-4888-9f21-f6fb130a429d","Mad Mutz Mozzarella Sticks",16,17,"deal",150000.00,20.00,150000.00,5.00
+"b17a4607-8b69-45f7-98bb-f1d98acd9249","Fanion Onion Cutting Fan",16,18,"no_deal",,,90000.00,15.00
+"3b9e38f5-aece-41e6-ab77-4ffde9e8bab6","Jaju Pierogi",16,18,"no_deal",,,300000.00,8.00
+"93c2f681-8117-4c70-887b-ddb2a40bbe4d","Permaplug Charger Lock",16,18,"deal",350000.00,15.00,350000.00,15.00
+"a39535aa-6793-47ae-99a4-4741d04c4d4a","Rocco Smart Fridge",16,18,"deal",600000.00,4.00,600000.00,3.00
+"03cd8604-09d9-42c5-a1a5-20411deff5a5","Cricket’s Candy Creations",16,19,"no_deal",,,275000.00,10.00
+"5f017688-8f9e-40a7-8f4a-51eb27ddd240","Mirai Soaps and Body Care",16,19,"no_deal",,,500000.00,5.00
+"742083e4-a30d-43f1-932a-aed6e8c50157","Morrison Outdoors Sleeping Bags",16,19,"deal_fell_through",,,300000.00,10.00
+"2869eeac-ab0f-4464-87a3-35e575f23960","Big Ass Luxuries Candles",16,20,"deal",500000.00,13.00,500000.00,5.00
+"3baf11a5-db13-41b3-90b9-35e8893bb9a0","Deviled Egg Co",16,20,"deal",250000.00,20.00,150000.00,5.00
+"23853367-987f-4962-b44b-ad3fabdfda57","Stringys Underwear",16,20,"deal",300000.00,3.00,300000.00,5.00
+"8f398c2e-1d75-4c71-8db0-72edbf7b5e28","Jane Foodie Frozen Foods",16,37,"deal",300000.00,25.00,300000.00,15.00
+"242f53bb-c873-40d8-8f63-f9b3d72486d0","Dad Strength Brewing",17,1,"deal",300000.00,15.00,250000.00,5.00
+"1cb25e45-b89f-417d-88ba-b997ef485585","Doublesoul Socks",17,1,"deal",500000.00,10.00,500000.00,4.00
+"2f5da7b0-1c01-433f-adaf-366503ecf86d","Pelagion Hydroblade",17,1,"no_deal",,,800000.00,4.00
+"25e6a5e1-be1a-4da7-a265-36acdb15a8fc","Z-Coil Spring Shoes",17,1,"deal",250000.00,50.00,250000.00,10.00
+"48d3d379-c66f-4c2c-81bc-87080a9f76da","Im’peccable Chicken",17,2,"deal",200000.00,15.00,75000.00,5.00
+"c2a0dc7f-741c-4df3-808b-46e117da49d2","QB54 Backyard Football Game",17,2,"no_deal",,,350000.00,10.00
+"fd8676fa-1ff7-4cbb-89a6-14ac878fffb3","Snorinator Anti-snoring Pillow",17,2,"deal",100000.00,25.00,100000.00,10.00
+"de162ee8-710d-4c4f-bf0e-40d84c31c7d3","Alchemize Fightwear",17,4,"deal",300000.00,15.00,250000.00,5.00
+"28da4923-ad6e-4a39-9aed-334fbfafd21a","Orka Bar Protein Ice Cream Bar",17,4,"deal",100000.00,25.00,100000.00,15.00
+"c596b9e7-3170-46d4-a106-c39693c5aca5","The Sprouting Company",17,4,"no_deal",,,500000.00,5.00
+"136c3058-e334-4a68-a014-b11202a81f29","Freestyle Snacks Olives & Pickle Chips",17,5,"deal",300000.00,11.00,300000.00,5.00
+"719554d8-5f29-4dc1-88ba-78146ab3b608","Lila Birth Gowns",17,5,"no_deal",,,200000.00,5.00
+"dc0d4f87-efd1-453c-a0b3-e19b1a10acdb","The Qi Flower Tea",17,5,"deal",200000.00,20.00,200000.00,8.00
+"9179129a-426c-46f1-82fc-14d1a37855d0","Warrior Kid Medic",17,5,"deal",50000.00,20.00,50000.00,10.00
+"a85fd233-0eb7-46e0-9365-929161d35543","Forte 3D Carbon Fiber Instruments",17,6,"deal",250000.00,16.00,250000.00,10.00
+"31712a58-5b0f-4afd-9586-a69736a6b8ce","Shalom Japan Matzoh Ball Ramen Kits",17,6,"deal",200000.00,30.00,200000.00,10.00
+"7dea9273-37fa-41c8-9c9e-c8b8806721f0","Surf Skull Surfing Helmet",17,6,"deal",50000.00,20.00,50000.00,12.00
+"1403d2f6-8154-4d44-823c-f66b09dde624","Tantos Puffed Pasta Chips",17,6,"no_deal",,,150000.00,10.00
+"d7ad8c22-57c2-4f0a-a57b-768d85beff42","Bauble Stockings",17,7,"unknown",,,,
+"5af940b6-5913-433f-9407-dad85818568a","Edible Architecture",17,7,"unknown",,,,
+"b95a55c8-0dc0-469f-8d31-2e78ebd43e7e","McMiller Party Games",17,7,"no_deal",,,150000.00,5.00
+"7d92407c-c5a4-4717-a622-9770a062bf94","The Christmas Carolers",17,7,"unknown",,,250000.00,20.00
