@@ -197,31 +197,29 @@ export default async function ProductPage({ params }: Props) {
                 alt={product.name}
                 size="xl"
               />
-              {product.status && (
-                <div className="absolute top-4 left-4">
-                  <StatusBadge status={product.status} verbose />
-                </div>
-              )}
             </div>
 
             {/* Product Info */}
             <div className="product-hero-info">
-              {/* Episode Badge + Air Date */}
-              {product.season && (
-                <div className="product-episode-meta">
+              {/* Episode Badge + Status Badge */}
+              <div className="product-episode-meta">
+                {product.season && (
                   <span className="product-episode-badge">
                     Season {product.season}{product.episode_number ? `, Episode ${product.episode_number}` : ''}
                   </span>
-                  {product.air_date && (
-                    <time className="product-air-date" dateTime={product.air_date}>
-                      Aired {new Date(product.air_date).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </time>
-                  )}
-                </div>
+                )}
+                {product.status && (
+                  <StatusBadge status={product.status} verbose />
+                )}
+              </div>
+              {product.air_date && (
+                <time className="product-air-date" dateTime={product.air_date}>
+                  Aired {new Date(product.air_date).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </time>
               )}
 
               <h1 className="product-title">{product.name}</h1>

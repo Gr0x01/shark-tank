@@ -2,10 +2,10 @@ import { cn } from '@/lib/utils'
 import type { ProductStatus } from '@/lib/supabase/types'
 
 const variants: Record<ProductStatus, string> = {
-  active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  out_of_business: 'bg-red-50 text-red-700 border-red-200',
-  acquired: 'bg-sky-50 text-sky-700 border-sky-200',
-  unknown: 'bg-[var(--cream)] text-[var(--ink-500)] border-[var(--ink-200)]',
+  active: 'bg-emerald-50/80 text-emerald-700',
+  out_of_business: 'bg-red-50/80 text-red-700',
+  acquired: 'bg-sky-50/80 text-sky-700',
+  unknown: 'bg-[var(--ink-100)] text-[var(--ink-500)]',
 }
 
 const labels: Record<ProductStatus, string> = {
@@ -34,7 +34,7 @@ export function StatusBadge({ status, verbose = false, className }: StatusBadgeP
   
   return (
     <span className={cn(
-      'inline-flex items-center text-xs px-2 py-0.5 rounded border font-display font-medium',
+      'inline-flex items-center font-display text-[0.6875rem] font-bold uppercase tracking-[0.12em] px-3 py-1.5',
       variants[validStatus],
       className
     )}>
