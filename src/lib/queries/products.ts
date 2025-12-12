@@ -9,6 +9,8 @@ export interface ProductFilters {
   categorySlug?: string
   sharkSlug?: string
   search?: string
+  dealAmountMin?: number
+  dealAmountMax?: number
   limit?: number
   offset?: number
 }
@@ -54,7 +56,20 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
     const sanitizedSearch = sanitizeSearchQuery(filters.search)
     query = query.or(`name.ilike.%${sanitizedSearch}%,company_name.ilike.%${sanitizedSearch}%`)
   }
-  
+
+  // Deal amount filtering - apply null check once if either filter is used
+  if (filters.dealAmountMin !== undefined || filters.dealAmountMax !== undefined) {
+    query = query.not('deal_amount', 'is', null)
+
+    if (filters.dealAmountMin !== undefined) {
+      query = query.gte('deal_amount', filters.dealAmountMin)
+    }
+
+    if (filters.dealAmountMax !== undefined) {
+      query = query.lte('deal_amount', filters.dealAmountMax)
+    }
+  }
+
   if (filters.limit) {
     query = query.limit(filters.limit)
   }

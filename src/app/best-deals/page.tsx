@@ -1,12 +1,13 @@
 import { Metadata } from 'next'
+import { getTopDeals, getSharkPhotos } from '@/lib/queries/products'
 import { loadSEOContent } from '@/lib/seo/seo-content'
 import { ArticlePage } from '@/components/seo/ArticlePage'
 import { SEOErrorBoundary } from '@/components/seo/SEOErrorBoundary'
 import { createBreadcrumbSchema, createArticleSchema, escapeJsonLd } from '@/lib/seo/schemas'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 
-const PAGE_SLUG = 'terms'
-const PAGE_TITLE = 'Terms of Service'
+const PAGE_SLUG = 'best-deals'
+const PAGE_TITLE = 'Best Shark Tank Deals'
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await loadSEOContent(PAGE_SLUG)
@@ -14,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!content) {
     return {
       title: `${PAGE_TITLE} | ${SITE_NAME}`,
-      description: 'Terms of Service governing your use of tankd.io.',
+      description: 'Complete guide to best shark tank deals.',
     }
   }
 
@@ -47,8 +48,16 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function TermsPage() {
-  const content = await loadSEOContent(PAGE_SLUG)
+export default async function BestDealsPage() {
+  const [contentResult, topDealsResult, sharkPhotosResult] = await Promise.allSettled([
+    loadSEOContent(PAGE_SLUG),
+    getTopDeals(10),
+    getSharkPhotos()
+  ])
+
+  const content = contentResult.status === 'fulfilled' ? contentResult.value : null
+  const topDeals = topDealsResult.status === 'fulfilled' ? topDealsResult.value : []
+  const sharkPhotos = sharkPhotosResult.status === 'fulfilled' ? sharkPhotosResult.value : {}
 
   if (!content) {
     return (
@@ -95,6 +104,8 @@ export default async function TermsPage() {
           description={content.meta_description}
           introduction={content.content.introduction}
           sections={content.content.sections || []}
+          relatedProducts={topDeals}
+          sharkPhotos={sharkPhotos}
         />
       </SEOErrorBoundary>
     </>

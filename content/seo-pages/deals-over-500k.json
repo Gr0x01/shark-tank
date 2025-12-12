@@ -1,0 +1,45 @@
+{
+  "slug": "deals-over-500k",
+  "title": "Shark Tank Mega Deals Over $500K: The Biggest Bets",
+  "meta_description": "Discover the biggest Shark Tank investments over $500,000. See which mega deals paid off and which sharks make the largest bets.",
+  "keywords": [
+    "shark tank deals over 500k",
+    "biggest shark tank investments",
+    "shark tank mega deals",
+    "shark tank over $500,000",
+    "largest shark tank deals"
+  ],
+  "generated_at": "2025-12-12T09:56:23.243Z",
+  "version": 1,
+  "content": {
+    "introduction": "Mega deals on Shark Tank—those investments exceeding $500,000—are rare but monumental moments on the show. These sizeable bets reflect both the sharks’ confidence in a product’s potential and the entrepreneurs’ proven traction. Out of 589 total products featured, only 280 secured deals, and an even smaller fraction crossed the half-million-dollar threshold, highlighting the exclusivity of these mega deals. Investors like Mark Cuban, Lori Greiner, and Kevin O'Leary often lead these high-stakes negotiations, leveraging their expertise and capital to propel businesses to new heights. This introduction explores the statistics, key players, notable mega deals, and the calculated risks behind these substantial investments.",
+    "sections": [
+      {
+        "heading": "The Million-Dollar Club: Biggest Deals Ever",
+        "content": "The largest Shark Tank investments often break the million-dollar mark, setting the stage for explosive growth. Leading the pack is Numilk Dairy-Free Milk, which earned $2 million from Mark Cuban for 10% equity, valuing the company at $20 million. Another massive deal was Rugged Maniac Obstacle Course, also backed by Cuban with $1.75 million for 25% equity, reflecting a $7 million valuation. Roboburger’s innovative burger vending machine attracted $1.5 million from Kevin O’Leary and Michael Rubin combined, at a valuation of approximately $16.67 million. Other million-dollar deals include Cupbop Korean BBQ ($1 million for 5% equity, $20 million valuation) and Psyonic Bionic Hand ($1 million for 6% equity, $16.67 million valuation), showcasing the diversity of industries and technologies that command such investments."
+      },
+      {
+        "heading": "Which Sharks Make Mega Investments?",
+        "content": "Mark Cuban is the most prolific shark when it comes to mega deals over $500,000, participating in at least 12 of the 20 largest deals, including the top two largest investments. His strategy often targets scalable consumer products and tech-driven companies with high valuations, such as Numilk and Rugged Maniac. Lori Greiner is another key player, known for her expertise in consumer goods and health-related products, investing $1 million in EverlyWell and $750,000 in Gunnar Computer Glasses. Kevin O’Leary frequently partners with other sharks for mega deals, exemplified by his joint $1.5 million investment in Roboburger and $600,000 in Pitt Moss alongside Cuban and Herjavec. Robert Herjavec and Daymond John also participate in several large deals, often collaborating with others to spread risk and leverage combined expertise."
+      },
+      {
+        "heading": "Do Big Deals = Big Success?",
+        "content": "While mega deals signal high confidence, they come with significant risk. Large investments require strong justifications, including proven revenue streams, sizable market opportunities, and defensible valuations. Many mega deals on Shark Tank have shown promising outcomes; for example, Rugged Maniac was purchased for $10.4 million in 2018, validating the $1.75 million investment. However, not all mega deals guarantee success, as market dynamics and execution challenges can impact growth. The sharks justify these investments by betting on companies with scalable business models and innovative products that can disrupt markets or create new ones. The involvement of multiple sharks in deals like GoGo Gear ($1 million for 30% equity with six sharks) illustrates how risk is mitigated through shared expertise and capital."
+      },
+      {
+        "heading": "Notable Mega Deals and Their Outcomes",
+        "content": "Among the standout mega deals, EverlyWell’s $1 million investment from Lori Greiner at a $20 million valuation has positioned it as a leader in home health testing, leveraging the booming telehealth market. Psyonic’s $1 million from Daymond John, Kevin O’Leary, and Lori Greiner for a bionic hand reflects the growing intersection of healthcare and technology. The Roboburger deal, with $1.5 million invested by O’Leary and Rubin, targets automation in the food industry, showing innovation’s appeal. Smaller mega deals like EmazingLights’ $650,000 for 5% equity and Pitt Moss’s $600,000 from three sharks highlight niche markets with strong growth potential. These deals exemplify the sharks’ willingness to invest heavily when the product, market, and team align for scalable success."
+      }
+    ]
+  },
+  "stats": {
+    "total": 589,
+    "active": 417,
+    "outOfBusiness": 145,
+    "gotDeal": 280,
+    "noDeal": 239,
+    "successRate": "70.8",
+    "failureRate": "24.6",
+    "dealRate": "47.5"
+  }
+}

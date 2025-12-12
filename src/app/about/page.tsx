@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!content) {
     return {
       title: `${PAGE_TITLE} | ${SITE_NAME}`,
-      description: 'Complete guide to about.',
+      description: 'Learn about tankd.io and our mission to provide spoiler-free Shark Tank product information.',
     }
   }
 

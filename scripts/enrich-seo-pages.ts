@@ -652,6 +652,76 @@ async function getProductStats() {
   };
 }
 
+async function getDealsData(slug: PageSlug) {
+  // Only fetch deal data for deal filtering pages
+  if (!['deals-under-100k', 'deals-100k-to-500k', 'deals-over-500k', 'best-deals'].includes(slug)) {
+    return null;
+  }
+
+  // Define filters based on page slug
+  const filters: {
+    dealOutcome: string;
+    dealAmountMin?: number;
+    dealAmountMax?: number;
+    limit: number;
+  } = {
+    dealOutcome: 'deal',
+    limit: 20  // Top 20 deals for each category
+  };
+
+  if (slug === 'deals-under-100k') {
+    filters.dealAmountMax = 99999;  // Exclusive: < $100K
+  } else if (slug === 'deals-100k-to-500k') {
+    filters.dealAmountMin = 100000;  // Inclusive: >= $100K
+    filters.dealAmountMax = 499999;  // Exclusive: < $500K
+  } else if (slug === 'deals-over-500k') {
+    filters.dealAmountMin = 500000;  // Inclusive: >= $500K
+  }
+  // For 'best-deals', no filters (top 20 overall)
+
+  let query = supabase
+    .from('products_with_sharks')
+    .select(`
+      id,
+      name,
+      company_name,
+      deal_amount,
+      deal_equity,
+      deal_valuation,
+      shark_names
+    `)
+    .eq('deal_outcome', filters.dealOutcome)
+    .not('deal_amount', 'is', null)
+    .order('deal_amount', { ascending: false });
+
+  if (filters.dealAmountMin) {
+    query = query.gte('deal_amount', filters.dealAmountMin);
+  }
+  if (filters.dealAmountMax) {
+    query = query.lte('deal_amount', filters.dealAmountMax);
+  }
+
+  query = query.limit(filters.limit);
+
+  const { data, error } = await query;
+
+  if (error || !data) {
+    console.error(`Failed to fetch deal data for ${slug}:`, error);
+    return null;
+  }
+
+  // Format deal data for the prompt
+  return data.map(d => ({
+    name: d.name || d.company_name,
+    amount: d.deal_amount ? `$${d.deal_amount.toLocaleString()}` : 'Unknown',
+    equity: d.deal_equity ? `${d.deal_equity}%` : 'Unknown',
+    valuation: d.deal_valuation ? `$${d.deal_valuation.toLocaleString()}` : 'Unknown',
+    sharks: Array.isArray(d.shark_names) && d.shark_names.length > 0
+      ? d.shark_names.join(', ')
+      : 'Unknown'
+  }));
+}
+
 async function searchForPage(slug: PageSlug): Promise<TavilyResponse[]> {
   const config = SEO_PAGES[slug];
 
@@ -673,7 +743,8 @@ async function searchForPage(slug: PageSlug): Promise<TavilyResponse[]> {
 async function generatePageContent(
   slug: PageSlug,
   searchResults: TavilyResponse[],
-  stats: Awaited<ReturnType<typeof getProductStats>>
+  stats: Awaited<ReturnType<typeof getProductStats>>,
+  dealsData: Awaited<ReturnType<typeof getDealsData>>
 ): Promise<{ introduction: string; sections?: Array<{ heading: string; content: string }> } | null> {
   const tracker = TokenTracker.getInstance();
   const config = SEO_PAGES[slug];
@@ -693,6 +764,17 @@ async function generatePageContent(
     `No Deals: ${stats.noDeal}`,
   ].join('\n') : '';
 
+  // Format deals data for the prompt
+  const dealsContext = dealsData ? [
+    `\n=== ACTUAL DEALS FROM OUR DATABASE ===`,
+    `Use ONLY these deals in your content. These are the exact products users will see on the page.`,
+    ``,
+    JSON.stringify(dealsData, null, 2),
+    ``,
+    `Write factually about these specific deals. Use exact amounts, shark names, and equity percentages.`,
+    `You can reference product names knowing users can click through to see full details.`,
+  ].join('\n') : '';
+
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4.1-mini',
@@ -700,7 +782,7 @@ async function generatePageContent(
         { role: 'system', content: config.prompt },
         {
           role: 'user',
-          content: `Page: ${config.title}\n\nStatistics:\n${statsContext}\n\nSearch Results:\n${combinedContent}`
+          content: `Page: ${config.title}\n\nStatistics:\n${statsContext}${dealsContext}\n\nSearch Results:\n${combinedContent}`
         },
       ],
       max_tokens: 3500,
@@ -747,12 +829,23 @@ async function enrichSEOPage(slug: PageSlug, dryRun: boolean): Promise<boolean> 
   console.log('      Fetching stats...');
   const stats = await getProductStats();
 
+  // Get deal data (for deal filtering pages)
+  console.log('      Fetching deal data...');
+  const dealsData = await getDealsData(slug);
+  if (dealsData) {
+    if (dealsData.length === 0) {
+      console.log(`      ⚠️  No deals found in database for ${slug}`);
+    } else {
+      console.log(`      ✅ Loaded ${dealsData.length} deals from database`);
+    }
+  }
+
   // Search
   const searchResults = await searchForPage(slug);
 
   // Generate
   console.log('      Generating content (gpt-4.1-mini Flex - may take up to 5 min)...');
-  const content = await generatePageContent(slug, searchResults, stats);
+  const content = await generatePageContent(slug, searchResults, stats, dealsData);
 
   if (!content) {
     return false;
