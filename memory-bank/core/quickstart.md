@@ -85,9 +85,9 @@ npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
 - [Architecture Patterns](../architecture/patterns.md)
 
 ## Database Status
-- **Products**: 607 total (297 deals, 241 no deal, 69 fell through)
-  - ALL 607 enriched with narrative content
-  - Includes 18 manually curated "greatest hits" (Bombas, Ring, Scrub Daddy, etc.)
+- **Products**: 618 total (306 deals, 243 no deal, 69 fell through)
+  - ALL 618 enriched with narrative content
+  - Includes 29 manually curated "greatest hits" (Bombas, Poppi, Scrub Daddy, The Comfy, etc.)
 - **Sharks**: 47 (8 main + 39 guest)
   - All have photos in Supabase Storage
   - ALL 47 enriched with narrative content

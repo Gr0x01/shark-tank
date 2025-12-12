@@ -358,3 +358,94 @@ npx tsx scripts/enrich-seo-pages.ts --page your-slug
 - Total cost: $0.0405
 
 **New Total:** 607 products (was 589), all fully enriched with narrative content.
+
+## Manual Seed Products Import - Round 2 (Dec 13, 2025)
+
+**Scope:** Comprehensive audit of Seasons 9-16 identified missing major products.
+
+**Problem:** Database had systematic gaps in S9-S16 coverage, missing flagship successes:
+- Poppi ($1.95B PepsiCo acquisition 2025) - one of biggest Shark Tank acquisitions ever
+- The Original Comfy ($550M+ lifetime sales) - Barbara's mega-deal
+- Basepaws (Zoetis acquisition $50M+ 2022)
+- 8 other major deals from seasons 9-12
+
+**Root Cause:** allsharktankproducts.com scraper source incomplete for recent seasons.
+
+**Discovery:** 17 products identified in initial research, but 6 already existed in database:
+- Already present: EverlyWell, LARQ, RoboBurger, Psyonic, Goumi Kids, Swimply
+- **Actually added: 11 new products**
+
+**Products Added (11 total):**
+
+1. **Mother Beverage** (Poppi) - S10E5
+   - Deal: $400K for 25% from Rohan Oza (guest shark)
+   - Status: Acquired by PepsiCo for $1.95B (March 2025)
+   - Annual Revenue: $50M
+
+2. **Basepaws** - S10E10
+   - Deal: $250K for 10% from Kevin O'Leary + Robert Herjavec
+   - Status: Acquired by Zoetis for $50M+ (June 2022)
+   - Annual Revenue: $3.8M
+
+3. **Boost Oxygen** - S11E1
+   - Deal: $1M loan + 6.25% equity from Kevin O'Leary
+   - Status: Active
+   - Deal includes loan at 7.5% interest
+
+4. **Blueland** - S11E1
+   - Deal: $270K for 3% + $0.50 royalty from Kevin O'Leary
+   - Status: Active
+   - Lifetime Revenue: $170M+
+
+5. **Wild Earth** - S10E3
+   - Deal: $550K for 10% from Mark Cuban
+   - Status: Out of business (Chapter 11 bankruptcy 2025)
+   - Annual Revenue: $21M before bankruptcy
+
+6. **The Original Comfy** - S9E13
+   - Deal: $50K for 30% from Barbara Corcoran
+   - Status: Active
+   - Lifetime Revenue: $550M+
+
+7. **Bala Bangles** - S11E7
+   - Deal: $900K for 30% from Mark Cuban + Maria Sharapova
+   - Status: Active
+   - Annual Revenue: $29M
+
+8. **Chirp** - S12E12
+   - Deal: $900K for 2.5% from Lori Greiner (fell through)
+   - Status: Active
+   - Company Valuation: $36M (highest in S12)
+
+9. **Pair Eyewear** - S11E14
+   - Deal: $400K for 5% from Lori Greiner + Katrina Lake
+   - Status: Active
+   - Annual Revenue: $9M
+
+10. **Aura Bora** - S12E11
+    - Deal: $200K for 15% from Robert Herjavec
+    - Status: Active
+    - Company Valuation: $20M
+
+11. **Genius Juice** - S11
+    - Deal: $300K for 20% from Barbara + Mark (fell through)
+    - Status: Out of business
+
+**Enrichment Costs:**
+- Batch enrichment: $0.0096 (11 products)
+- Narrative enrichment: $0.0151 (11 products)
+- **Total cost: $0.0247** (under budget of $0.60-0.85)
+
+**New Total:** 618 products (was 607, +11)
+
+**Season Coverage Improvement:**
+- S9: +1 (The Original Comfy)
+- S10: +3 (Poppi, Basepaws, Wild Earth)
+- S11: +5 (Blueland, Boost Oxygen, Bala Bangles, Pair Eyewear, Genius Juice)
+- S12: +2 (Chirp, Aura Bora)
+
+**Notable Findings:**
+- 2 deals fell through (Chirp, Genius Juice)
+- 2 products acquired by major companies (Poppi by PepsiCo, Basepaws by Zoetis)
+- 1 bankruptcy (Wild Earth - still operating under Ch. 11)
+- The Original Comfy generated $550M+ - one of highest revenue ST products
