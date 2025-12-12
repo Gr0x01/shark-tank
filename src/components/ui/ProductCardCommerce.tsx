@@ -108,6 +108,8 @@ export function ProductCardCommerce({ product, compact = false, spoiler = false,
                   {product.deal_equity && ` / ${product.deal_equity}%`}
                 </span>
               </>
+            ) : product.deal_outcome === 'unknown' ? (
+              <span className="season-card-spoiler-pending">DEAL PENDING</span>
             ) : (
               <span className="season-card-spoiler-nodeal">NO DEAL</span>
             )}

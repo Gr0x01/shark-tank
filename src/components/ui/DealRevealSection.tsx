@@ -42,6 +42,7 @@ export function DealRevealSection({
   const gotDeal = dealOutcome === 'deal'
   const noDeal = dealOutcome === 'no_deal'
   const fellThrough = dealOutcome === 'deal_fell_through'
+  const isUnknown = dealOutcome === 'unknown'
 
   return (
     <div className="deal-stats">
@@ -124,6 +125,10 @@ export function DealRevealSection({
 
             {fellThrough && (
               <span className="deal-stats-fell">Deal Fell Through</span>
+            )}
+
+            {isUnknown && (
+              <span className="deal-stats-pending">Deal Pending</span>
             )}
           </div>
         )}

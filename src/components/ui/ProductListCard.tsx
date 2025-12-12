@@ -53,8 +53,10 @@ export function ProductListCard({
                 </span>
               ) : noDeal ? (
                 <span className="text-[var(--danger)]">No Deal</span>
+              ) : product.deal_outcome === 'unknown' ? (
+                <span className="text-[var(--warning)]">Deal Pending</span>
               ) : (
-                <span className="text-[var(--ink-400)]">Outcome unknown</span>
+                <span className="text-[var(--ink-400)]">Deal Fell Through</span>
               )
             ) : (
               // Simple info (used on products, categories, season detail pages)
@@ -69,6 +71,10 @@ export function ProductListCard({
                 ) : noDeal ? (
                   <span className="text-[var(--danger)]">
                     {!hideSeason && product.season ? ' · ' : ''}No Deal
+                  </span>
+                ) : product.deal_outcome === 'unknown' ? (
+                  <span className="text-[var(--warning)]">
+                    {!hideSeason && product.season ? ' · ' : ''}Pending
                   </span>
                 ) : null}
               </>
