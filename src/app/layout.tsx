@@ -40,6 +40,8 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Privacy-friendly analytics by Plausible */}
+        <script defer data-domain="tankd.io" src="https://plausible.io/js/script.js"></script>
       </head>
       <body className="antialiased">
         <SpoilerProvider>

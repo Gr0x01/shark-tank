@@ -124,6 +124,8 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
                             {product.deal_equity && ` / ${product.deal_equity}%`}
                           </span>
                         </>
+                      ) : product.deal_outcome === 'unknown' ? (
+                        <span className="ep-card-spoiler-pending">DEAL PENDING</span>
                       ) : (
                         <span className="ep-card-spoiler-nodeal">NO DEAL</span>
                       )}

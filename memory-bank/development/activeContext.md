@@ -66,6 +66,111 @@ npx tsx scripts/daily-enrich-pending.ts --limit 5 --dry-run
 npx tsx scripts/daily-enrich-pending.ts --force  # Ignore age/attempt limits
 ```
 
+## Vercel Cron Automation (Built Dec 12)
+
+**Automated daily enrichment for products with unknown deal outcomes.**
+
+### Overview
+Products created during Friday episodes initially have `deal_outcome = 'unknown'`. While the manual `update-deal.ts` script handles most updates, this automation catches any missed products by automatically searching for deal information daily.
+
+### Schedule
+- **Frequency**: Daily at 10am UTC (5am ET)
+- **Rationale**:
+  - Episodes air Friday 8pm ET
+  - Deal info typically published Saturday-Sunday on blogs/news sites
+  - Running daily for 6 days catches most updates
+  - Early morning timing captures fresh content for SEO
+
+### Technical Implementation
+
+**Files:**
+- `vercel.json` - Cron configuration (schedule: `0 10 * * *`)
+- `src/app/api/cron/daily-enrich/route.ts` - API endpoint handler
+
+**Flow:**
+1. Vercel triggers cron at 10am UTC
+2. Calls `/api/cron/daily-enrich` with `CRON_SECRET` header
+3. API route verifies secret, executes: `npx tsx scripts/daily-enrich-pending.ts --limit 20`
+4. Script searches for unknown deals using Tavily + OpenAI
+5. High-confidence results update database
+6. Logs sent to Vercel dashboard
+
+**Security:**
+- `CRON_SECRET` environment variable required (set in Vercel dashboard)
+- API route validates `Authorization: Bearer ${CRON_SECRET}` header
+- Vercel automatically injects secret into cron requests
+
+### Configuration
+
+**Environment Variables (Vercel):**
+```bash
+CRON_SECRET=...                      # Cron authentication
+NEXT_PUBLIC_SUPABASE_URL=...        # Already exists
+SUPABASE_SERVICE_ROLE_KEY=...       # Already exists
+TAVILY_API_KEY=...                  # Already exists
+OPENAI_API_KEY=...                  # Already exists
+```
+
+**Retry Logic:**
+- Max 7 attempts per product (tracked in `deal_search_attempts` column)
+- 24h cooldown between retries
+- Only updates with high-confidence results (preserves data quality)
+
+### Monitoring
+
+**Vercel Dashboard:**
+1. Navigate to Vercel Dashboard → Project → Logs
+2. Filter by `/api/cron/daily-enrich`
+3. Check for successful execution logs
+4. Review any errors or failures
+
+**Manual Testing:**
+```bash
+# Test endpoint directly (get CRON_SECRET from Vercel)
+curl -X GET "https://tankd.io/api/cron/daily-enrich" \
+  -H "Authorization: Bearer YOUR_CRON_SECRET"
+```
+
+**Expected response:**
+```json
+{
+  "success": true,
+  "message": "Daily enrichment completed successfully",
+  "timestamp": "2025-12-12T10:00:00.000Z",
+  "output": "... enrichment logs ..."
+}
+```
+
+### Cost & Performance
+- **Compute**: Included in Vercel Pro plan ($20/month)
+- **API calls**: ~$0.01-0.10 per run (Tavily + OpenAI)
+- **Monthly cost**: ~$1-4 in API calls
+- **Execution time**: ~1-4 minutes (depending on number of products)
+- **Timeout**: 5 minutes max (configured in route)
+
+### Integration with Workflow
+This automation integrates seamlessly with the Friday episode workflow:
+1. Run `new-episode.ts` → Creates products with unknown outcomes
+2. Watch episode, run `update-deal.ts` → Manual updates
+3. **Automated cron catches anything missed** (no intervention needed)
+4. Products automatically transition from "Deal Pending" to confirmed outcomes
+
+### Troubleshooting
+
+**Cron not running?**
+- Check Vercel dashboard for cron job status
+- Verify `vercel.json` is in repository root
+- Ensure latest deployment includes `vercel.json`
+
+**Authentication errors?**
+- Verify `CRON_SECRET` is set in Vercel environment variables
+- Check secret matches between Vercel and API route
+
+**Script failures?**
+- Check Vercel logs for error messages
+- Verify all environment variables are set correctly
+- Test script locally: `npx tsx scripts/daily-enrich-pending.ts --dry-run`
+
 ### Friday Workflow
 1. Episode airs Friday 8pm ET
 2. Find product names (Google, Reddit r/sharktank, competitor sites)
@@ -183,6 +288,47 @@ OPENAI_API_KEY=...
 ```sql
 UPDATE sharks SET is_retired = TRUE WHERE slug = 'shark-slug';
 ```
+
+## Page Template System (Built Dec 12)
+
+Standardized page generation for SEO content pages to ensure consistency and prevent implementation errors.
+
+**Problem Solved:** Coding agents were creating inconsistent page implementations with varying component structures, missing SEO metadata, and incorrect schema.org markup.
+
+**Solution Components:**
+- **Generator Script**: `scripts/create-seo-page.ts` enforces consistent page structure
+- **ArticlePage**: Component for editorial/guide content (2-col layout with optional sidebar)
+- **FilteredListingPage**: Component for product listings with narrative content
+- **Template Docs**: `.templates/` directory contains reference documentation
+
+**Creating New Pages:**
+```bash
+# Article pages (guides, how-tos)
+npx tsx scripts/create-seo-page.ts article "your-slug" "Your Title"
+
+# Listing pages (filtered products)
+npx tsx scripts/create-seo-page.ts listing "your-slug" "Your Title"
+
+# Then generate content
+npx tsx scripts/enrich-seo-pages.ts --page your-slug
+```
+
+**Example Pages:**
+- `/how-to-apply` - ArticlePage for application guide
+- `/success-stories` - ArticlePage with related products sidebar
+- `/still-in-business` - FilteredListingPage for active businesses
+- `/out-of-business` - FilteredListingPage for failed businesses
+
+**Key Patterns:**
+- Metadata generation (SEO, OpenGraph, Twitter)
+- Schema.org structured data (breadcrumb + article/collection)
+- SEOErrorBoundary for graceful error handling
+- DOMPurify HTML sanitization
+- Content loading via `loadSEOContent()` from `seo_pages` table
+
+**Documentation:** See `development/page-templates.md` for comprehensive guide
+
+**Template Files:** `.templates/README.md`, `.templates/NEW-PAGE-CHECKLIST.md`, `.templates/seo-page-template.md`
 
 ## Recent Migrations
 - `00005_deal_search_tracking.sql` - Adds `deal_search_attempts` column for daily cron

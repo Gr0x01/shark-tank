@@ -43,7 +43,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : 'Got a Deal'
     : product.deal_outcome === 'no_deal'
       ? 'No Deal'
-      : ''
+      : product.deal_outcome === 'unknown'
+        ? 'Deal Pending on Shark Tank'
+        : 'Deal Fell Through'
 
   const businessStatus = product.status === 'active'
     ? 'Still in Business'

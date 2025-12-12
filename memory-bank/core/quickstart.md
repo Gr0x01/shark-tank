@@ -52,6 +52,16 @@ npx tsx scripts/enrich-narratives.ts --limit 10
 
 # Manually flag a product for narrative refresh (if needed):
 # SELECT flag_product_for_narrative_refresh('product-uuid');
+
+# === NEW SEO PAGES ===
+# Create a new article page (guides, how-tos)
+npx tsx scripts/create-seo-page.ts article "how-to-apply" "How to Apply"
+
+# Create a new listing page (filtered products)
+npx tsx scripts/create-seo-page.ts listing "biggest-deals" "Biggest Deals"
+
+# Then generate content
+npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
 ```
 
 **IMPORTANT**: Always use port 3004 for this project to avoid conflicts.
@@ -62,7 +72,9 @@ npx tsx scripts/enrich-narratives.ts --limit 10
 3. Run `new-episode.ts` with product names → pages go live with backstory
 4. Watch episode, note deals
 5. Run `update-deal.ts` for each product → deal details added
-6. Daily cron catches anything missed
+6. **Automated daily cron catches anything missed** (runs at 10am UTC via Vercel)
+
+**Note:** The daily enrichment script (`daily-enrich-pending.ts`) runs automatically via Vercel Cron - no manual intervention needed. It searches for unknown deal outcomes and updates products with high-confidence results.
 
 ## Quick Links
 - [Project Brief](./projectbrief.md)

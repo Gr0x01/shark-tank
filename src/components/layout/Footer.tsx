@@ -2,9 +2,9 @@ import Link from 'next/link'
 
 export function Footer() {
   return (
-    <footer className="border-t border-[var(--ink-100)] bg-[var(--off-white)] py-16 mt-20">
+    <footer className="border-t border-[var(--ink-100)] bg-[var(--off-white)] py-16">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
           <div>
             <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">Browse</h3>
             <ul className="space-y-2.5 text-[var(--ink-500)]">
@@ -17,9 +17,18 @@ export function Footer() {
           <div>
             <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">Discover</h3>
             <ul className="space-y-2.5 text-[var(--ink-500)]">
-              <li><Link href="/products?status=active" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Still in Business</Link></li>
-              <li><Link href="/products?deal=deal" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Got a Deal</Link></li>
-              <li><Link href="/products?deal=no_deal" className="hover:text-[var(--cyan-600)] transition-colors text-sm">No Deal</Link></li>
+              <li><Link href="/still-in-business" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Still in Business</Link></li>
+              <li><Link href="/best-deals" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Best Deals</Link></li>
+              <li><Link href="/success-stories" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Success Stories</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">By Deal Size</h3>
+            <ul className="space-y-2.5 text-[var(--ink-500)]">
+              <li><Link href="/deals/under-100k" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Under $100K</Link></li>
+              <li><Link href="/deals/100k-to-500k" className="hover:text-[var(--cyan-600)] transition-colors text-sm">$100K - $500K</Link></li>
+              <li><Link href="/deals/over-500k" className="hover:text-[var(--cyan-600)] transition-colors text-sm">Over $500K</Link></li>
             </ul>
           </div>
 
@@ -33,10 +42,12 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">About</h3>
-            <p className="text-[var(--ink-500)] text-sm leading-relaxed">
-              Every Shark Tank product with real-time business status tracking.
-            </p>
+            <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">Company</h3>
+            <ul className="space-y-2.5 text-[var(--ink-500)]">
+              <li><Link href="/about" className="hover:text-[var(--cyan-600)] focus-visible:text-[var(--cyan-600)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--cyan-600)] transition-colors text-sm">About</Link></li>
+              <li><Link href="/privacy" className="hover:text-[var(--cyan-600)] focus-visible:text-[var(--cyan-600)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--cyan-600)] transition-colors text-sm">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-[var(--cyan-600)] focus-visible:text-[var(--cyan-600)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--cyan-600)] transition-colors text-sm">Terms of Service</Link></li>
+            </ul>
           </div>
         </div>
         

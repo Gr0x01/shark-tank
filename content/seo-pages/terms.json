@@ -1,0 +1,60 @@
+{
+  "slug": "terms",
+  "title": "Terms of Service - tankd.io",
+  "meta_description": "Terms of Service for tankd.io. Understand the terms governing use of our site, affiliate links, disclaimers, and limitations.",
+  "keywords": [
+    "tankd.io terms of service",
+    "terms of use",
+    "website terms",
+    "legal terms"
+  ],
+  "generated_at": "2025-12-12T09:29:53.411Z",
+  "version": 1,
+  "content": {
+    "introduction": "<p><em>Last Updated: December 12, 2025</em></p><p>Welcome to tankd.io. These Terms of Service govern your use of our Shark Tank product database website, which includes affiliate links to third-party retailers. Please read these terms carefully before using the site. By accessing or using tankd.io, you agree to comply with and be bound by these Terms of Service.</p>",
+    "sections": [
+      {
+        "heading": "Acceptance of Terms",
+        "content": "By using tankd.io, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any part of these terms, please do not use our website. We may update these terms from time to time without prior notice, and your continued use of the site constitutes acceptance of those changes."
+      },
+      {
+        "heading": "Use of This Site",
+        "content": "tankd.io is intended for personal, non-commercial use to browse and learn about products featured on Shark Tank. You agree to use the site only for lawful purposes and in a manner that does not infringe the rights of, restrict, or inhibit anyone else's use and enjoyment of the site. Prohibited activities include, but are not limited to, unauthorized copying, distribution, modification, or misuse of the content, attempting to gain unauthorized access to our systems, or using the site to transmit harmful or illegal material."
+      },
+      {
+        "heading": "Affiliate Links and Disclosure",
+        "content": "tankd.io participates in affiliate marketing programs, including the Amazon Associates Program and others, which means we may earn commissions from qualifying purchases made through links on our site. This comes at no additional cost to you. We believe in transparency and want you to know that some links are affiliate links, helping support the maintenance and development of tankd.io."
+      },
+      {
+        "heading": "Content Accuracy and Disclaimers",
+        "content": "While we strive to provide accurate, up-to-date, and reliable information about products featured on Shark Tank, tankd.io cannot guarantee 100% accuracy or completeness. Product details, availability, pricing, and deals may change without notice. We encourage you to verify all information directly with the product sellers before making any purchase decisions."
+      },
+      {
+        "heading": "Limitation of Liability",
+        "content": "tankd.io and its owners, affiliates, and partners provide the site and its content 'as is' without warranties of any kind, either express or implied. We are not liable for any damages arising from your use or inability to use the site, including but not limited to direct, indirect, incidental, consequential, or punitive damages. Your use of the site and reliance on its content is at your own risk."
+      },
+      {
+        "heading": "Intellectual Property",
+        "content": "All content on tankd.io, including text, graphics, logos, and database compilations, is our intellectual property or used with permission. The trademarks and logos of Shark Tank, ABC, Sony, and other related entities are the property of their respective owners. tankd.io is not officially affiliated, endorsed, or sponsored by ABC, Sony, or the Shark Tank television program."
+      },
+      {
+        "heading": "Changes to These Terms",
+        "content": "We reserve the right to modify or update these Terms of Service at any time. Changes will be effective immediately upon posting on the website. Your continued use of tankd.io after such changes constitutes your acceptance of the updated terms. We encourage you to review this page periodically to stay informed of any updates."
+      },
+      {
+        "heading": "Contact Us",
+        "content": "If you have any questions or concerns about these Terms of Service or the operation of tankd.io, please contact us at info@tankd.io. We welcome your feedback and will do our best to address your inquiries promptly."
+      }
+    ]
+  },
+  "stats": {
+    "total": 589,
+    "active": 417,
+    "outOfBusiness": 145,
+    "gotDeal": 280,
+    "noDeal": 239,
+    "successRate": "70.8",
+    "failureRate": "24.6",
+    "dealRate": "47.5"
+  }
+}

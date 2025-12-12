@@ -1,0 +1,56 @@
+{
+  "slug": "privacy",
+  "title": "Privacy Policy - tankd.io",
+  "meta_description": "Privacy policy for tankd.io. Learn how we handle your data, our use of analytics (Plausible and Google Analytics), and affiliate cookies.",
+  "keywords": [
+    "tankd.io privacy policy",
+    "privacy policy",
+    "data collection",
+    "analytics privacy"
+  ],
+  "generated_at": "2025-12-12T09:29:25.222Z",
+  "version": 1,
+  "content": {
+    "introduction": "<p><em>Last Updated: December 12, 2025</em></p><p>At tankd.io, your privacy matters to us. We are committed to being transparent about the data we collect and how we use it. This Privacy Policy explains in plain language what information we gather, how we use it, and your rights regarding your data when you visit our Shark Tank product database website. tankd.io is designed for and targeted at users in the United States.</p>",
+    "sections": [
+      {
+        "heading": "Information We Collect",
+        "content": "We collect only minimal data focused on understanding how visitors use our site. This includes anonymous analytics data such as page views, device type, and general location (like country or region). We do not collect personal information such as names, email addresses, or any data that could directly identify you. There are no user accounts or sign-ups on our site, so we do not store any personal data."
+      },
+      {
+        "heading": "Analytics and Tracking",
+        "content": "To understand how people use tankd.io and improve your experience, we use two types of analytics tools. First, we use Plausible Analytics, a privacy-focused service that does not use cookies or collect personal data. It provides us with aggregate, anonymous insights without tracking you personally. Second, we also use Google Analytics (GA4) to gather standard website usage data. Google Analytics uses cookies to collect information about your visit, such as how long you stay and which pages you view. You can opt out of Google Analytics tracking by using browser add-ons or settings."
+      },
+      {
+        "heading": "Affiliate Links and Cookies",
+        "content": "tankd.io includes affiliate links from programs like Amazon Associates and ShareASale. When you click these links, affiliate cookies may be placed on your device by those third parties to track qualifying purchases and help us earn commissions. These cookies are set and managed by the affiliate networks, not by us, and their use is subject to their own privacy policies. We do not collect any personal data through these affiliate cookies."
+      },
+      {
+        "heading": "How We Use Your Information",
+        "content": "The anonymous data we collect helps us understand how visitors interact with tankd.io so we can improve the site's content, design, and performance. We use analytics to see which products and features are most popular and to identify any issues. We do not use your data for advertising or share it with third parties for marketing purposes."
+      },
+      {
+        "heading": "Third-Party Services",
+        "content": "We rely on third-party services like Plausible Analytics, Google Analytics, and affiliate networks to operate parts of our website. Each of these services has its own privacy policies governing how they collect and use data. We encourage you to review their policies to understand how your information is handled: Plausible Analytics (https://plausible.io/data-policy), Google Analytics (https://policies.google.com/privacy), Amazon Associates (https://affiliate-program.amazon.com/help/operating/policies), and ShareASale (https://www.shareasale.com/affiliate-privacy-policy)."
+      },
+      {
+        "heading": "Your Privacy Rights",
+        "content": "Because we do not collect personal information or create user accounts, there is minimal personal data to manage. You can browse tankd.io without being personally tracked by Plausible Analytics. For Google Analytics, you can opt out of tracking by using browser extensions or adjusting your browser settings. You can also clear or block affiliate cookies through your browser. If you are a California resident, you may have additional rights under the California Consumer Privacy Act (CCPA), though our site does not meet the thresholds that trigger CCPA compliance requirements."
+      },
+      {
+        "heading": "Contact Us",
+        "content": "If you have any questions or concerns about this Privacy Policy or how we handle your data, please reach out to us at info@tankd.io. We are happy to provide more information and address any privacy-related inquiries you may have."
+      }
+    ]
+  },
+  "stats": {
+    "total": 589,
+    "active": 417,
+    "outOfBusiness": 145,
+    "gotDeal": 280,
+    "noDeal": 239,
+    "successRate": "70.8",
+    "failureRate": "24.6",
+    "dealRate": "47.5"
+  }
+}

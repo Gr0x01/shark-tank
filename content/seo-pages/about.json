@@ -1,0 +1,44 @@
+{
+  "slug": "about",
+  "title": "About tankd.io: Your Spoiler-Free Shark Tank Product Database",
+  "meta_description": "Learn about tankd.io - the comprehensive, spoiler-free database of every Shark Tank product. Built by a solo developer who hates spoilers as much as you do.",
+  "keywords": [
+    "about tankd.io",
+    "shark tank product database",
+    "spoiler free shark tank",
+    "shark tank episode lookup"
+  ],
+  "generated_at": "2025-12-12T09:28:57.188Z",
+  "version": 1,
+  "content": {
+    "introduction": "I hate being mid-episode, scrolling through Shark Tank, excited to buy something cool, and then suddenly realizing I’m stepping right into a spoiler minefield. If you’re not watching live, dodging spoilers online can feel like a full-time job — and honestly, it’s frustrating. I built tankd.io because I kept running into this exact problem, and I knew there had to be a better way to enjoy the show and shop without ruining the surprise.",
+    "sections": [
+      {
+        "heading": "Why I Built This: The Spoiler Problem",
+        "content": "If you’re a Shark Tank fan like me, you know the drill. You’re watching an episode, a product catches your eye, and you want to learn more — maybe even buy it. But the internet, social media, and even casual conversations can be full of spoilers about who got a deal, who didn’t, or how the business fared after the show. It’s like walking into a party where everyone’s already talking about the ending of your favorite movie. No one wants that! I kept finding myself frustrated, wanting to browse Shark Tank products without accidentally reading spoilers about the episode outcome. That’s what sparked the idea for tankd.io."
+      },
+      {
+        "heading": "What tankd.io Does Differently",
+        "content": "Tankd.io is designed to be your spoiler-free Shark Tank product database. That means you get comprehensive product info — details about the businesses, their products, and their current status — without any spoilers about the episode outcomes. Whether a company landed a deal or not, or how the pitch went down, that stuff stays under wraps until you’re ready. Plus, tankd.io shows you real-time business status updates: is the company still active, closed, or somewhere in between? It’s all about giving you the info you want without ruining your viewing experience. And since I’m the solo developer behind all of this, I make sure the site stays lean, focused, and spoiler-free — just like I want it for myself."
+      },
+      {
+        "heading": "The Mission: Spoiler-Free Shopping",
+        "content": "My mission with tankd.io is simple: make it easy and fun for Shark Tank fans to find and buy products without the fear of spoilers lurking around every corner. I want tankd.io to be the go-to place where you can explore hundreds of Shark Tank products (we’re talking nearly 600 and counting!), check their current business status, and get the info you need — all without accidentally spoiling the episode you’re watching. This isn’t about just listing products; it’s about preserving the thrill of discovery while helping you support the entrepreneurs you root for. Because let’s face it, we all love the show for the drama, the pitches, and the surprises — and that should stay intact."
+      },
+      {
+        "heading": "A Solo Dev’s Passion Project",
+        "content": "Tankd.io isn’t a corporate website or some big company’s side hustle. It’s just me — a Shark Tank fan and developer — building something I wish existed. I’ve spent countless hours coding, researching, and updating the site to keep it spoiler-free and packed with useful info. Sure, it’s an MVP and not perfect (yet!), but it’s built with love and a genuine passion for the show and its amazing entrepreneurs. So when you use tankd.io, you’re supporting a real person who’s just as obsessed with Shark Tank as you are and who hates spoilers just as much. Thanks for stopping by — and happy spoiler-free shopping!"
+      }
+    ]
+  },
+  "stats": {
+    "total": 589,
+    "active": 417,
+    "outOfBusiness": 145,
+    "gotDeal": 280,
+    "noDeal": 239,
+    "successRate": "70.8",
+    "failureRate": "24.6",
+    "dealRate": "47.5"
+  }
+}

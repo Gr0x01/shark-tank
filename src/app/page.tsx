@@ -4,6 +4,7 @@ import { getProductStats, getLatestEpisodeProducts, getSeasonProducts } from '@/
 import { getCategories } from '@/lib/queries/categories'
 import { LatestEpisodeSection } from '@/components/ui/LatestEpisodeSection'
 import { SeasonProductsSection } from '@/components/ui/SeasonProductsSection'
+import { InterstitialBand } from '@/components/ui/InterstitialBand'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createOrganizationSchema, createSearchActionSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
@@ -101,12 +102,21 @@ export default async function Home() {
       </section>
 
       {latestEpisode.episode && (
-        <LatestEpisodeSection 
-          episode={latestEpisode.episode} 
+        <LatestEpisodeSection
+          episode={latestEpisode.episode}
           products={latestEpisode.products}
           sharkPhotos={latestEpisode.sharkPhotos}
         />
       )}
+
+      <InterstitialBand
+        title="The Biggest Winners"
+        description="Discover the most successful products from Shark Tank history and what made them thrive."
+        ctaText="View Success Stories"
+        ctaHref="/success-stories"
+        variant="cyan"
+        stat={{ value: `${stats.active}`, label: 'Active Products' }}
+      />
 
       <SeasonProductsSection
         products={seasonData.products}
@@ -132,15 +142,14 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bottom-cta">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="bottom-cta-text">
-            <span className="text-[var(--success)]">{stats.active}</span> active businesses · 
-            <span className="text-[var(--gold)]"> {stats.gotDeal}</span> got deals · 
-            <span className="text-[var(--ink-400)]"> {stats.outOfBusiness}</span> out of business
-          </p>
-        </div>
-      </section>
+      <InterstitialBand
+        title="Want to be on Shark Tank?"
+        description="Learn how to apply, what the sharks look for, and how to prepare your pitch."
+        ctaText="Application Guide"
+        ctaHref="/how-to-apply"
+        variant="gold"
+        stat={{ value: `${stats.gotDeal}`, label: 'Got Deals' }}
+      />
     </main>
     </>
   )
