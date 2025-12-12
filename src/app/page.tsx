@@ -150,16 +150,6 @@ export default async function Home() {
         variant="gold"
         stat={{ value: `${stats.gotDeal}`, label: 'Got Deals' }}
       />
-
-      <section className="bottom-cta">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="bottom-cta-text">
-            <span className="text-[var(--success)]">{stats.active}</span> active businesses · 
-            <span className="text-[var(--gold)]"> {stats.gotDeal}</span> got deals · 
-            <span className="text-[var(--ink-400)]"> {stats.outOfBusiness}</span> out of business
-          </p>
-        </div>
-      </section>
     </main>
     </>
   )
