@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import clsx from 'clsx'
 import { useSpoilerContext } from '@/contexts/SpoilerContext'
 import { useSearchTypeahead } from '@/hooks/useSearchTypeahead'
@@ -21,9 +22,14 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
+  const [mounted, setMounted] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const { spoilersHidden, toggleSpoilers } = useSpoilerContext()
   const { results, isLoading, error } = useSearchTypeahead(searchQuery)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (searchOpen && inputRef.current) {
@@ -149,125 +155,127 @@ export function Header() {
               ))}
             </nav>
           </div>
-          
-          {searchOpen && (
-            <div className="search-modal-overlay" onClick={() => setSearchOpen(false)}>
-              <div className="search-modal" onClick={(e) => e.stopPropagation()}>
-                <form onSubmit={handleSearch}>
-                  <div className="search-input-wrapper">
-                    <svg className="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder="Search Shark Tank products..."
-                      className="search-input"
-                      role="combobox"
-                      aria-expanded={results.length > 0}
-                      aria-controls="search-results-list"
-                      aria-activedescendant={selectedIndex >= 0 ? `result-${selectedIndex}` : undefined}
-                      aria-autocomplete="list"
-                    />
-                    <button type="button" onClick={() => setSearchOpen(false)} className="search-close">
-                      <kbd>ESC</kbd>
-                    </button>
-                  </div>
-                </form>
+        </div>
+      </div>
 
-                {/* Typeahead Results */}
-                {searchQuery.trim().length >= 2 && (
-                  <div className="search-results">
-                    {isLoading && (
-                      <div className="search-loading">
-                        <div className="search-spinner" />
-                        <span>Searching...</span>
-                      </div>
-                    )}
+      {/* Search Modal - Rendered via portal to escape header stacking context */}
+      {mounted && searchOpen && createPortal(
+        <div className="search-modal-overlay" onClick={() => setSearchOpen(false)}>
+          <div className="search-modal" onClick={(e) => e.stopPropagation()}>
+            <form onSubmit={handleSearch}>
+              <div className="search-input-wrapper">
+                <svg className="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Search Shark Tank products..."
+                  className="search-input"
+                  role="combobox"
+                  aria-expanded={results.length > 0}
+                  aria-controls="search-results-list"
+                  aria-activedescendant={selectedIndex >= 0 ? `result-${selectedIndex}` : undefined}
+                  aria-autocomplete="list"
+                />
+                <button type="button" onClick={() => setSearchOpen(false)} className="search-close">
+                  <kbd>ESC</kbd>
+                </button>
+              </div>
+            </form>
 
-                    {error && !isLoading && (
-                      <div className="search-no-results">
-                        <p className="text-sm text-red-600">{error}</p>
-                      </div>
-                    )}
-
-                    {!isLoading && !error && results.length > 0 && (
-                      <div id="search-results-list" role="listbox" className="search-results-list">
-                        {results.map((product, index) => (
-                          <Link
-                            key={product.slug}
-                            id={`result-${index}`}
-                            href={`/products/${product.slug}`}
-                            className={clsx('search-result-item', index === selectedIndex && 'selected')}
-                            role="option"
-                            aria-selected={index === selectedIndex}
-                            data-result-index={index}
-                            onClick={() => {
-                              setSearchOpen(false)
-                              setSearchQuery('')
-                              setSelectedIndex(-1)
-                            }}
-                          >
-                            <div className="search-result-image">
-                              {product.photo_url && !failedImages.has(product.slug) ? (
-                                <Image
-                                  src={product.photo_url}
-                                  alt={product.name}
-                                  width={40}
-                                  height={40}
-                                  className="object-cover"
-                                  onError={() => {
-                                    setFailedImages(prev => new Set(prev).add(product.slug))
-                                  }}
-                                />
-                              ) : (
-                                <div className="search-result-placeholder" />
-                              )}
-                            </div>
-                            <div className="search-result-text">
-                              <div className="search-result-name">{product.name}</div>
-                              {product.company_name && (
-                                <div className="search-result-company">{product.company_name}</div>
-                              )}
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-
-                    {!isLoading && !error && results.length === 0 && (
-                      <div className="search-no-results">
-                        <p>No products found</p>
-                        <Link
-                          href={`/products?q=${encodeURIComponent(searchQuery.trim())}`}
-                          className="search-view-all"
-                          onClick={() => {
-                            setSearchOpen(false)
-                            setSearchQuery('')
-                            setSelectedIndex(-1)
-                          }}
-                        >
-                          View all results for "{searchQuery}"
-                        </Link>
-                      </div>
-                    )}
+            {/* Typeahead Results */}
+            {searchQuery.trim().length >= 2 && (
+              <div className="search-results">
+                {isLoading && (
+                  <div className="search-loading">
+                    <div className="search-spinner" />
+                    <span>Searching...</span>
                   </div>
                 )}
 
-                <div className="search-hints">
-                  <span>Try: Scrub Daddy, Ring, Bombas, or browse by</span>
-                  <Link href="/products?status=active" onClick={() => setSearchOpen(false)} className="search-hint-link">Still Active</Link>
-                  <span>·</span>
-                  <Link href="/products?deal=true" onClick={() => setSearchOpen(false)} className="search-hint-link">Got Deals</Link>
-                </div>
+                {error && !isLoading && (
+                  <div className="search-no-results">
+                    <p className="text-sm text-red-600">{error}</p>
+                  </div>
+                )}
+
+                {!isLoading && !error && results.length > 0 && (
+                  <div id="search-results-list" role="listbox" className="search-results-list">
+                    {results.map((product, index) => (
+                      <Link
+                        key={product.slug}
+                        id={`result-${index}`}
+                        href={`/products/${product.slug}`}
+                        className={clsx('search-result-item', index === selectedIndex && 'selected')}
+                        role="option"
+                        aria-selected={index === selectedIndex}
+                        data-result-index={index}
+                        onClick={() => {
+                          setSearchOpen(false)
+                          setSearchQuery('')
+                          setSelectedIndex(-1)
+                        }}
+                      >
+                        <div className="search-result-image">
+                          {product.photo_url && !failedImages.has(product.slug) ? (
+                            <Image
+                              src={product.photo_url}
+                              alt={product.name}
+                              width={40}
+                              height={40}
+                              className="object-cover"
+                              onError={() => {
+                                setFailedImages(prev => new Set(prev).add(product.slug))
+                              }}
+                            />
+                          ) : (
+                            <div className="search-result-placeholder" />
+                          )}
+                        </div>
+                        <div className="search-result-text">
+                          <div className="search-result-name">{product.name}</div>
+                          {product.company_name && (
+                            <div className="search-result-company">{product.company_name}</div>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                {!isLoading && !error && results.length === 0 && (
+                  <div className="search-no-results">
+                    <p>No products found</p>
+                    <Link
+                      href={`/products?q=${encodeURIComponent(searchQuery.trim())}`}
+                      className="search-view-all"
+                      onClick={() => {
+                        setSearchOpen(false)
+                        setSearchQuery('')
+                        setSelectedIndex(-1)
+                      }}
+                    >
+                      View all results for "{searchQuery}"
+                    </Link>
+                  </div>
+                )}
               </div>
+            )}
+
+            <div className="search-hints">
+              <span>Try: Scrub Daddy, Ring, Bombas, or browse by</span>
+              <Link href="/products?status=active" onClick={() => setSearchOpen(false)} className="search-hint-link">Still Active</Link>
+              <span>·</span>
+              <Link href="/products?deal=true" onClick={() => setSearchOpen(false)} className="search-hint-link">Got Deals</Link>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </header>
   )
 }
