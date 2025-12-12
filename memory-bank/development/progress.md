@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-12
+Last-Updated: 2025-12-13
 Maintainer: RB
 Status: Phase 3 Complete - Production Ready
 ---
@@ -38,15 +38,16 @@ Status: Phase 3 Complete - Production Ready
 | 19 | All Sharks Narrative Enrichment | Dec 12 | ✅ Complete (47 sharks) |
 | 20 | Retired Shark Status System | Dec 12 | ✅ Complete |
 | 21 | Vercel Cron Automation | Dec 12 | ✅ Complete |
+| 22 | Manual Seed Products Import | Dec 13 | ✅ Complete (18 products) |
 
-## Current Status (as of Dec 12, 2025)
+## Current Status (as of Dec 13, 2025)
 
-**Products**: 589 total
-- 279 deals (with shark investments)
-- 238 no deal
-- 67 deal fell through
-- 5 unknown
-- ALL 589 with narrative content enriched
+**Products**: 607 total
+- 297 deals (with shark investments)
+- 241 no deal
+- 69 deal fell through
+- ALL 607 with narrative content enriched
+- Includes 18 manually curated "greatest hits" products
 
 **Sharks**: 47 total (8 main + 39 guest sharks)
 - All have photos in Supabase Storage (`shark-photos` bucket)
@@ -284,6 +285,69 @@ Scripts for ingesting new Shark Tank episodes as they air:
 **Status:** Deployed to production, running daily at 10am UTC
 
 **Integration:** Seamlessly integrates with Friday episode workflow as automatic safety net for missed products
+
+### Manual Seed Products Import (Dec 13, 2025)
+
+**Problem Discovered:**
+- 18 manually curated "greatest hits" products in `seed-products.json` were never imported
+- Original `seed-products.ts` script was incomplete (line 155: "Database write not implemented yet")
+- Missing major success stories: Bombas ($2B revenue), Ring ($1B acquisition), Scrub Daddy
+
+**Root Cause:**
+- All 589 products were scraped from allsharktankproducts.com via `seed-from-scrape.ts`
+- Manual seed file with curated top products was created but never loaded
+
+**Solution:**
+- Created `scripts/import-seed-products.ts` - One-time import script for seed file
+- Script handles:
+  - Slug generation and duplicate checking
+  - Category mapping
+  - Shark relationship linking
+  - Upsert logic to avoid duplicates
+
+**Products Added (18 total):**
+1. Bombas - $2B lifetime revenue, Daymond John deal
+2. Scrub Daddy - Highest revenue Shark Tank product, Lori Greiner
+3. Ring - No deal on show, later sold to Amazon for $1B
+4. Squatty Potty - Acquired, Lori Greiner
+5. Tipsy Elves - Active, Robert Herjavec
+6. Groovebook - Acquired, Mark Cuban + Kevin O'Leary
+7. Simply Fit Board - Active, Lori Greiner
+8. BeatBox Beverages - Active, Mark Cuban
+9. Shark Tank Swimwear (The Swim Brief) - Deal fell through
+10. Wicked Good Cupcakes - Acquired, Kevin O'Leary
+11. Sleep Styler - Active, Lori Greiner
+12. Dude Wipes - Active, Mark Cuban
+13. LovePop - Active, Kevin O'Leary
+14. The Bouqs Company - Active, no deal
+15. Breathometer - Out of business, deal fell through
+16. Cousins Maine Lobster - Active, Barbara Corcoran
+17. Bantam Bagels - Acquired, Lori Greiner
+18. Spatty - Active, no deal
+
+**Enrichment Process:**
+1. Set `enrichment_status = 'pending'` for all 18 products
+2. Ran `batch-enrich.ts --limit 20 --concurrency 10`:
+   - Tavily web search for product details
+   - OpenAI synthesis for structured data
+   - Updated status, revenue, deal info, shark relationships
+   - Cost: $0.0156
+3. Ran `enrich-narratives.ts --limit 20`:
+   - Generated 6 SEO narrative sections per product
+   - Cost: $0.0249
+4. Total enrichment cost: **$0.0405**
+
+**Results:**
+- Database now has **607 products** (was 589)
+- ALL 607 fully enriched with data + narrative content
+- Deal count: 297 (was 279, +18)
+- No deal count: 241 (was 238, +3)
+- Fell through: 69 (was 67, +2)
+- Acquired products: 23 (5 from this batch)
+
+**Files Created:**
+- `scripts/import-seed-products.ts` - One-time import (can be run again if needed)
+- Temp scripts cleaned up after verification
 
 ## Phase 4: Future Enhancements
 

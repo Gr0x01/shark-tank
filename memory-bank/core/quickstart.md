@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-12
+Last-Updated: 2025-12-13
 Maintainer: RB
 Status: Phase 3 Complete - Production Ready
 ---
@@ -85,8 +85,9 @@ npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
 - [Architecture Patterns](../architecture/patterns.md)
 
 ## Database Status
-- **Products**: 589 total (279 deals, 238 no deal, 67 fell through)
-  - ALL 589 enriched with narrative content
+- **Products**: 607 total (297 deals, 241 no deal, 69 fell through)
+  - ALL 607 enriched with narrative content
+  - Includes 18 manually curated "greatest hits" (Bombas, Ring, Scrub Daddy, etc.)
 - **Sharks**: 47 (8 main + 39 guest)
   - All have photos in Supabase Storage
   - ALL 47 enriched with narrative content

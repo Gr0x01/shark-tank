@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-12
+Last-Updated: 2025-12-13
 Maintainer: RB
 Status: Phase 3 Complete - Ready for Launch
 ---
@@ -336,3 +336,25 @@ npx tsx scripts/enrich-seo-pages.ts --page your-slug
 - `00006_shark_narrative_content.sql` - Adds narrative fields to sharks table
 - `00007_narrative_refresh_on_status_change.sql` - Auto-flags narrative refresh on status change
 - `00008_shark_retired_status.sql` - Adds `is_retired` field for retired sharks
+
+## Manual Seed Products Import (Dec 13, 2025)
+
+**Problem:** 18 manually curated "greatest hits" products from `seed-products.json` were never imported into the database. The original `seed-products.ts` script was incomplete (never wrote to database).
+
+**Solution:** Created `scripts/import-seed-products.ts` to import the seed file.
+
+**Products Added:**
+- Bombas ($2B lifetime revenue, Daymond John)
+- Scrub Daddy (highest revenue ST product)
+- Ring (no deal, later sold to Amazon for $1B)
+- Squatty Potty, Tipsy Elves, Groovebook, Simply Fit Board
+- BeatBox Beverages, Wicked Good Cupcakes, Sleep Styler
+- Dude Wipes, LovePop, The Bouqs Company, Breathometer
+- Cousins Maine Lobster, Bantam Bagels, Spatty, Swim Brief
+
+**Enrichment:**
+- Batch enrichment: $0.0156 (Tavily + OpenAI for product details)
+- Narrative enrichment: $0.0249 (SEO long-form content)
+- Total cost: $0.0405
+
+**New Total:** 607 products (was 589), all fully enriched with narrative content.
