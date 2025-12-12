@@ -33,10 +33,12 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">About</h3>
-            <p className="text-[var(--ink-500)] text-sm leading-relaxed">
-              Every Shark Tank product with real-time business status tracking.
-            </p>
+            <h3 className="font-display font-medium text-[var(--ink-900)] mb-4 text-sm">Company</h3>
+            <ul className="space-y-2.5 text-[var(--ink-500)]">
+              <li><Link href="/about" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">About</Link></li>
+              <li><Link href="/privacy" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">Privacy Policy</Link></li>
+              <li><Link href="/terms" scroll={false} className="hover:text-[var(--cyan-600)] transition-colors text-sm">Terms of Service</Link></li>
+            </ul>
           </div>
         </div>
         

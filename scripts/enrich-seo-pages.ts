@@ -251,6 +251,348 @@ Return ONLY valid JSON matching this schema:
     ...
   ]
 }`
+  },
+  'best-deals': {
+    type: 'article' as const,
+    title: 'Best Shark Tank Deals: Biggest Investments & Success Stories',
+    meta_description: 'Discover the biggest Shark Tank investments and best deals ever made. From million-dollar valuations to equity stakes that created unicorns, see which deals paid off.',
+    keywords: [
+      'best shark tank deals',
+      'biggest shark tank investments',
+      'largest shark tank deals',
+      'shark tank million dollar deals',
+      'most valuable shark tank deals',
+      'highest shark tank valuations',
+      'top shark tank investments'
+    ],
+    searchQueries: [
+      'biggest Shark Tank deals by investment amount',
+      'largest Shark Tank investments all time',
+      'most expensive Shark Tank deals',
+      'Shark Tank highest valuations',
+      'best Shark Tank deals revenue'
+    ],
+    prompt: `Write a comprehensive 1500-2000 word article about the best and biggest Shark Tank deals ever made.
+
+STRUCTURE:
+1. Introduction (200-300 words): Overview of Shark Tank's biggest investment moments
+2. Top 10 Biggest Deals: For each deal include:
+   - Company name and product
+   - Investment amount and equity offered
+   - Which shark(s) invested
+   - Deal valuation
+   - Post-show performance and current status
+3. What Makes a "Best Deal": Criteria beyond just deal size (ROI, success, impact)
+4. Notable Multi-Million Dollar Investments
+5. Deals That Went On To Massive Success
+
+Create 5-7 sections with H2 headings like:
+- "The Biggest Shark Tank Investments of All Time"
+- "Million-Dollar Deals That Created Unicorns"
+- "Which Sharks Make the Biggest Investments?"
+- "Ring: The Billion-Dollar Deal That Almost Didn't Happen"
+- "What Separates Good Deals from Great Deals"
+- "The ROI Champions: Small Investments, Huge Returns"
+
+SEO REQUIREMENTS:
+- Include specific investment amounts, valuations, and equity percentages
+- Naturally use phrases: "best shark tank deals", "biggest investments", "largest deals"
+- Highlight both deal size AND outcome/success
+- Focus on data: numbers, percentages, revenue figures
+- Factual content based on search results and actual deal details
+- Create internal link opportunities to product pages
+
+Return ONLY valid JSON matching this schema:
+{
+  "introduction": "Opening section about Shark Tank's biggest deals...",
+  "sections": [
+    { "heading": "Section Title", "content": "Detailed section with specific deals..." },
+    ...
+  ]
+}`
+  },
+  'deals-under-100k': {
+    type: 'filtered' as const,
+    title: 'Small Shark Tank Deals Under $100K',
+    meta_description: 'Browse Shark Tank investments under $100,000. Discover which small deals turned into big successes and which sharks back entrepreneurs at this level.',
+    keywords: [
+      'shark tank deals under 100k',
+      'small shark tank investments',
+      'shark tank under $100,000',
+      'affordable shark tank deals'
+    ],
+    searchQueries: [
+      'Shark Tank deals under $100,000',
+      'small investments Shark Tank',
+      'Shark Tank lowest investment deals'
+    ],
+    prompt: `Write an 800-1000 word introduction for a page listing Shark Tank deals under $100,000.
+
+REQUIRED CONTENT:
+1. Opening: Why small deals matter and success stories at this level
+2. Statistics: How many deals fall in this range, success rates
+3. Which sharks invest small: Analysis of shark investment patterns
+4. Notable small deals that succeeded: 2-3 examples with outcomes
+5. Value proposition: Why smaller investments can be smart
+
+THEN create 3-4 sections with H2 headings like:
+- "The Power of Small Investments"
+- "Success Stories Under $100K"
+- "Which Sharks Make Small Deals?"
+- "Smart Bets: Equity vs. Investment Size"
+
+SEO REQUIREMENTS:
+- Include phrases: "deals under $100K", "small investments", "affordable"
+- Focus on success stories and ROI potential
+- Factual data from search results and stats
+
+Return ONLY valid JSON.`
+  },
+  'deals-100k-to-500k': {
+    type: 'filtered' as const,
+    title: 'Shark Tank Deals $100K-$500K: The Sweet Spot',
+    meta_description: 'Explore Shark Tank deals between $100K-$500K. This mid-range investment tier has produced some of the show\'s biggest success stories.',
+    keywords: [
+      'shark tank deals 100k to 500k',
+      'mid-range shark tank investments',
+      'shark tank $100,000 to $500,000',
+      'shark tank medium deals'
+    ],
+    searchQueries: [
+      'Shark Tank deals $100K to $500K',
+      'mid-size Shark Tank investments',
+      'Shark Tank average deal size'
+    ],
+    prompt: `Write an 800-1000 word introduction for Shark Tank deals in the $100K-$500K range.
+
+REQUIRED CONTENT:
+1. Opening: Why this is the "sweet spot" for Shark Tank deals
+2. Statistics: Deal volume, success rates, shark participation
+3. Notable successes: 3-4 major success stories in this range
+4. Shark preferences: Which sharks favor this deal size and why
+5. ROI analysis: Success patterns at this investment level
+
+THEN create 3-4 sections with H2 headings like:
+- "The Sweet Spot: Why $100K-$500K Works"
+- "Major Success Stories in This Range"
+- "Shark Investment Patterns"
+- "What Makes These Deals Succeed"
+
+SEO REQUIREMENTS:
+- Include specific deal amounts and valuations
+- Success stories with revenue data
+- Natural use of "$100K-$500K", "mid-range"
+
+Return ONLY valid JSON.`
+  },
+  'deals-over-500k': {
+    type: 'filtered' as const,
+    title: 'Shark Tank Mega Deals Over $500K: The Biggest Bets',
+    meta_description: 'Discover the biggest Shark Tank investments over $500,000. See which mega deals paid off and which sharks make the largest bets.',
+    keywords: [
+      'shark tank deals over 500k',
+      'biggest shark tank investments',
+      'shark tank mega deals',
+      'shark tank over $500,000',
+      'largest shark tank deals'
+    ],
+    searchQueries: [
+      'Shark Tank deals over $500,000',
+      'biggest Shark Tank investments',
+      'largest Shark Tank deals ever'
+    ],
+    prompt: `Write an 800-1000 word introduction for Shark Tank mega deals over $500,000.
+
+REQUIRED CONTENT:
+1. Opening: The rarity and significance of mega deals
+2. Statistics: How many deals exceed $500K, success rates
+3. The big players: Which sharks make these bets (Cuban, Herjavec analysis)
+4. Biggest deals breakdown: Top 5-10 deals with outcomes
+5. Risk and reward: What justifies these massive investments
+
+THEN create 3-4 sections with H2 headings like:
+- "The Million-Dollar Club: Biggest Deals Ever"
+- "Which Sharks Make Mega Investments?"
+- "Do Big Deals = Big Success?"
+- "Notable Mega Deals and Their Outcomes"
+
+SEO REQUIREMENTS:
+- Specific investment amounts, valuations, revenue figures
+- Focus on the biggest deals and their outcomes
+- Natural use of "mega deals", "over $500K", "largest"
+
+Return ONLY valid JSON.`
+  },
+
+  'about': {
+    type: 'article' as const,
+    title: 'About tankd.io: Your Spoiler-Free Shark Tank Product Database',
+    meta_description: 'Learn about tankd.io - the comprehensive, spoiler-free database of every Shark Tank product. Built by a solo developer who hates spoilers as much as you do.',
+    keywords: [
+      'about tankd.io',
+      'shark tank product database',
+      'spoiler free shark tank',
+      'shark tank episode lookup'
+    ],
+    searchQueries: [
+      'why people search for shark tank products',
+      'shark tank spoiler problem online',
+      'shark tank product tracking websites'
+    ],
+    prompt: `Write a friendly, casual, personal 800-1000 word About page for tankd.io.
+
+TONE: Light, casual, friendly - like talking to a friend who shares your frustration.
+
+KEY MESSAGE: This site exists because the founder HATES being mid-episode, wanting to buy something, and trying to dodge spoilers online when not watching live.
+
+REQUIRED CONTENT:
+1. Opening: The spoiler problem - "I hate being mid episode, looking for something to buy and trying to duck spoilers online if I don't watch it live"
+2. The Solution: What tankd.io provides - comprehensive product info WITHOUT episode outcome spoilers
+3. Solo Developer Story: Built by one person who loves Shark Tank and wanted a better way
+4. Mission/Vision: Make it easy to find and buy Shark Tank products without ruining your viewing experience
+5. What Makes Us Different: Spoiler-free design, real-time business status, comprehensive coverage
+6. Personal Touch: This isn't a corporate site, it's a passion project
+
+STRUCTURE - Create 3-4 sections with H2 headings like:
+- "The Spoiler Problem" or "Why I Built This"
+- "What tankd.io Does Differently"
+- "The Mission: Spoiler-Free Shopping"
+- "What's Next" or "Future Plans"
+
+STYLE:
+- First person ("I") when talking about the founder/development
+- Conversational, authentic voice
+- Show personality - this is a solo dev passion project
+- Be relatable - we all hate spoilers
+- Keep it real - acknowledge this is an MVP, not perfect
+
+Return ONLY valid JSON matching this schema:
+{
+  "introduction": "Personal, engaging opening about the spoiler problem...",
+  "sections": [
+    { "heading": "Section Title", "content": "Friendly, authentic content..." },
+    ...
+  ]
+}`
+  },
+
+  'privacy': {
+    type: 'article' as const,
+    title: 'Privacy Policy - tankd.io',
+    meta_description: 'Privacy policy for tankd.io. Learn how we handle your data, our use of analytics (Plausible and Google Analytics), and affiliate cookies.',
+    keywords: [
+      'tankd.io privacy policy',
+      'privacy policy',
+      'data collection',
+      'analytics privacy'
+    ],
+    searchQueries: [
+      'privacy policy template analytics affiliate cookies US',
+      'Plausible Analytics privacy policy',
+      'Google Analytics privacy policy requirements US',
+      'Amazon Associates affiliate disclosure privacy FTC'
+    ],
+    prompt: `Write a clear, readable privacy policy for tankd.io (a Shark Tank product database website FOR US USERS).
+
+IMPORTANT CONTEXT: This is a US-focused site about US Shark Tank with US Amazon affiliate links. Target audience is United States users. DO NOT mention GDPR (that's EU). Focus on US privacy practices and FTC requirements.
+
+REQUIREMENTS - Must cover:
+1. State this site is designed for US users
+2. What data we collect (minimal - just analytics)
+3. Plausible Analytics (privacy-focused, no cookies, no personal tracking)
+4. Google Analytics (GA4) - standard analytics tracking with cookies
+5. Affiliate cookies (Amazon Associates, ShareASale, etc.) - FTC disclosure
+6. No user accounts or personal data collection
+7. How we use the data (site improvement, traffic analysis)
+8. Third-party services and their privacy policies
+9. User rights (mention CCPA for California but note thresholds don't apply)
+10. Contact information
+
+TONE: Clear, straightforward, human-readable (not just legal jargon)
+- Explain in plain English what each thing does
+- Be transparent and honest
+- Keep it concise but comprehensive
+- Use "we" and "you" language
+
+STRUCTURE - Create 5-7 sections with H2 headings like:
+- "Information We Collect"
+- "Analytics and Tracking"
+- "Affiliate Links and Cookies"
+- "How We Use Your Information"
+- "Third-Party Services"
+- "Your Privacy Rights" (mention CCPA exists but doesn't apply to small sites)
+- "Changes to This Policy"
+- "Contact Us"
+
+Each section should be 100-200 words, clear and specific.
+
+Return ONLY valid JSON matching this schema:
+{
+  "introduction": "Brief intro explaining our commitment to privacy and that this is for US users...",
+  "sections": [
+    { "heading": "Section Title", "content": "Clear explanation..." },
+    ...
+  ]
+}`
+  },
+
+  'terms': {
+    type: 'article' as const,
+    title: 'Terms of Service - tankd.io',
+    meta_description: 'Terms of Service for tankd.io. Understand the terms governing use of our site, affiliate links, disclaimers, and limitations.',
+    keywords: [
+      'tankd.io terms of service',
+      'terms of use',
+      'website terms',
+      'legal terms'
+    ],
+    searchQueries: [
+      'terms of service template affiliate website',
+      'website terms of use disclaimer',
+      'affiliate disclosure legal requirements',
+      'website liability disclaimer'
+    ],
+    prompt: `Write clear, reasonable Terms of Service for tankd.io (Shark Tank product database with affiliate links).
+
+REQUIREMENTS - Must cover:
+1. Acceptance of terms
+2. Use of the site (what's allowed, what's not)
+3. Affiliate links disclosure (Amazon Associates, etc.)
+4. Content accuracy disclaimer (we do our best but can't guarantee 100% accuracy)
+5. No warranties - site provided "as is"
+6. Limitation of liability
+7. Not affiliated with ABC/Sony/Shark Tank officially
+8. Product information may change
+9. Intellectual property (our content vs. trademarks)
+10. Changes to terms
+11. Contact information
+
+TONE: Professional but reasonable and clear
+- Protect the site legally without being aggressive
+- Use plain English where possible
+- Be fair and transparent
+- Not overly restrictive
+
+STRUCTURE - Create 6-8 sections with H2 headings like:
+- "Acceptance of Terms"
+- "Use of This Site"
+- "Affiliate Links and Disclosure"
+- "Content Accuracy and Disclaimers"
+- "Limitation of Liability"
+- "Intellectual Property"
+- "Changes to These Terms"
+- "Contact Us"
+
+Each section should be clear and specific (100-250 words).
+
+Return ONLY valid JSON matching this schema:
+{
+  "introduction": "Brief intro to the terms...",
+  "sections": [
+    { "heading": "Section Title", "content": "Clear terms content..." },
+    ...
+  ]
+}`
   }
 } as const;
 
