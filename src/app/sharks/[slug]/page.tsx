@@ -452,7 +452,7 @@ export default async function SharkPage({ params, searchParams }: Props) {
           </section>
 
           {/* Timeline - Full width */}
-          <SharkTimeline timeline={timeline} sharkName={shark.name} />
+          <SharkTimeline timeline={timeline} sharkName={shark.name} sharkPhotos={sharkPhotos} />
         </div>
       </main>
     </>

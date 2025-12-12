@@ -1,5 +1,5 @@
 import type { ProductWithSharks } from '@/lib/supabase/types'
-import { ProductListCard } from '@/components/ui/ProductListCard'
+import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import type { SEOPageSection } from '@/lib/seo/seo-content'
 import DOMPurify from 'isomorphic-dompurify'
 
@@ -18,6 +18,7 @@ export function ArticlePage({
   introduction,
   sections,
   relatedProducts,
+  sharkPhotos = {},
 }: ArticlePageProps) {
   return (
     <main className="min-h-screen py-12 px-6">
@@ -83,11 +84,13 @@ export function ArticlePage({
                 <h3 className="text-lg font-medium text-[var(--ink-900)] mb-4">
                   Related Products
                 </h3>
-                <div className="space-y-4">
+                <div className="flex flex-col gap-4">
                   {relatedProducts.slice(0, 5).map(product => (
-                    <ProductListCard
+                    <ProductCardCommerce
                       key={product.id}
                       product={product}
+                      sharkPhotos={sharkPhotos}
+                      compact
                     />
                   ))}
                 </div>

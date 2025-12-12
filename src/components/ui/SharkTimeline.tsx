@@ -1,12 +1,13 @@
 import type { TimelineEntry } from '@/lib/supabase/types'
-import { ProductListCard } from './ProductListCard'
+import { ProductCardCommerce } from './ProductCardCommerce'
 
 interface SharkTimelineProps {
   timeline: TimelineEntry[]
   sharkName: string
+  sharkPhotos?: Record<string, string>
 }
 
-export function SharkTimeline({ timeline, sharkName }: SharkTimelineProps) {
+export function SharkTimeline({ timeline, sharkName, sharkPhotos = {} }: SharkTimelineProps) {
   if (timeline.length === 0) {
     return null
   }
@@ -44,13 +45,13 @@ export function SharkTimeline({ timeline, sharkName }: SharkTimelineProps) {
             </div>
 
             {/* Products for this season */}
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {entry.products.map((product) => (
-                <ProductListCard
+                <ProductCardCommerce
                   key={product.id}
                   product={product}
-                  showDealDetails
-                  hideSeason
+                  sharkPhotos={sharkPhotos}
+                  compact
                 />
               ))}
             </div>

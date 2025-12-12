@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getSeasonNumbers, getSeasonStats, getEpisodesBySeason } from '@/lib/queries/episodes'
-import { getProductsBySeason } from '@/lib/queries/products'
-import { ProductListCard } from '@/components/ui/ProductListCard'
+import { getProductsBySeason, getSharkPhotos } from '@/lib/queries/products'
+import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
@@ -62,10 +62,11 @@ export default async function SeasonPage({ params }: Props) {
   const { number } = await params
   const seasonNum = parseInt(number)
 
-  const [products, stats, episodes] = await Promise.all([
+  const [products, stats, episodes, sharkPhotos] = await Promise.all([
     getProductsBySeason(seasonNum),
     getSeasonStats(seasonNum),
     getEpisodesBySeason(seasonNum),
+    getSharkPhotos(),
   ])
 
   const breadcrumbSchema = createBreadcrumbSchema([
@@ -110,15 +111,15 @@ export default async function SeasonPage({ params }: Props) {
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-10">
-          <div className="card text-center">
+          <div className="bg-white border border-[var(--ink-100)] p-6 text-center">
             <div className="stat-number text-3xl">{stats.total}</div>
             <div className="stat-label mt-1">Products</div>
           </div>
-          <div className="card text-center">
+          <div className="bg-white border border-[var(--ink-100)] p-6 text-center">
             <div className="stat-number text-3xl text-[var(--gold)]">{stats.deals}</div>
             <div className="stat-label mt-1">Got Deals</div>
           </div>
-          <div className="card text-center">
+          <div className="bg-white border border-[var(--ink-100)] p-6 text-center">
             <div className="stat-number text-3xl text-[var(--success)]">{stats.active}</div>
             <div className="stat-label mt-1">Still Active</div>
           </div>
@@ -132,7 +133,7 @@ export default async function SeasonPage({ params }: Props) {
                 <Link
                   key={ep.id}
                   href={`/episodes/${ep.season}/${ep.episode_number}`}
-                  className="px-4 py-2 card text-sm font-display hover:text-[var(--cyan-600)] transition-colors"
+                  className="px-4 py-2 bg-white border border-[var(--ink-100)] text-sm font-display hover:text-[var(--cyan-600)] transition-colors"
                 >
                   Ep {ep.episode_number}
                 </Link>
@@ -145,13 +146,13 @@ export default async function SeasonPage({ params }: Props) {
           <h2 className="text-xl font-medium mb-4">Products</h2>
 
           {products.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="products-grid-home">
               {products.map(product => (
-                <ProductListCard key={product.id} product={product} hideSeason />
+                <ProductCardCommerce key={product.id} product={product} sharkPhotos={sharkPhotos} showEpisode />
               ))}
             </div>
           ) : (
-            <div className="card text-center py-12">
+            <div className="bg-white border border-[var(--ink-100)] p-12 text-center">
               <p className="text-[var(--ink-400)] font-display">No products found for this season.</p>
             </div>
           )}

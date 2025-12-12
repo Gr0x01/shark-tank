@@ -12,6 +12,7 @@ interface ProductCardCommerceProps {
   spoiler?: boolean
   hideBadges?: boolean
   sharkPhotos?: Record<string, string>
+  showEpisode?: boolean
 }
 
 function formatMoney(amount: number | null): string {
@@ -21,11 +22,11 @@ function formatMoney(amount: number | null): string {
   return `$${amount.toLocaleString()}`
 }
 
-export function ProductCardCommerce({ product, compact = false, spoiler = false, hideBadges = false, sharkPhotos = {} }: ProductCardCommerceProps) {
+export function ProductCardCommerce({ product, compact = false, spoiler = false, hideBadges = false, sharkPhotos = {}, showEpisode = false }: ProductCardCommerceProps) {
   const { spoilersHidden } = useSpoilerContext()
   const [imgError, setImgError] = useState(false)
   const [revealed, setRevealed] = useState(false)
-  
+
   const showDealInfo = !spoilersHidden || revealed
   const gotDeal = product.deal_outcome === 'deal'
   const productSharks = product.shark_names || []
@@ -57,12 +58,17 @@ export function ProductCardCommerce({ product, compact = false, spoiler = false,
       </div>
       
       <div className="season-card-body">
+        {showEpisode && product.episode_number && (
+          <span className="season-card-episode">
+            Episode {product.episode_number}
+          </span>
+        )}
         {product.founder_names && product.founder_names.length > 0 && (
           <span className="season-card-founders">
             by {product.founder_names.join(' & ')}
           </span>
         )}
-        
+
         <h3 className="season-card-name">{product.name}</h3>
       </div>
       

@@ -2,7 +2,8 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getEpisode, getEpisodeProducts } from '@/lib/queries/episodes'
-import { ProductListCard } from '@/components/ui/ProductListCard'
+import { getSharkPhotos } from '@/lib/queries/products'
+import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createTVEpisodeSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
@@ -71,9 +72,10 @@ export default async function EpisodePage({ params }: Props) {
   const seasonNum = parseInt(season)
   const episodeNum = parseInt(ep)
 
-  const [episodeData, products] = await Promise.all([
+  const [episodeData, products, sharkPhotos] = await Promise.all([
     getEpisode(seasonNum, episodeNum),
     getEpisodeProducts(seasonNum, episodeNum),
+    getSharkPhotos(),
   ])
 
   if (!episodeData && products.length === 0) {
@@ -140,13 +142,13 @@ export default async function EpisodePage({ params }: Props) {
           <h2 className="text-xl font-medium mb-4">Products Featured ({products.length})</h2>
 
           {products.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="products-grid-home">
               {products.map(product => (
-                <ProductListCard key={product.id} product={product} showDealDetails hideSeason />
+                <ProductCardCommerce key={product.id} product={product} sharkPhotos={sharkPhotos} />
               ))}
             </div>
           ) : (
-            <div className="card text-center py-12">
+            <div className="bg-white border border-[var(--ink-100)] p-12 text-center">
               <p className="text-[var(--ink-400)] font-display">No product data available for this episode.</p>
             </div>
           )}
