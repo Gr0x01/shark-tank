@@ -10,6 +10,7 @@ import { WhereToBuySection } from '@/components/ui/WhereToBuySection'
 import { StickyCTABar } from '@/components/ui/StickyCTABar'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { addAmazonAffiliateTag } from '@/lib/utils'
+import { createProductOffers, escapeJsonLd } from '@/lib/seo/schemas'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -138,16 +139,12 @@ export default async function ProductPage({ params }: Props) {
       '@type': 'Brand',
       name: product.company_name || product.name,
     },
-    ...(product.amazon_url && {
-      offers: {
-        '@type': 'Offer',
-        url: product.amazon_url,
-        availability: product.status === 'active'
-          ? 'https://schema.org/InStock'
-          : product.status === 'out_of_business'
-            ? 'https://schema.org/Discontinued'
-            : 'https://schema.org/OutOfStock',
-      },
+    offers: createProductOffers({
+      slug: product.slug,
+      amazonUrl: product.amazon_url,
+      websiteUrl: product.website_url,
+      currentPrice: product.current_price,
+      status: product.status,
     }),
   }
 
@@ -186,20 +183,20 @@ export default async function ProductPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productJsonLd).replace(/</g, '\\u003c')
+          __html: escapeJsonLd(productJsonLd)
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c')
+          __html: escapeJsonLd(breadcrumbJsonLd)
         }}
       />
       {faqJsonLd && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(faqJsonLd).replace(/</g, '\\u003c')
+            __html: escapeJsonLd(faqJsonLd)
           }}
         />
       )}
