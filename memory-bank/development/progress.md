@@ -37,6 +37,7 @@ Status: Phase 3 Complete - Production Ready
 | 18 | Auto Narrative Refresh System | Dec 12 | ✅ Complete |
 | 19 | All Sharks Narrative Enrichment | Dec 12 | ✅ Complete (47 sharks) |
 | 20 | Retired Shark Status System | Dec 12 | ✅ Complete |
+| 21 | Vercel Cron Automation | Dec 12 | ✅ Complete |
 
 ## Current Status (as of Dec 12, 2025)
 
@@ -236,6 +237,53 @@ Scripts for ingesting new Shark Tank episodes as they air:
 - **Helper Function**: `flag_product_for_narrative_refresh(product_id)` for manual flagging
 - **Documentation**: Comprehensive ops guide in `development/content-enrichment.md`
 - **Pattern**: Documented in `architecture/patterns.md` as reusable cache invalidation pattern
+
+### Vercel Cron Automation (Dec 12)
+
+**Purpose:** Automatically enrich products with unknown deal outcomes to reduce manual work and improve data freshness.
+
+**Implementation:**
+- Vercel Cron job running `daily-enrich-pending.ts` script daily at 10am UTC (5am ET)
+- Searches for deal information using Tavily web search + OpenAI synthesis
+- Only updates database with high-confidence results (preserves data quality)
+- Tracks retry attempts (max 7) with 24h cooldown between retries
+
+**Files Created:**
+1. `vercel.json` - Cron configuration
+   ```json
+   {
+     "crons": [{
+       "path": "/api/cron/daily-enrich",
+       "schedule": "0 10 * * *"
+     }]
+   }
+   ```
+
+2. `src/app/api/cron/daily-enrich/route.ts` - API endpoint handler
+   - Verifies `CRON_SECRET` for security
+   - Executes enrichment script with proper environment variables
+   - Returns JSON response with success/failure status
+   - 5-minute timeout, 4-minute script timeout
+
+**Environment Variables:**
+- `CRON_SECRET` added to Vercel dashboard (authentication)
+- Existing vars used: SUPABASE credentials, TAVILY_API_KEY, OPENAI_API_KEY
+
+**Benefits:**
+- **Reduces manual work** - No need to run `daily-enrich-pending.ts` manually
+- **Improves SEO** - Products with confirmed deals rank better in search
+- **Better UX** - Fewer "Deal Pending" products shown to users
+- **Scalability** - Handles 10-20 new products per episode automatically
+- **Reliability** - Runs even if user forgets or is unavailable
+
+**Cost:**
+- Compute: Included in Vercel Pro plan ($20/month)
+- API calls: ~$0.01-0.10 per run (Tavily + OpenAI)
+- Monthly: ~$1-4 in API calls
+
+**Status:** Deployed to production, running daily at 10am UTC
+
+**Integration:** Seamlessly integrates with Friday episode workflow as automatic safety net for missed products
 
 ## Phase 4: Future Enhancements
 

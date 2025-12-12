@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-10
+Last-Updated: 2025-12-12
 Maintainer: RB
 Status: Defined
 ---
@@ -30,6 +30,7 @@ Modern web stack optimized for rapid development and minimal operational overhea
 - **CDN**: Vercel Edge Network (included)
 - **Analytics**: PostHog (product analytics)
 - **Monitoring**: Vercel Analytics + Supabase monitoring
+- **Automation**: Vercel Cron (daily scheduled jobs)
 
 ## Development Tools
 
@@ -95,6 +96,9 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 # Analytics
 NEXT_PUBLIC_POSTHOG_KEY=your_posthog_project_api_key
 NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+
+# Automation
+CRON_SECRET=your_cron_secret
 ```
 
 ## Deployment Architecture

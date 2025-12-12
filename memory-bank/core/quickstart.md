@@ -72,7 +72,9 @@ npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
 3. Run `new-episode.ts` with product names → pages go live with backstory
 4. Watch episode, note deals
 5. Run `update-deal.ts` for each product → deal details added
-6. Daily cron catches anything missed
+6. **Automated daily cron catches anything missed** (runs at 10am UTC via Vercel)
+
+**Note:** The daily enrichment script (`daily-enrich-pending.ts`) runs automatically via Vercel Cron - no manual intervention needed. It searches for unknown deal outcomes and updates products with high-confidence results.
 
 ## Quick Links
 - [Project Brief](./projectbrief.md)
