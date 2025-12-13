@@ -64,6 +64,7 @@ export function SeasonProductsSection({ products, season, totalProducts, sharkPh
               key={product.id}
               product={product}
               sharkPhotos={sharkPhotos}
+              spoiler={true}
               hideBadges={true}
             />
           ))}

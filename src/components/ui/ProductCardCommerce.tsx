@@ -9,6 +9,7 @@ import { useSpoilerContext } from '@/contexts/SpoilerContext'
 interface ProductCardCommerceProps {
   product: ProductWithSharks
   compact?: boolean
+  spoiler?: boolean  // Override global spoiler setting for this card
   hideBadges?: boolean
   sharkPhotos?: Record<string, string>
   showEpisode?: boolean
@@ -21,12 +22,14 @@ function formatMoney(amount: number | null): string {
   return `$${amount.toLocaleString()}`
 }
 
-export function ProductCardCommerce({ product, compact = false, hideBadges = false, sharkPhotos = {}, showEpisode = false }: ProductCardCommerceProps) {
+export function ProductCardCommerce({ product, compact = false, spoiler, hideBadges = false, sharkPhotos = {}, showEpisode = false }: ProductCardCommerceProps) {
   const { spoilersHidden } = useSpoilerContext()
   const [imgError, setImgError] = useState(false)
   const [revealed, setRevealed] = useState(false)
 
-  const showDealInfo = !spoilersHidden || revealed
+  // Use per-card spoiler prop if provided, otherwise fall back to global context
+  const effectiveSpoilerState = spoiler !== undefined ? spoiler : spoilersHidden
+  const showDealInfo = !effectiveSpoilerState || revealed
   const gotDeal = product.deal_outcome === 'deal'
   const productSharks = product.shark_names || []
   const firstShark = productSharks[0]
