@@ -105,7 +105,7 @@ export function FilterSidebar({ stats, sharks, categories, currentSeason, hideSh
         {/* Category */}
         <div>
           <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Category</h3>
-          <div className="space-y-3 max-h-64 overflow-y-auto">
+          <div className="space-y-3">
             {categories.map(cat => (
               <label key={cat.id} className="flex items-center gap-3 text-[var(--ink-600)] cursor-pointer hover:text-[var(--ink-900)]">
                 <input

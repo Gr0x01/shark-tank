@@ -177,16 +177,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           />
         )}
 
-        {!filters.status && !filters.dealOutcome && !filters.search && (
-          <InterstitialBand
-            title="Filter by Status"
-            description="Curious which products are still thriving? Filter to see active businesses or those that closed."
-            ctaText="View All Active"
-            ctaHref="/still-in-business"
-            variant="cream"
-          />
-        )}
-
         <div className="flex gap-10">
           {/* Desktop Sidebar */}
           <Suspense fallback={null}>
