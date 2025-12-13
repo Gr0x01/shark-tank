@@ -10,7 +10,7 @@ import { WhereToBuySection } from '@/components/ui/WhereToBuySection'
 import { StickyCTABar } from '@/components/ui/StickyCTABar'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { addAmazonAffiliateTag } from '@/lib/utils'
-import { createProductOffers, escapeJsonLd } from '@/lib/seo/schemas'
+import { createArticleSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -131,25 +131,18 @@ export default async function ProductPage({ params }: Props) {
     photoUrl: sharkPhotos[name] || null,
   }))
 
+  // Get best available date for "last updated"
+  const lastUpdatedDate = product.last_verified || product.last_enriched_at || product.updated_at
+
   // JSON-LD Structured Data
-  const productJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    description: product.meta_description || product.tagline || product.pitch_summary,
-    image: product.photo_url,
-    brand: {
-      '@type': 'Brand',
-      name: product.company_name || product.name,
-    },
-    offers: createProductOffers({
-      slug: product.slug,
-      amazonUrl: product.amazon_url,
-      websiteUrl: product.website_url,
-      currentPrice: product.current_price,
-      status: product.status,
-    }),
-  }
+  const articleJsonLd = createArticleSchema({
+    headline: product.name,
+    description: product.meta_description || product.tagline || product.pitch_summary || '',
+    url: `${SITE_URL}/products/${slug}`,
+    datePublished: product.air_date || product.created_at || '2009-08-09', // Shark Tank series premiere
+    dateModified: lastUpdatedDate || undefined,
+    image: product.photo_url || undefined,
+  })
 
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
@@ -184,9 +177,6 @@ export default async function ProductPage({ params }: Props) {
     }],
   } : null
 
-  // Get best available date for "last updated"
-  const lastUpdatedDate = product.last_verified || product.last_enriched_at || product.updated_at
-
   // Convert Amazon URL to affiliate link
   const affiliateAmazonUrl = addAmazonAffiliateTag(product.amazon_url)
 
@@ -196,7 +186,7 @@ export default async function ProductPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: escapeJsonLd(productJsonLd)
+          __html: escapeJsonLd(articleJsonLd)
         }}
       />
       <script

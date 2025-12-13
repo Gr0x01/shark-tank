@@ -10,4 +10,4 @@ export const DEFAULT_OG_IMAGE_HEIGHT = 630
 export const SCHEMA_CONTEXT = 'https://schema.org'
 export const SCHEMA_ORG_NAME = 'tankd.io'
 export const SCHEMA_ORG_URL = SITE_URL
-export const SCHEMA_ORG_LOGO = `${SITE_URL}/logo.png`
+export const SCHEMA_ORG_LOGO = DEFAULT_OG_IMAGE
