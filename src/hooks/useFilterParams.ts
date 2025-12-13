@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
-export function useFilterParams() {
+export function useFilterParams(basePath: string = '/products') {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -35,17 +35,17 @@ export function useFilterParams() {
       const currentValues = searchParams.getAll(key)
       const action = currentValues.includes(value) ? 'remove' : 'add'
       const queryString = createQueryString(key, value, action)
-      router.push(`/products${queryString ? `?${queryString}` : ''}`, { scroll: false })
+      router.push(`${basePath}${queryString ? `?${queryString}` : ''}`, { scroll: false })
     },
-    [searchParams, createQueryString, router]
+    [searchParams, createQueryString, router, basePath]
   )
 
   const setFilter = useCallback(
     (key: string, value: string) => {
       const queryString = createQueryString(key, value, 'set')
-      router.push(`/products${queryString ? `?${queryString}` : ''}`, { scroll: false })
+      router.push(`${basePath}${queryString ? `?${queryString}` : ''}`, { scroll: false })
     },
-    [createQueryString, router]
+    [createQueryString, router, basePath]
   )
 
   const removeFilter = useCallback(
@@ -60,9 +60,9 @@ export function useFilterParams() {
         params.delete(key)
       }
 
-      router.push(`/products${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false })
+      router.push(`${basePath}${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false })
     },
-    [searchParams, router]
+    [searchParams, router, basePath]
   )
 
   const isChecked = useCallback(
@@ -73,8 +73,8 @@ export function useFilterParams() {
   )
 
   const clearAll = useCallback(() => {
-    router.push('/products', { scroll: false })
-  }, [router])
+    router.push(basePath, { scroll: false })
+  }, [router, basePath])
 
   const getFilterValue = useCallback(
     (key: string) => searchParams.get(key) || '',

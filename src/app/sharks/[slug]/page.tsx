@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 import {
   getSharkBySlug,
   getSharkStats,
@@ -8,19 +9,23 @@ import {
   getSharkSlugs,
   getSharkTopPerformers,
   getSharkCoInvestors,
-  getSharkTimeline,
+  getSharkPhotos,
   type SharkProductFilters
-} from '@/lib/queries/sharks'
+} from '@/lib/queries/cached'
 import { createClient } from '@/lib/supabase/server'
 import { SharkImage } from '@/components/ui/SharkImage'
 import { SharkTopDeals } from '@/components/ui/SharkTopDeals'
 import { SharkCoInvestors } from '@/components/ui/SharkCoInvestors'
-import { SharkPortfolioFilters } from '@/components/ui/SharkPortfolioFilters'
-import { SharkTimeline } from '@/components/ui/SharkTimeline'
+import { FilterSidebar } from '@/components/ui/FilterSidebar'
+import { FilterChips } from '@/components/ui/FilterChips'
+import { MobileFilters } from '@/components/ui/MobileFilters'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
-import { getSharkPhotos } from '@/lib/queries/products'
+import { computePortfolioStats } from '@/lib/utils/portfolioStats'
 import type { Category, ProductStatus, DealOutcome } from '@/lib/supabase/types'
 import { isSharkNarrative } from '@/lib/supabase/types'
+
+// ISR: Revalidate every 1 hour (portfolio changes, new deals)
+export const revalidate = 3600
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -136,7 +141,6 @@ export default async function SharkPage({ params, searchParams }: Props) {
     products,
     topPerformers,
     coInvestors,
-    timeline,
     categoriesData,
     sharkPhotos
   ] = await Promise.all([
@@ -145,7 +149,6 @@ export default async function SharkPage({ params, searchParams }: Props) {
     getSharkProducts(slug, filters),
     getSharkTopPerformers(slug),
     getSharkCoInvestors(slug),
-    getSharkTimeline(slug),
     supabase.from('categories').select('id, name, slug').order('name'),
     getSharkPhotos()
   ])
@@ -156,6 +159,8 @@ export default async function SharkPage({ params, searchParams }: Props) {
 
   const categories: Category[] = categoriesData.data || []
   const currentSeason = 17 // TODO: Get from database or config
+  const pathname = `/sharks/${slug}`
+  const portfolioStats = computePortfolioStats(products)
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'
 
@@ -428,31 +433,63 @@ export default async function SharkPage({ params, searchParams }: Props) {
               <h2 className="text-2xl font-medium">All Investments ({products.length})</h2>
             </div>
 
-            <SharkPortfolioFilters categories={categories} currentSeason={currentSeason} />
+            {/* Filter chips */}
+            <Suspense fallback={null}>
+              <FilterChips
+                sharks={[]}
+                categories={categories}
+                basePath={pathname}
+              />
+            </Suspense>
 
-            {products.length > 0 ? (
-              <div className="products-grid-home">
-                {products.map(product => (
-                  <ProductCardCommerce
-                    key={product.id}
-                    product={product}
-                    sharkPhotos={sharkPhotos}
-                  />
-                ))}
+            {/* Two-column layout: sidebar + products */}
+            <div className="flex gap-10">
+              {/* Desktop Sidebar */}
+              <Suspense fallback={null}>
+                <FilterSidebar
+                  stats={portfolioStats}
+                  sharks={[]}
+                  categories={categories}
+                  currentSeason={currentSeason}
+                  hideSharkFilter={true}
+                  basePath={pathname}
+                />
+              </Suspense>
+
+              {/* Product Grid */}
+              <div className="flex-1">
+                {products.length > 0 ? (
+                  <div className="products-grid-home">
+                    {products.map(product => (
+                      <ProductCardCommerce
+                        key={product.id}
+                        product={product}
+                        sharkPhotos={sharkPhotos}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="card text-center py-12">
+                    <p className="text-[var(--ink-400)] font-display">
+                      {Object.keys(filters).length > 0
+                        ? 'No products match the selected filters.'
+                        : 'No portfolio data available yet.'}
+                    </p>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="card text-center py-12">
-                <p className="text-[var(--ink-400)] font-display">
-                  {Object.keys(filters).length > 0
-                    ? 'No products match the selected filters.'
-                    : 'No portfolio data available yet.'}
-                </p>
-              </div>
-            )}
+            </div>
           </section>
 
-          {/* Timeline - Full width */}
-          <SharkTimeline timeline={timeline} sharkName={shark.name} sharkPhotos={sharkPhotos} />
+          {/* Mobile filters */}
+          <MobileFilters
+            stats={portfolioStats}
+            sharks={[]}
+            categories={categories}
+            currentSeason={currentSeason}
+            hideSharkFilter={true}
+            basePath={pathname}
+          />
         </div>
       </main>
     </>

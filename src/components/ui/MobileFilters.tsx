@@ -15,14 +15,16 @@ interface MobileFiltersProps {
   sharks: Shark[]
   categories: Category[]
   currentSeason: number
+  hideSharkFilter?: boolean
+  basePath?: string
 }
 
-export function MobileFilters({ stats, sharks, categories, currentSeason }: MobileFiltersProps) {
+export function MobileFilters({ stats, sharks, categories, currentSeason, hideSharkFilter, basePath }: MobileFiltersProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      <FilterButton onClick={() => setIsOpen(true)} />
+      <FilterButton onClick={() => setIsOpen(true)} hideSharkFilter={hideSharkFilter} basePath={basePath} />
       <FilterDrawer
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -30,6 +32,8 @@ export function MobileFilters({ stats, sharks, categories, currentSeason }: Mobi
         sharks={sharks}
         categories={categories}
         currentSeason={currentSeason}
+        hideSharkFilter={hideSharkFilter}
+        basePath={basePath}
       />
     </>
   )

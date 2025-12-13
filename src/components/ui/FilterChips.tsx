@@ -6,10 +6,11 @@ import { useFilterParams } from '@/hooks/useFilterParams'
 interface FilterChipsProps {
   sharks: { slug: string; name: string }[]
   categories: { slug: string; name: string }[]
+  basePath?: string
 }
 
-export function FilterChips({ sharks, categories }: FilterChipsProps) {
-  const { removeFilter, clearAll, getFilterValue, getFilterValues } = useFilterParams()
+export function FilterChips({ sharks, categories, basePath }: FilterChipsProps) {
+  const { removeFilter, clearAll, getFilterValue, getFilterValues } = useFilterParams(basePath)
 
   // Create lookup maps for O(1) access instead of O(n) find operations
   const sharksMap = useMemo(

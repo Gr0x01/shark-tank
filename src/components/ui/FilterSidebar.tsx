@@ -17,10 +17,12 @@ interface FilterSidebarProps {
   sharks: Shark[]
   categories: Category[]
   currentSeason: number
+  hideSharkFilter?: boolean
+  basePath?: string
 }
 
-export function FilterSidebar({ stats, sharks, categories, currentSeason }: FilterSidebarProps) {
-  const { toggleFilter, setFilter, isChecked, getFilterValue } = useFilterParams()
+export function FilterSidebar({ stats, sharks, categories, currentSeason, hideSharkFilter, basePath }: FilterSidebarProps) {
+  const { toggleFilter, setFilter, isChecked, getFilterValue } = useFilterParams(basePath)
 
   const currentSeasonFilter = getFilterValue('season')
   const currentSharkFilter = getFilterValue('shark')
@@ -38,15 +40,17 @@ export function FilterSidebar({ stats, sharks, categories, currentSeason }: Filt
           />
         </div>
 
-        {/* Shark */}
-        <div>
-          <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
-          <SharkSelect
-            sharks={sharks}
-            value={currentSharkFilter}
-            onChange={(value) => setFilter('shark', value)}
-          />
-        </div>
+        {/* Shark - Hidden on shark portfolio pages */}
+        {!hideSharkFilter && (
+          <div>
+            <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
+            <SharkSelect
+              sharks={sharks}
+              value={currentSharkFilter}
+              onChange={(value) => setFilter('shark', value)}
+            />
+          </div>
+        )}
 
         {/* Status */}
         <div>

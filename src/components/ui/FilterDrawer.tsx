@@ -19,6 +19,8 @@ interface FilterDrawerProps {
   sharks: Shark[]
   categories: Category[]
   currentSeason: number
+  hideSharkFilter?: boolean
+  basePath?: string
 }
 
 export function FilterDrawer({
@@ -28,18 +30,20 @@ export function FilterDrawer({
   sharks,
   categories,
   currentSeason,
+  hideSharkFilter,
+  basePath,
 }: FilterDrawerProps) {
-  const { toggleFilter, setFilter, isChecked, clearAll, getFilterValue, getFilterValues } = useFilterParams()
+  const { toggleFilter, setFilter, isChecked, clearAll, getFilterValue, getFilterValues } = useFilterParams(basePath)
 
   const currentSeasonFilter = getFilterValue('season')
   const currentSharkFilter = getFilterValue('shark')
 
-  // Count active filters
+  // Count active filters (exclude shark filter if hidden)
   const activeCount =
     (currentSeasonFilter ? 1 : 0) +
     getFilterValues('status').length +
     getFilterValues('deal').length +
-    (currentSharkFilter ? 1 : 0) +
+    (hideSharkFilter ? 0 : (currentSharkFilter ? 1 : 0)) +
     getFilterValues('category').length
 
   return (
@@ -98,15 +102,17 @@ export function FilterDrawer({
                   />
                 </div>
 
-                {/* Shark */}
-                <div>
-                  <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
-                  <SharkSelect
-                    sharks={sharks}
-                    value={currentSharkFilter}
-                    onChange={(value) => setFilter('shark', value)}
-                  />
-                </div>
+                {/* Shark - Hidden on shark portfolio pages */}
+                {!hideSharkFilter && (
+                  <div>
+                    <h3 className="font-display font-medium text-[var(--ink-900)] text-sm mb-3">Shark</h3>
+                    <SharkSelect
+                      sharks={sharks}
+                      value={currentSharkFilter}
+                      onChange={(value) => setFilter('shark', value)}
+                    />
+                  </div>
+                )}
 
                 {/* Status */}
                 <div>

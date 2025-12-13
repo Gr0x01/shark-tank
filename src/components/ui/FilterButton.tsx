@@ -4,17 +4,19 @@ import { useSearchParams } from 'next/navigation'
 
 interface FilterButtonProps {
   onClick: () => void
+  hideSharkFilter?: boolean
+  basePath?: string
 }
 
-export function FilterButton({ onClick }: FilterButtonProps) {
+export function FilterButton({ onClick, hideSharkFilter }: FilterButtonProps) {
   const searchParams = useSearchParams()
 
-  // Count active filters
+  // Count active filters (exclude shark filter if hidden)
   const activeCount =
     (searchParams.get('season') ? 1 : 0) +
     searchParams.getAll('status').length +
     searchParams.getAll('deal').length +
-    searchParams.getAll('shark').length +
+    (hideSharkFilter ? 0 : searchParams.getAll('shark').length) +
     searchParams.getAll('category').length
 
   return (
