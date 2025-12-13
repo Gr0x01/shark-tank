@@ -1,8 +1,11 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { getSeasons, getSeasonStats } from '@/lib/queries/episodes'
+import { getSeasons, getSeasonStats } from '@/lib/queries/cached'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
+
+// ISR: Revalidate every 24 hours (historical data, rarely changes)
+export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = 'All Seasons | tankd.io'

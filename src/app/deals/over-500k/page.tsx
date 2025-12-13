@@ -1,10 +1,13 @@
 import { Metadata } from 'next'
-import { getProducts, getProductStats, getSharkPhotos } from '@/lib/queries/products'
+import { getProducts, getProductStats, getSharkPhotos } from '@/lib/queries/cached'
 import { loadSEOContent } from '@/lib/seo/seo-content'
 import { FilteredListingPage } from '@/components/seo/FilteredListingPage'
 import { SEOErrorBoundary } from '@/components/seo/SEOErrorBoundary'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
+
+// ISR: Revalidate every 6 hours (SEO content, deal data)
+export const revalidate = 21600
 
 const PAGE_SLUG = 'deals-over-500k'
 const PAGE_TITLE = 'Shark Tank Mega Deals Over $500K'

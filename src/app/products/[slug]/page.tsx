@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getProductBySlug, getProductSlugs, getProductsByEpisode, getProductsByCategory, getSharkPhotos } from '@/lib/queries/products'
+import { getProductBySlug, getProductSlugs, getProductsByEpisode, getProductsByCategory, getSharkPhotos } from '@/lib/queries/cached'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { ProductImage } from '@/components/ui/ProductImage'
 import { DealRevealSection } from '@/components/ui/DealRevealSection'
@@ -11,6 +11,9 @@ import { StickyCTABar } from '@/components/ui/StickyCTABar'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { addAmazonAffiliateTag } from '@/lib/utils'
 import { createArticleSchema, escapeJsonLd } from '@/lib/seo/schemas'
+
+// ISR: Revalidate every 6 hours (narratives/deals change over months, not hours)
+export const revalidate = 21600
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -97,7 +100,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const slugs = await getProductSlugs(100)
+  // Pre-render all products at build time for instant page loads
+  const slugs = await getProductSlugs()  // No limit - render all 618 products
   return slugs.map(slug => ({ slug }))
 }
 

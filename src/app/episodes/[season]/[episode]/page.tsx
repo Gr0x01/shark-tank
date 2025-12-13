@@ -1,11 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getEpisode, getEpisodeProducts } from '@/lib/queries/episodes'
-import { getSharkPhotos } from '@/lib/queries/products'
+import { getEpisode, getEpisodeProducts, getSharkPhotos } from '@/lib/queries/cached'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createTVEpisodeSchema, escapeJsonLd } from '@/lib/seo/schemas'
+
+// ISR: Revalidate every 24 hours (historical episode data)
+export const revalidate = 86400
 
 type Props = {
   params: Promise<{ season: string; episode: string }>

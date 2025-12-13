@@ -1,8 +1,11 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { getCategoriesWithCounts } from '@/lib/queries/categories'
+import { getCategoriesWithCounts } from '@/lib/queries/cached'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
+
+// ISR: Revalidate every 24 hours (categories rarely change)
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Product Categories | Shark Tank Products by Industry',

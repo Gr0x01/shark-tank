@@ -1,10 +1,12 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { getSeasonNumbers, getSeasonStats, getEpisodesBySeason } from '@/lib/queries/episodes'
-import { getProductsBySeason, getSharkPhotos } from '@/lib/queries/products'
+import { getSeasonNumbers, getSeasonStats, getEpisodesBySeason, getProductsBySeason, getSharkPhotos } from '@/lib/queries/cached'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
+
+// ISR: Revalidate every 24 hours (historical season data)
+export const revalidate = 86400
 
 type Props = {
   params: Promise<{ number: string }>

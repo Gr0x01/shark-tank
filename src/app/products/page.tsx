@@ -1,8 +1,6 @@
 import { Metadata } from 'next'
 import { Suspense } from 'react'
-import { getProducts, getProductStats, getSharkPhotos } from '@/lib/queries/products'
-import { getCategories } from '@/lib/queries/categories'
-import { getSharks } from '@/lib/queries/sharks'
+import { getProducts, getProductStats, getSharkPhotos, getCategories, getSharks } from '@/lib/queries/cached'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { FilterSidebar } from '@/components/ui/FilterSidebar'
 import { FilterChips } from '@/components/ui/FilterChips'
@@ -11,6 +9,9 @@ import { InterstitialBand } from '@/components/ui/InterstitialBand'
 import type { ProductStatus, DealOutcome } from '@/lib/supabase/types'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
+
+// ISR: Revalidate every 6 hours (new products weekly, deal updates monthly)
+export const revalidate = 21600
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = 'All Products | tankd.io'

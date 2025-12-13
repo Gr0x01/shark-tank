@@ -1,10 +1,13 @@
 import { Metadata } from 'next'
-import { getProducts, getSharkPhotos } from '@/lib/queries/products'
+import { getProducts, getSharkPhotos } from '@/lib/queries/cached'
 import { loadSEOContent } from '@/lib/seo/seo-content'
 import { ArticlePage } from '@/components/seo/ArticlePage'
 import { SEOErrorBoundary } from '@/components/seo/SEOErrorBoundary'
 import { createBreadcrumbSchema, createArticleSchema, escapeJsonLd } from '@/lib/seo/schemas'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
+
+// ISR: Revalidate every 6 hours (SEO content)
+export const revalidate = 21600
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await loadSEOContent('success-stories')

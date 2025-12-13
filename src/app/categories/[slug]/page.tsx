@@ -1,11 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getCategoryBySlug, getCategoryProducts, getCategorySlugs } from '@/lib/queries/categories'
-import { getSharkPhotos } from '@/lib/queries/products'
+import { getCategoryBySlug, getCategoryProducts, getCategorySlugs, getSharkPhotos } from '@/lib/queries/cached'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
+
+// ISR: Revalidate every 24 hours (category products updated weekly)
+export const revalidate = 86400
 
 type Props = {
   params: Promise<{ slug: string }>

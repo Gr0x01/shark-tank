@@ -1,7 +1,10 @@
 import { Metadata } from 'next'
-import { getSharks, getAllSharkStats, getLeaderboardSharks } from '@/lib/queries/sharks'
+import { getSharks, getAllSharkStats, getLeaderboardSharks } from '@/lib/queries/cached'
 import { SharkLeaderboard } from '@/components/ui/SharkLeaderboard'
 import { SharkFilter } from '@/components/ui/SharkFilter'
+
+// ISR: Revalidate every 24 hours (shark profiles rarely change)
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'The Sharks - All Shark Tank Investors & Their Portfolios | Shark Tank Products',
