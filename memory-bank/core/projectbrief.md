@@ -1,7 +1,7 @@
 ---
-Last-Updated: 2025-12-10
+Last-Updated: 2025-12-13
 Maintainer: RB
-Status: Defined
+Status: Live - Phase 4
 ---
 
 # Project Brief: tankd.io
@@ -72,31 +72,33 @@ Solve the problem of finding reliable, up-to-date information about Shark Tank p
 - User accounts or reviews
 - Real-time inventory checking
 
-## Timeline & Phases
+## Timeline & Phases (REVISED - Dec 2025)
 
-### Phase 1: Foundation (Current)
+### Phase 1: Foundation ✅ COMPLETE (Dec 10, 2025)
 - Project scaffolding and memory bank
 - Database schema design
-- Basic Next.js app structure
 - Initial data model
 
-### Phase 2: MVP
+### Phase 2: MVP ✅ COMPLETE (Dec 10, 2025)
 - Core pages (product, shark, season, episode)
 - Basic filtering and search
-- Initial data load (seed from Wikipedia/public sources)
+- Initial data load (589 products scraped)
 - Affiliate link integration
 
-### Phase 3: Differentiation
+### Phase 3: Differentiation ✅ COMPLETE (Dec 12, 2025)
 - Status verification system
 - Freshness tracking and badges
 - Advanced shark portfolio stats
-- Episode alert system for new airings
+- Narrative enrichment (all 618 products + 47 sharks)
+- Automated episode ingestion workflow
+- Vercel Cron automation (3 jobs)
 
-### Phase 4: Scale
-- Full historical data (all 17 seasons)
-- Automated status checking
-- SEO optimization
-- Analytics and conversion tracking
+### Phase 4: Launch & Growth 🚀 CURRENT (Dec 13+)
+- **Google indexing** - Submitted sitemap, awaiting 1-4 week indexation
+- **External link building** - Reddit, Product Hunt, social media
+- **Weekly episode workflow** - Friday episode creation & deal updates
+- **SEO monitoring** - Google Search Console, traffic analytics
+- **Content freshness** - Automated enrichment, narrative updates
 
 ## Technical Constraints
 - **Budget-conscious**: Free tiers initially (Vercel, Supabase)
@@ -106,12 +108,12 @@ Solve the problem of finding reliable, up-to-date information about Shark Tank p
 
 ## Risks & Assumptions
 
-### Key Risks
-- **Data sourcing**: Initial scraping/manual entry effort
-- **Freshness maintenance**: Products go out of business constantly
-- **Affiliate approval**: Amazon Associates needs live site first
+### Key Risks (Mitigated)
+- **Data sourcing** ✅ - Scraped 589 products, manually added 18 greatest hits
+- **Freshness maintenance** ✅ - Automated with Vercel Cron + database triggers
+- **Affiliate approval** ✅ - Amazon Associates approved
 
-### Assumptions
-- Wikipedia/public sources have good baseline data
-- Shark Tank viewership creates sustained search demand
-- Better UX + freshness can capture market share
+### Assumptions (Validated)
+- Wikipedia/public sources have good baseline data ✅
+- Shark Tank viewership creates sustained search demand ✅
+- Better UX + freshness can capture market share (in progress)

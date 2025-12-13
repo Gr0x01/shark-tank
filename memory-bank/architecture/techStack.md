@@ -1,7 +1,7 @@
 ---
-Last-Updated: 2025-12-12
+Last-Updated: 2025-12-13
 Maintainer: RB
-Status: Defined
+Status: Live - Production
 ---
 
 # Technology Stack: tankd.io
@@ -28,9 +28,12 @@ Modern web stack optimized for rapid development and minimal operational overhea
 - **Database Hosting**: Supabase (managed Postgres)
 - **File Storage**: Supabase Storage
 - **CDN**: Vercel Edge Network (included)
-- **Analytics**: PostHog (product analytics)
+- **Analytics**:
+  - Google Analytics 4 (active, tracking ID: G-8G8CLL4K3F)
+  - Plausible.io (active, privacy-friendly backup)
+  - PostHog (not yet integrated - planned for Phase 4)
 - **Monitoring**: Vercel Analytics + Supabase monitoring
-- **Automation**: Vercel Cron (daily scheduled jobs)
+- **Automation**: Vercel Cron (3 scheduled jobs: episode detection, daily enrichment, narrative refresh)
 
 ## Development Tools
 
@@ -49,6 +52,17 @@ Modern web stack optimized for rapid development and minimal operational overhea
 ### Specialized Tools
 - **Data Validation**: Zod for runtime type checking
 - **Environment Variables**: Next.js built-in env support
+
+### LLM & AI Tools
+- **Language Model**: OpenAI gpt-4.1-mini (Flex tier, 50% cost savings)
+- **Search API**: Tavily (web research for enrichment)
+- **Use Cases**:
+  - Product narrative generation (~$0.001/product)
+  - Shark biography enrichment (~$0.0012/shark)
+  - Deal detail extraction from web search
+- **Performance**: 100% accuracy on 618 products, zero hallucinations
+- **Monthly Cost**: ~$3.82 for all automation (OpenAI ~$0.20, Tavily ~$3.60)
+- **Reference**: See `/memory-bank/architecture/llm-models.md` for model testing details
 
 ## Architecture Decisions
 
@@ -99,6 +113,10 @@ NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 
 # Automation
 CRON_SECRET=your_cron_secret
+
+# AI/LLM
+OPENAI_API_KEY=your_openai_api_key
+TAVILY_API_KEY=your_tavily_api_key
 ```
 
 ## Deployment Architecture

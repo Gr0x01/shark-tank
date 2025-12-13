@@ -1,12 +1,14 @@
 ---
 Last-Updated: 2025-12-13
 Maintainer: RB
-Status: Archived - Historical Reference Only
+Status: Archived (Dec 13, 2025 - Project went live)
 ---
 
 # tankd.io - Phase 1-3 History
 
-This document contains historical implementation details from the project's development phases. This is archived context - not needed for day-to-day operations.
+**Archived: December 13, 2025** (site went live)
+
+This document contains historical implementation details from Phase 1-3 (Dec 10-13, 2025). This is archived context - not needed for day-to-day operations. For current operational procedures, see `/memory-bank/development/activeContext.md`.
 
 ## Phase 2: Data Pipeline (Completed)
 

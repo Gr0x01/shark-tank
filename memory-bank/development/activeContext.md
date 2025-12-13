@@ -116,3 +116,137 @@ See `archive/` directory for:
 - Manual seed product imports
 - Detailed system implementations
 - Migration history
+
+---
+
+## Operational Procedures
+
+### Google Search Console Checklist
+
+**Weekly Monitoring** (10 minutes):
+- [ ] GSC → Coverage report: Check indexing progress
+- [ ] Look for "Discovered - not indexed" warnings
+- [ ] Monitor "Page indexing" status (should increase weekly)
+- [ ] Check for new validation errors (none expected with Article schema)
+
+**Manual Indexing Requests**:
+1. GSC → URL Inspection → Enter URL
+2. Click "Request Indexing" button
+3. **Priority pages** (do first):
+   - Home: `https://tankd.io`
+   - Products listing: `https://tankd.io/products`
+   - Sharks listing: `https://tankd.io/sharks`
+   - Top 5 product pages (Bombas, Scrub Daddy, Ring, Squatty Potty, Tipsy Elves)
+   - Still in business: `https://tankd.io/still-in-business`
+
+**Expected Timeline**:
+- Manual indexing: 2-7 days
+- Full site indexation: 1-4 weeks (618 products is a lot)
+- If "Discovered - not indexed" persists after 3 weeks, request manual indexing for those pages
+
+---
+
+### External Link Building Strategy
+
+**Reddit Engagement** (1-2x per week):
+- **Subreddit**: r/sharktank
+- **Strategy**: Helpful comments mentioning tankd.io when relevant
+- **Example**: "I track all Shark Tank products at tankd.io - [Product] is still active and selling on Amazon!"
+- **Avoid**: Spammy self-promotion, posting every episode
+
+**Product Hunt Launch**:
+- **Timing**: After Google indexes 50+ pages (2-3 weeks from Dec 13)
+- **Prep**: Create compelling tagline, screenshots, demo GIF
+- **Goal**: 50-100 upvotes, external backlinks
+- **Tagline idea**: "Every Shark Tank product, deal & business status in one place"
+
+**Social Media**:
+- **Twitter/X**: Share weekly episode updates, success stories (2-3x per week)
+- **LinkedIn**: Share data insights (e.g., "40% of Shark Tank deals fail within 5 years")
+- **Frequency**: 2-3x per week, not daily
+
+---
+
+### Weekly Monitoring Checklist
+
+**Daily** (2 minutes):
+- [ ] Vercel Dashboard → Functions → Check cron execution:
+  - `/api/cron/daily-enrich` (10am UTC)
+  - `/api/cron/process-narrative-refreshes` (every 3 hours)
+  - `/api/cron/auto-episode-check` (6am UTC Saturdays)
+- [ ] Supabase Dashboard → Performance: Query time <100ms avg
+- [ ] Google Analytics → Real-time: Verify tracking active
+
+**Weekly** (10 minutes):
+- [ ] Google Search Console: Coverage report, indexing progress
+- [ ] Vercel Analytics: Error rate (should be <1%)
+- [ ] Cost monitoring: OpenAI + Tavily API usage (should be ~$3-4/month)
+- [ ] Reddit r/sharktank: Engage on 1-2 posts about recent episode
+
+**Monthly** (30 minutes):
+- [ ] Google Search Console: Search performance (impressions, clicks, CTR)
+- [ ] External links audit: Google "site:tankd.io" to see who's linking
+- [ ] Content freshness: Check products with stale `last_verified` dates
+- [ ] Cost analysis: Total API spend vs budget
+
+---
+
+### Cost Monitoring & Alerts
+
+**Current Monthly Costs** (~$3.82/month API usage):
+- **Vercel Pro**: $20/month (compute included, not per-API cost)
+- **Supabase Free tier**: $0 (within limits: <500MB database, <2GB bandwidth)
+- **OpenAI API**: ~$0.20/month (Flex tier, 50% cost savings)
+- **Tavily API**: ~$3.60/month (search queries for enrichment)
+- **Google Analytics**: $0 (free tier)
+- **Plausible**: $0 (free tier)
+
+**Alert Thresholds** (set up manual monitoring):
+- OpenAI spend >$10/month (unusual enrichment volume, check for runaway cron)
+- Tavily spend >$20/month (hitting rate limits or over-enriching)
+- Vercel bandwidth >100GB/month (viral traffic, good problem to have!)
+
+**When to Scale**:
+- Traffic >10k daily visitors → Upgrade Supabase (connection pooling, better performance)
+- Products >2000 → Consider batch enrichment optimizations
+- API costs >$50/month → Review enrichment triggers, reduce cron frequency
+
+---
+
+### Troubleshooting Quick Reference
+
+**Cron job failed**:
+- **Symptom**: No Vercel Cron execution in logs
+- **Check**: Vercel Dashboard → Functions → Filter by `/api/cron/`
+- **Fix**: Re-run manually:
+  ```bash
+  npx tsx scripts/daily-enrich-pending.ts
+  npx tsx scripts/process-narrative-refreshes.ts
+  ```
+
+**Product narrative not refreshing**:
+- **Symptom**: Deal details updated but narrative still stale
+- **Check**: Database query:
+  ```sql
+  SELECT narrative_refresh_scheduled_at, narrative_version
+  FROM products WHERE slug = 'product-slug';
+  ```
+- **Fix**: Manually flag for refresh:
+  ```sql
+  SELECT flag_product_for_narrative_refresh('product-uuid');
+  ```
+
+**Search Console: "Discovered - not indexed"**:
+- **Symptom**: Pages found but not indexed by Google
+- **Likely cause**: Too many pages submitted at once (618 products)
+- **Fix**: Request manual indexing for top 10 pages, wait 2-3 weeks for auto-indexing
+
+**Site down or slow**:
+- **Check**: Vercel Dashboard → Deployments (recent deploy?)
+- **Check**: Supabase Dashboard → Performance (query time spike?)
+- **Rollback**: Vercel Dashboard → Deployments → Previous version → Promote to Production
+
+**Database migration failed**:
+- **Never run migrations in production without testing locally first**
+- **Rollback**: Migrations are one-way, restore from Supabase backup if needed
+- **Prevention**: Always run `npx supabase db push` locally first
