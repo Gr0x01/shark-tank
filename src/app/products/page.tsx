@@ -138,7 +138,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           <h1 className="text-3xl md:text-4xl font-medium mb-2">All Products</h1>
           {filters.search && (
             <p className="text-sm text-[var(--ink-500)] mb-2">
-              Showing results for "<span className="font-medium text-[var(--ink-900)]">{filters.search}</span>"
+              Showing results for &ldquo;<span className="font-medium text-[var(--ink-900)]">{filters.search}</span>&rdquo;
             </p>
           )}
           <p className="text-[var(--ink-500)]">

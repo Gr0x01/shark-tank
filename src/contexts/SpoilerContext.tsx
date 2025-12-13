@@ -28,6 +28,7 @@ export function SpoilerProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = getCookie(COOKIE_NAME)
     if (saved !== null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSpoilersHidden(saved === 'true')
     }
   }, [])

@@ -379,3 +379,26 @@ export async function getSharkPhotos(): Promise<Record<string, string>> {
   }
   return sharkPhotos
 }
+
+/**
+ * Get products from the same category, excluding the current product
+ * Used for "More in [Category]" section on product pages
+ */
+export async function getProductsByCategory(
+  categoryId: string,
+  excludeSlug: string,
+  limit = 6
+): Promise<ProductWithSharks[]> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('products_with_sharks')
+    .select('*')
+    .eq('category_id', categoryId)
+    .neq('slug', excludeSlug)
+    .order('air_date', { ascending: false, nullsFirst: false })
+    .limit(limit)
+
+  if (error) throw error
+  return (data as ProductWithSharks[]) || []
+}

@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getProductBySlug, getProductSlugs, getProductsByEpisode, getSharkPhotos } from '@/lib/queries/products'
+import { getProductBySlug, getProductSlugs, getProductsByEpisode, getProductsByCategory, getSharkPhotos } from '@/lib/queries/products'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 import { ProductImage } from '@/components/ui/ProductImage'
 import { DealRevealSection } from '@/components/ui/DealRevealSection'
@@ -114,9 +114,12 @@ export default async function ProductPage({ params }: Props) {
   const hasNarrative = narrative && Object.values(narrative).some(v => v)
 
   // Fetch related products and all shark photos in parallel
-  const [relatedProducts, sharkPhotos] = await Promise.all([
+  const [relatedProducts, categoryProducts, sharkPhotos] = await Promise.all([
     product.season && product.episode_number
       ? getProductsByEpisode(product.season, product.episode_number, slug)
+      : Promise.resolve([]),
+    product.category_id
+      ? getProductsByCategory(product.category_id, slug).catch(() => [])
       : Promise.resolve([]),
     getSharkPhotos(),
   ])
@@ -154,7 +157,17 @@ export default async function ProductPage({ params }: Props) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
       { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/products` },
-      { '@type': 'ListItem', position: 3, name: product.name },
+      ...(product.category_name && product.category_slug ? [{
+        '@type': 'ListItem',
+        position: 3,
+        name: product.category_name,
+        item: `${SITE_URL}/categories/${product.category_slug}`
+      }] : []),
+      {
+        '@type': 'ListItem',
+        position: product.category_name ? 4 : 3,
+        name: product.name
+      },
     ],
   }
 
@@ -210,6 +223,13 @@ export default async function ProductPage({ params }: Props) {
               <ol className="product-breadcrumb-list">
                 <li><Link href="/">Home</Link></li>
                 <li><Link href="/products">Products</Link></li>
+                {product.category_name && product.category_slug && (
+                  <li>
+                    <Link href={`/categories/${product.category_slug}`}>
+                      {product.category_name}
+                    </Link>
+                  </li>
+                )}
                 <li aria-current="page">{product.name}</li>
               </ol>
             </nav>
@@ -245,6 +265,21 @@ export default async function ProductPage({ params }: Props) {
                     year: 'numeric'
                   })}
                 </time>
+              )}
+
+              {/* Category Link */}
+              {product.category_name && product.category_slug && (
+                <div className="mb-2">
+                  <Link
+                    href={`/categories/${product.category_slug}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-display font-medium text-[var(--shark-blue)] hover:text-[var(--shark-blue-dark)] transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    {product.category_name}
+                  </Link>
+                </div>
               )}
 
               <h1 className="product-title">{product.name}</h1>
@@ -433,6 +468,27 @@ export default async function ProductPage({ params }: Props) {
                 </div>
               )}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* More in [Category Name] */}
+      {product.category_name && categoryProducts.length >= 2 && (
+        <section className="product-related-section">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="related-heading">More in {product.category_name}</h2>
+            <div className="related-products-grid">
+              {categoryProducts.slice(0, 6).map(p => (
+                <ProductCardCommerce key={p.id} product={p} sharkPhotos={sharkPhotos} />
+              ))}
+            </div>
+
+            <Link
+              href={`/categories/${product.category_slug}`}
+              className="btn-cta-primary mt-6"
+            >
+              View All {product.category_name} Products
+            </Link>
           </div>
         </section>
       )}

@@ -131,6 +131,8 @@ export interface Product {
 export interface ProductWithSharks extends Product {
   shark_names: string[]
   shark_slugs: string[]
+  category_name: string | null
+  category_slug: string | null
 }
 
 export interface SharkStats {

@@ -115,7 +115,7 @@ async function main() {
   console.log('━'.repeat(60) + '\n');
 
   const manualSeed = loadManualSeed();
-  let allDiscovered: DiscoveredProduct[] = [];
+  const allDiscovered: DiscoveredProduct[] = [];
 
   if (!skipDiscovery && !onlySeed && seasonsToDiscover.length > 0) {
     console.log('\n🔍 Running LLM-based discovery...\n');

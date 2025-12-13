@@ -21,6 +21,11 @@ interface SeasonData {
   season: number
 }
 
+interface EpisodeSlug {
+  season: number
+  episode_number: number
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = createStaticClient()
 
@@ -51,6 +56,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Get unique seasons
   const uniqueSeasons = [...new Set((seasons as SeasonData[] || []).map(s => s.season))]
+
+  // Fetch all episodes
+  const { data: episodes } = await supabase
+    .from('episodes')
+    .select('season, episode_number')
+    .order('season', { ascending: false })
+    .order('episode_number', { ascending: false })
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -102,6 +114,62 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.6,
     },
+
+    // === Content Hubs ===
+    {
+      url: `${SITE_URL}/categories`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/best-deals`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+
+    // === Deal Filters ===
+    {
+      url: `${SITE_URL}/deals/under-100k`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/deals/100k-to-500k`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/deals/over-500k`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+
+    // === Informational Pages ===
+    {
+      url: `${SITE_URL}/about`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+
+    // === Legal Pages ===
+    {
+      url: `${SITE_URL}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${SITE_URL}/terms`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
   ]
 
   // Product pages
@@ -136,11 +204,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }))
 
+  // Episode pages
+  const episodePages: MetadataRoute.Sitemap = (episodes as EpisodeSlug[] || []).map((episode) => ({
+    url: `${SITE_URL}/episodes/${episode.season}/${episode.episode_number}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
   return [
     ...staticPages,
     ...productPages,
     ...sharkPages,
     ...categoryPages,
     ...seasonPages,
+    ...episodePages,
   ]
 }

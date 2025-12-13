@@ -60,11 +60,10 @@ export function SeasonProductsSection({ products, season, totalProducts, sharkPh
         
         <div className="products-grid-home">
           {filteredProducts.map((product) => (
-            <ProductCardCommerce 
-              key={product.id} 
+            <ProductCardCommerce
+              key={product.id}
               product={product}
               sharkPhotos={sharkPhotos}
-              spoiler={true}
               hideBadges={true}
             />
           ))}

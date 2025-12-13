@@ -9,7 +9,6 @@ import { useSpoilerContext } from '@/contexts/SpoilerContext'
 interface ProductCardCommerceProps {
   product: ProductWithSharks
   compact?: boolean
-  spoiler?: boolean
   hideBadges?: boolean
   sharkPhotos?: Record<string, string>
   showEpisode?: boolean
@@ -22,7 +21,7 @@ function formatMoney(amount: number | null): string {
   return `$${amount.toLocaleString()}`
 }
 
-export function ProductCardCommerce({ product, compact = false, spoiler = false, hideBadges = false, sharkPhotos = {}, showEpisode = false }: ProductCardCommerceProps) {
+export function ProductCardCommerce({ product, compact = false, hideBadges = false, sharkPhotos = {}, showEpisode = false }: ProductCardCommerceProps) {
   const { spoilersHidden } = useSpoilerContext()
   const [imgError, setImgError] = useState(false)
   const [revealed, setRevealed] = useState(false)

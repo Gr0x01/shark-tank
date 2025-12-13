@@ -28,6 +28,7 @@ export function Header() {
   const { results, isLoading, error } = useSearchTypeahead(searchQuery)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
   }, [])
 
@@ -55,6 +56,7 @@ export function Header() {
 
   // Reset selected index when query changes or results become empty
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedIndex(-1)
   }, [searchQuery, results.length])
 
@@ -259,7 +261,7 @@ export function Header() {
                         setSelectedIndex(-1)
                       }}
                     >
-                      View all results for "{searchQuery}"
+                      View all results for &ldquo;{searchQuery}&rdquo;
                     </Link>
                   </div>
                 )}
