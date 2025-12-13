@@ -39,6 +39,7 @@ Status: Phase 3 Complete - Production Ready
 | 20 | Retired Shark Status System | Dec 12 | ✅ Complete |
 | 21 | Vercel Cron Automation | Dec 12 | ✅ Complete |
 | 22 | Manual Seed Products Import | Dec 13 | ✅ Complete (18 products) |
+| 23 | Delayed Narrative Refresh System | Dec 13 | ✅ Complete |
 
 ## Current Status (as of Dec 13, 2025)
 
@@ -348,6 +349,69 @@ Scripts for ingesting new Shark Tank episodes as they air:
 **Files Created:**
 - `scripts/import-seed-products.ts` - One-time import (can be run again if needed)
 - Temp scripts cleaned up after verification
+
+### Delayed Narrative Refresh System (Dec 13, 2025)
+
+**Problem Solved:**
+- When watching episodes live, deal details are updated incrementally (offer → counter → final deal)
+- Previous system would regenerate narrative after each edit (~$0.001 per regeneration)
+- During a single episode, 3-5 edits = 3-5× wasted narrative regenerations
+
+**Solution: 1-Hour Cooldown System**
+- Deal field changes trigger `narrative_refresh_scheduled_at = NOW()`
+- Each subsequent edit resets the timer
+- Every 3 hours, cron checks for products where last edit was 1+ hour ago
+- Only then is narrative flagged for regeneration
+- Multiple edits batch together into single narrative refresh
+
+**Implementation:**
+
+1. **Migration `00010_delayed_narrative_refresh.sql`:**
+   - Added `narrative_refresh_scheduled_at` TIMESTAMPTZ column
+   - Updated `flag_narrative_refresh_on_status_change()` to clear scheduled refreshes (immediate takes precedence)
+   - Created `schedule_narrative_refresh_on_deal_change()` trigger function
+   - Monitors 8 deal fields: `deal_outcome`, `deal_amount`, `deal_equity`, `royalty_deal`, `royalty_terms`, `deal_notes`, `asking_amount`, `asking_equity`
+   - Only schedules if `narrative_version > 0` (prevents conflict with immediate refresh)
+   - Created `process_scheduled_narrative_refreshes()` function with `FOR UPDATE SKIP LOCKED` (prevents concurrent edit race conditions)
+   - Optimized partial index: `WHERE narrative_refresh_scheduled_at IS NOT NULL AND narrative_version > 0`
+
+2. **Processing Script `scripts/process-narrative-refreshes.ts`:**
+   - Calls database function to find products past 1-hour cooldown
+   - Flags them for enrichment (sets `narrative_version = 0`)
+   - Enhanced error logging with database connection diagnostics
+   - Array validation to prevent runtime errors
+
+3. **API Route `/api/cron/process-narrative-refreshes/route.ts`:**
+   - Vercel Cron endpoint with `CRON_SECRET` authentication
+   - Runs every 3 hours (not hourly - appropriate for MVP scale)
+   - Only passes necessary env vars (security improvement)
+   - 30-second timeout (fast execution, just database queries)
+
+4. **Vercel Cron Configuration:**
+   - Schedule: `0 */3 * * *` (every 3 hours: 12am, 3am, 6am, 9am, 12pm, 3pm, 6pm, 9pm UTC)
+   - Conservative schedule for solo dev MVP (1 episode/week)
+
+**Code Review:**
+- Fixed 3 critical issues: trigger race conditions, env var leakage, concurrent edit handling
+- Fixed 4 warnings: index optimization, error logging, cron schedule, return validation
+- Added `FOR UPDATE SKIP LOCKED` to prevent lost updates during concurrent transactions
+
+**Benefits:**
+- **Cost savings**: Prevents duplicate narrative regenerations during live episode updates
+- **Better UX**: User can make multiple edits without worrying about system overhead
+- **Automatic**: Zero manual intervention required
+- **Scalable**: Works seamlessly with existing daily enrichment cron
+
+**User Workflow:**
+1. Watch episode, update deal details multiple times as you watch
+2. Each edit resets 1-hour timer
+3. System waits for 1 hour of inactivity
+4. Cron flags product for refresh
+5. Daily enrichment cron regenerates narrative with final details
+
+**Status:** Deployed to production (Dec 13, 2025)
+
+**Cost Impact:** ~$0.50-1.00/month in additional cron execution, but saves $0.001+ per prevented duplicate regeneration
 
 ## Phase 4: Future Enhancements
 

@@ -43,12 +43,20 @@ npx tsx scripts/enrich-shark-narratives.ts --shark "Mark"    # Shark narratives
 npx tsx scripts/enrich-shark-narratives.ts --all             # All sharks
 
 # === CONTENT MAINTENANCE ===
-# When product status changes, narrative is auto-flagged for refresh (database trigger)
-# Run this to regenerate narratives for flagged products:
+# When product status changes, narrative is auto-flagged for immediate refresh (database trigger)
+# When deal details change, narrative is scheduled for refresh 1 hour later (cooldown system)
+
+# Regenerate narratives for flagged products:
 npx tsx scripts/enrich-narratives.ts --limit 10
+
+# Process scheduled narrative refreshes (normally runs every 3 hours via cron):
+npx tsx scripts/process-narrative-refreshes.ts
 
 # Check which products need narrative refresh:
 # SELECT id, name, status FROM products WHERE narrative_version = 0;
+
+# Check which products have scheduled refreshes pending:
+# SELECT id, name, narrative_refresh_scheduled_at FROM products WHERE narrative_refresh_scheduled_at IS NOT NULL;
 
 # Manually flag a product for narrative refresh (if needed):
 # SELECT flag_product_for_narrative_refresh('product-uuid');
@@ -71,10 +79,14 @@ npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
 2. Find product names (Google, Reddit r/sharktank, competitor)
 3. Run `new-episode.ts` with product names → pages go live with backstory
 4. Watch episode, note deals
-5. Run `update-deal.ts` for each product → deal details added
-6. **Automated daily cron catches anything missed** (runs at 10am UTC via Vercel)
+5. Run `update-deal.ts` for each product as you watch → deal details added
+   - **Multiple updates are OK!** System batches them together with 1-hour cooldown
+   - Narrative regeneration happens automatically 1+ hours after your last edit
+6. **Automated systems handle the rest:**
+   - Every 3 hours: Check for products ready for narrative refresh (1hr+ since last edit)
+   - Daily at 10am UTC: Search for unknown deal outcomes & regenerate narratives
 
-**Note:** The daily enrichment script (`daily-enrich-pending.ts`) runs automatically via Vercel Cron - no manual intervention needed. It searches for unknown deal outcomes and updates products with high-confidence results.
+**Note:** The delayed narrative refresh system prevents wasted regenerations when you're making multiple edits during the episode. Your edits trigger a 1-hour cooldown timer that resets with each change. Once 1 hour passes with no changes, the product is automatically flagged for narrative refresh.
 
 ## Quick Links
 - [Project Brief](./projectbrief.md)
@@ -92,7 +104,7 @@ npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
   - All have photos in Supabase Storage
   - ALL 47 enriched with narrative content
   - 2 marked as retired (Mark Cuban, Kevin Harrington)
-- **Schema**: Deployed with 8 migrations (00001-00008)
+- **Schema**: Deployed with 10 migrations (00001-00010)
 
 ## Environment Requirements
 ```

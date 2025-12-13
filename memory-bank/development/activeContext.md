@@ -38,8 +38,10 @@ See `core/quickstart.md` for full command reference.
 ## Active Systems
 
 ### Automated Systems (No Manual Intervention)
-- **Vercel Cron**: Daily enrichment for products with unknown deals (`/api/cron/daily-enrich`)
-- **Narrative Refresh Trigger**: Auto-flags products for re-enrichment when status changes
+- **Vercel Cron - Daily Enrichment**: Runs at 10am UTC, searches for unknown deal outcomes (`/api/cron/daily-enrich`)
+- **Vercel Cron - Narrative Refresh Processing**: Runs every 3 hours, flags products after 1-hour cooldown (`/api/cron/process-narrative-refreshes`)
+- **Narrative Refresh Trigger (Immediate)**: Auto-flags products for re-enrichment when status changes
+- **Narrative Refresh Trigger (Delayed)**: Schedules refresh 1 hour after deal detail changes (prevents wasted regenerations during live episode updates)
 - **Google Analytics**: GA4 + Plausible tracking active
 
 ### Available Tools
@@ -87,7 +89,7 @@ CRON_SECRET=...
 ### Database
 - 618 products (306 deals, 243 no deal, 69 fell through)
 - 47 sharks (8 main + 39 guest, 2 retired: Mark Cuban, Kevin Harrington)
-- Schema: 8 migrations deployed (00001-00008)
+- Schema: 10 migrations deployed (00001-00010)
 - All content narrative-enriched
 
 ### Frontend Features
@@ -98,6 +100,7 @@ CRON_SECRET=...
 - Deal filter pages: `/deals/under-100k`, `/deals/100k-to-500k`, `/deals/over-500k`
 
 ## Recent Changes
+- **Dec 13**: Delayed narrative refresh system deployed - 1-hour cooldown for deal changes
 - **Dec 13**: SEO audit completed - no blockers found, site ready for indexing
 - **Dec 13**: 11 missing S9-S12 products added (Poppi, Comfy, Basepaws, etc.)
 - **Dec 12**: Vercel Cron automation deployed for daily deal enrichment
