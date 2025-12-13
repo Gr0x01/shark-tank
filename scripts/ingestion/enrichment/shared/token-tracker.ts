@@ -46,4 +46,10 @@ export class TokenTracker {
   reset(): void {
     this.totalUsage = { prompt: 0, completion: 0, total: 0 };
   }
+
+  getSummary(model: string = 'gpt-4.1-mini'): string {
+    const usage = this.getTotalUsage();
+    const cost = this.estimateCost(model);
+    return `Tokens: ${usage.total.toLocaleString()} (prompt: ${usage.prompt.toLocaleString()}, completion: ${usage.completion.toLocaleString()}) | Cost: $${cost.toFixed(4)}`;
+  }
 }

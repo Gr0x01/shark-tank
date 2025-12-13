@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/process-narrative-refreshes",
       "schedule": "0 */3 * * *"
+    },
+    {
+      "path": "/api/cron/auto-episode-check",
+      "schedule": "0 6 * * *"
     }
   ]
 }

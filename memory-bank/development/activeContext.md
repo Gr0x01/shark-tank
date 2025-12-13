@@ -38,6 +38,7 @@ See `core/quickstart.md` for full command reference.
 ## Active Systems
 
 ### Automated Systems (No Manual Intervention)
+- **Vercel Cron - Auto Episode Detection**: Runs at 6am UTC (1am ET), catches missed episodes via TVMaze API + competitor scraping (`/api/cron/auto-episode-check`)
 - **Vercel Cron - Daily Enrichment**: Runs at 10am UTC, searches for unknown deal outcomes (`/api/cron/daily-enrich`)
 - **Vercel Cron - Narrative Refresh Processing**: Runs every 3 hours, flags products after 1-hour cooldown (`/api/cron/process-narrative-refreshes`)
 - **Narrative Refresh Trigger (Immediate)**: Auto-flags products for re-enrichment when status changes
@@ -49,6 +50,7 @@ See `core/quickstart.md` for full command reference.
 - **Batch enrichment**: `batch-enrich.ts`, `enrich-narratives.ts`
 - **SEO page creation**: `create-seo-page.ts`, `enrich-seo-pages.ts`
 - See `core/quickstart.md` for complete command reference
+- See `development/automation.md` for automated systems documentation
 
 ## Current Focus Areas
 

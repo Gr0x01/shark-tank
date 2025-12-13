@@ -88,11 +88,48 @@ npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
 
 **Note:** The delayed narrative refresh system prevents wasted regenerations when you're making multiple edits during the episode. Your edits trigger a 1-hour cooldown timer that resets with each change. Once 1 hour passes with no changes, the product is automatically flagged for narrative refresh.
 
+## Automated Systems
+
+**No manual intervention required** - these run automatically:
+
+### Vercel Cron Jobs
+1. **Automated Episode Detection** (6am UTC / 1am ET)
+   - Checks TVMaze API for new episodes aired in last 72 hours
+   - Scrapes competitor site for product names
+   - Auto-creates products and runs enrichment
+   - **Catches missed episodes automatically**
+   - Cost: ~$0.20/month
+
+2. **Daily Deal Enrichment** (10am UTC / 5am ET)
+   - Searches for products with unknown deal outcomes
+   - Updates deal terms, amounts, sharks
+   - Cost: ~$3.60/month (Tavily + OpenAI)
+
+3. **Narrative Refresh Processing** (Every 3 hours)
+   - Flags products after 1-hour cooldown from deal edits
+   - Batches multiple edits into single regeneration
+   - Cost: ~$0.02/month
+
+### Database Triggers
+1. **Status Change → Immediate Refresh**
+   - When product status changes (active → closed), flag for immediate narrative refresh
+
+2. **Deal Change → Delayed Refresh**
+   - When deal fields change, schedule refresh 1 hour later
+   - Timer resets on each edit (batching behavior)
+
+3. **Updated-At Timestamp**
+   - Automatically tracks last modification time
+
+**Monitoring**: Vercel Dashboard → Functions → Filter by route
+**Full Documentation**: [Automation Systems](../development/automation.md)
+
 ## Quick Links
 - [Project Brief](./projectbrief.md)
 - [Tech Stack](../architecture/techStack.md)
 - [Active Context](../development/activeContext.md)
 - [Progress Log](../development/progress.md)
+- [Automation Systems](../development/automation.md) ⚙️
 - [Content Enrichment Guide](../development/content-enrichment.md)
 - [Architecture Patterns](../architecture/patterns.md)
 
@@ -113,6 +150,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 TAVILY_API_KEY=...
 OPENAI_API_KEY=...
+CRON_SECRET=...  # For Vercel Cron authentication
 ```
 
 ## Project Overview
