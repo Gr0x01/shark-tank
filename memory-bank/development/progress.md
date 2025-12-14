@@ -1,7 +1,7 @@
 ---
-Last-Updated: 2025-12-13
+Last-Updated: 2025-12-14
 Maintainer: RB
-Status: Phase 3 Complete - Production Ready
+Status: Phase 4 - Launch & Growth
 ---
 
 # Progress Log: tankd.io
@@ -40,8 +40,9 @@ Status: Phase 3 Complete - Production Ready
 | 21 | Vercel Cron Automation | Dec 12 | ✅ Complete |
 | 22 | Manual Seed Products Import | Dec 13 | ✅ Complete (18 products) |
 | 23 | Delayed Narrative Refresh System | Dec 13 | ✅ Complete |
+| 24 | ISR + React Cache Optimization | Dec 14 | ✅ Complete |
 
-## Current Status (as of Dec 13, 2025)
+## Current Status (as of Dec 14, 2025)
 
 **Products**: 618 total
 - 306 deals (with shark investments)
@@ -71,6 +72,13 @@ Status: Phase 3 Complete - Production Ready
 ---
 
 ## Phase 4: Current Work (Launch & Growth)
+
+### Performance Optimization
+- ✅ ISR (Incremental Static Regeneration) configured for all pages (Dec 14)
+- ✅ React Cache wrapper implemented for query deduplication (Dec 14)
+- ✅ Cache times optimized based on data update frequency (6-24 hours)
+- 🎯 Expected: 60-80% reduction in database queries, sub-100ms cached page loads
+- **Key Learning**: Next.js 16 App Router doesn't pre-render pages at build time even with `generateStaticParams()` - ISR provides on-demand rendering with caching
 
 ### Google Indexing
 - ✅ Sitemap submitted to Google Search Console

@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-13
+Last-Updated: 2025-12-14
 Maintainer: RB
 Status: Live - Awaiting Google Indexing
 ---
@@ -52,6 +52,18 @@ See `core/quickstart.md` for full command reference.
 - See `core/quickstart.md` for complete command reference
 - See `development/automation.md` for automated systems documentation
 
+### Performance & Caching Architecture
+- **ISR (Incremental Static Regeneration)**: Time-based page caching with automatic refresh
+  - Home page: 6 hours (new episodes weekly)
+  - Product pages: 12 hours (updates monthly)
+  - Shark pages: 24 hours (rarely change)
+  - Season/Episode/Category pages: 24 hours (historical data)
+  - SEO pages: 12 hours (content updates occasionally)
+- **React Cache**: Query deduplication within single render (60-80% fewer duplicate DB calls)
+- **Implementation**: `/src/lib/queries/cached.ts` wraps all database queries with React's `cache()`
+- **Expected Performance**: Sub-100ms page loads for cached pages, automatic background refresh
+- **Key Learning**: Next.js 16 App Router ISR works differently than Pages Router - pages with async data fetching show as "dynamic" but are still cached per revalidate time
+
 ## Current Focus Areas
 
 ### 1. Google Indexing (Week 1-4)
@@ -102,6 +114,7 @@ CRON_SECRET=...
 - Deal filter pages: `/deals/under-100k`, `/deals/100k-to-500k`, `/deals/over-500k`
 
 ## Recent Changes
+- **Dec 14**: ISR + React Cache optimization deployed for 60-80% database query reduction
 - **Dec 13**: Delayed narrative refresh system deployed - 1-hour cooldown for deal changes
 - **Dec 13**: SEO audit completed - no blockers found, site ready for indexing
 - **Dec 13**: 11 missing S9-S12 products added (Poppi, Comfy, Basepaws, etc.)

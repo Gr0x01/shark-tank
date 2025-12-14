@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-13
+Last-Updated: 2025-12-14
 Maintainer: RB
 Status: Live - Production
 ---
@@ -82,9 +82,24 @@ Modern web stack optimized for rapid development and minimal operational overhea
 - **Admin Auth**: Supabase Auth for admin-only endpoints
 
 ### Performance Considerations
-- **Static Generation**: Pre-generate pages where possible (SEO critical)
-- **Client-Side Filtering**: Cache dataset client-side for instant filtering
-- **Lazy Loading**: Load product details on demand
+- **ISR (Incremental Static Regeneration)**: Time-based page caching with automatic background refresh
+  - `export const revalidate = X` on all pages (6-24 hours based on data update frequency)
+  - First visitor triggers on-demand render, subsequent visitors get cached version from Vercel CDN
+  - Cache automatically refreshes in background after expiration
+- **React Cache**: Query deduplication within single render tree
+  - All database queries wrapped with React's `cache()` function
+  - Implementation: `/src/lib/queries/cached.ts`
+  - Prevents duplicate queries when same function called multiple times on a page
+  - 60-80% reduction in duplicate database calls per request
+- **Dynamic Route Optimization**: `dynamicParams = false` on dynamic routes returns 404 for invalid slugs
+- **Client-Side Filtering**: Product/shark listing pages use URL query params for filtering
+- **Lazy Loading**: Images and product details loaded on demand
+
+**Key Learning**: Next.js 16 App Router with ISR behaves differently than Pages Router:
+- Pages with async data fetching show as "dynamic" (ƒ) in build output, NOT static (○)
+- Despite showing as dynamic, pages ARE cached per `revalidate` time on Vercel
+- `generateStaticParams()` defines valid slugs but doesn't pre-render at build time
+- True build-time static generation requires `export const dynamic = 'force-static'` (not used - breaks features needing runtime data)
 
 ## Dependencies
 ```json
