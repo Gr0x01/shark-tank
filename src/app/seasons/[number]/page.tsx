@@ -5,8 +5,9 @@ import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
-// ISR: Revalidate every 24 hours (historical season data)
+// ISR: Revalidate every 24 hours (historical data)
 export const revalidate = 86400
+export const dynamicParams = false
 
 type Props = {
   params: Promise<{ number: string }>

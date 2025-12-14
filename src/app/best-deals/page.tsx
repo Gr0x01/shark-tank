@@ -6,8 +6,8 @@ import { SEOErrorBoundary } from '@/components/seo/SEOErrorBoundary'
 import { createBreadcrumbSchema, createArticleSchema, escapeJsonLd } from '@/lib/seo/schemas'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 
-// ISR: Revalidate every 6 hours (SEO content, deal changes)
-export const revalidate = 21600
+// ISR: Revalidate every 12 hours (SEO content, deal changes monthly)
+export const revalidate = 43200
 
 const PAGE_SLUG = 'best-deals'
 const PAGE_TITLE = 'Best Shark Tank Deals'

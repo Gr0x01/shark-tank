@@ -6,8 +6,8 @@ import { SEOErrorBoundary } from '@/components/seo/SEOErrorBoundary'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 
-// ISR: Revalidate every 6 hours (SEO content, status changes)
-export const revalidate = 21600
+// ISR: Revalidate every 12 hours (SEO content, status changes monthly)
+export const revalidate = 43200
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await loadSEOContent('still-in-business')

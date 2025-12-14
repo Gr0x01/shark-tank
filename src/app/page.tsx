@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
-import { getProductStats, getLatestEpisodeProducts, getSeasonProducts } from '@/lib/queries/products'
-import { getCategories } from '@/lib/queries/categories'
+import { getProductStats, getLatestEpisodeProducts, getSeasonProducts, getCategories } from '@/lib/queries/cached'
 import { LatestEpisodeSection } from '@/components/ui/LatestEpisodeSection'
 import { SeasonProductsSection } from '@/components/ui/SeasonProductsSection'
 import { InterstitialBand } from '@/components/ui/InterstitialBand'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createOrganizationSchema, createSearchActionSchema, escapeJsonLd } from '@/lib/seo/schemas'
+
+// ISR: Revalidate every 6 hours (new episodes weekly)
+export const revalidate = 21600
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = 'tankd.io | Every Shark Tank Product, Deal & Business Status'

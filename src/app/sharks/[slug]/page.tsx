@@ -24,8 +24,9 @@ import { computePortfolioStats } from '@/lib/utils/portfolioStats'
 import type { Category, ProductStatus, DealOutcome } from '@/lib/supabase/types'
 import { isSharkNarrative } from '@/lib/supabase/types'
 
-// ISR: Revalidate every 12 hours (portfolio changes weekly at most)
-export const revalidate = 43200
+// ISR: Revalidate every 24 hours (portfolio changes weekly at most)
+export const revalidate = 86400
+export const dynamicParams = false
 
 type Props = {
   params: Promise<{ slug: string }>

@@ -10,8 +10,8 @@ import type { ProductStatus, DealOutcome } from '@/lib/supabase/types'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
-// ISR: Revalidate every 6 hours (new products weekly, deal updates monthly)
-export const revalidate = 21600
+// ISR: Revalidate every 12 hours (products updated monthly)
+export const revalidate = 43200
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = 'All Products | tankd.io'

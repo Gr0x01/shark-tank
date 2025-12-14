@@ -12,8 +12,9 @@ import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { addAmazonAffiliateTag } from '@/lib/utils'
 import { createArticleSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
-// ISR: Revalidate every 6 hours (narratives/deals change over months, not hours)
-export const revalidate = 21600
+// ISR: Revalidate every 12 hours (narratives/deals change monthly)
+export const revalidate = 43200
+export const dynamicParams = false
 
 type Props = {
   params: Promise<{ slug: string }>

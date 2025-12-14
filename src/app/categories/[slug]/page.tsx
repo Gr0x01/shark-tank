@@ -8,6 +8,7 @@ import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from
 
 // ISR: Revalidate every 24 hours (category products updated weekly)
 export const revalidate = 86400
+export const dynamicParams = false
 
 type Props = {
   params: Promise<{ slug: string }>
