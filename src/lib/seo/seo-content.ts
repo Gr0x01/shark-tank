@@ -38,18 +38,19 @@ const SEOPageContentSchema = z.object({
 
 // Map of valid SEO page slugs to their import functions
 // Using dynamic imports ensures JSON files are bundled at build time
+// Path is relative from src/lib/seo/ to content/seo-pages/
 const seoContentLoaders: Record<string, () => Promise<unknown>> = {
-  'still-in-business': () => import('@/../content/seo-pages/still-in-business.json'),
-  'out-of-business': () => import('@/../content/seo-pages/out-of-business.json'),
-  'best-deals': () => import('@/../content/seo-pages/best-deals.json'),
-  'success-stories': () => import('@/../content/seo-pages/success-stories.json'),
-  'deals-under-100k': () => import('@/../content/seo-pages/deals-under-100k.json'),
-  'deals-100k-to-500k': () => import('@/../content/seo-pages/deals-100k-to-500k.json'),
-  'deals-over-500k': () => import('@/../content/seo-pages/deals-over-500k.json'),
-  'how-to-apply': () => import('@/../content/seo-pages/how-to-apply.json'),
-  'about': () => import('@/../content/seo-pages/about.json'),
-  'privacy': () => import('@/../content/seo-pages/privacy.json'),
-  'terms': () => import('@/../content/seo-pages/terms.json'),
+  'still-in-business': () => import('../../../content/seo-pages/still-in-business.json'),
+  'out-of-business': () => import('../../../content/seo-pages/out-of-business.json'),
+  'best-deals': () => import('../../../content/seo-pages/best-deals.json'),
+  'success-stories': () => import('../../../content/seo-pages/success-stories.json'),
+  'deals-under-100k': () => import('../../../content/seo-pages/deals-under-100k.json'),
+  'deals-100k-to-500k': () => import('../../../content/seo-pages/deals-100k-to-500k.json'),
+  'deals-over-500k': () => import('../../../content/seo-pages/deals-over-500k.json'),
+  'how-to-apply': () => import('../../../content/seo-pages/how-to-apply.json'),
+  'about': () => import('../../../content/seo-pages/about.json'),
+  'privacy': () => import('../../../content/seo-pages/privacy.json'),
+  'terms': () => import('../../../content/seo-pages/terms.json'),
 }
 
 /**
