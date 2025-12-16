@@ -1,7 +1,18 @@
 import type { ProductWithSharks } from '@/lib/supabase/types'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import type { SEOPageSection } from '@/lib/seo/seo-content'
-import DOMPurify from 'isomorphic-dompurify'
+
+// Simple text formatting - converts newlines to paragraphs
+// Safe because content comes from our own generated JSON files
+function formatContent(text: string): string {
+  // Convert double newlines to paragraph breaks
+  const paragraphs = text.split(/\n\n+/).filter(p => p.trim())
+  if (paragraphs.length > 1) {
+    return paragraphs.map(p => `<p>${p.replace(/\n/g, '<br/>')}</p>`).join('')
+  }
+  // Single paragraph - just convert single newlines to <br>
+  return text.replace(/\n/g, '<br/>')
+}
 
 interface FilteredListingPageProps {
   title: string
@@ -47,12 +58,7 @@ export function FilteredListingPage({
           {/* Introduction */}
           <div
             className="text-[var(--ink-700)] leading-relaxed mb-8"
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(introduction, {
-                ALLOWED_TAGS: ['p', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'br', 'h2', 'h3', 'h4'],
-                ALLOWED_ATTR: ['href', 'target', 'rel']
-              })
-            }}
+            dangerouslySetInnerHTML={{ __html: formatContent(introduction) }}
           />
 
           {/* Sections */}
@@ -69,13 +75,8 @@ export function FilteredListingPage({
                 {section.heading}
               </h2>
               <div
-                className="text-[var(--ink-700)] leading-relaxed"
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(section.content, {
-                    ALLOWED_TAGS: ['p', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'br', 'h3', 'h4'],
-                    ALLOWED_ATTR: ['href', 'target', 'rel']
-                  })
-                }}
+                className="text-[var(--ink-700)] leading-relaxed whitespace-pre-line"
+                dangerouslySetInnerHTML={{ __html: formatContent(section.content) }}
               />
             </section>
           ))}
