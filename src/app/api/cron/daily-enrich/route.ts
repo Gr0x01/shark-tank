@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { exec } from 'child_process'
-import { promisify } from 'util'
-
-const execAsync = promisify(exec)
+import { enrichPendingDeals } from '@/lib/services/enrichment'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -16,32 +13,46 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  // Validate required environment variables
+  const requiredEnvVars = [
+    'NEXT_PUBLIC_SUPABASE_URL',
+    'SUPABASE_SERVICE_ROLE_KEY',
+    'TAVILY_API_KEY',
+    'OPENAI_API_KEY',
+  ] as const
+
+  const missingVars = requiredEnvVars.filter(v => !process.env[v])
+  if (missingVars.length > 0) {
+    console.error('[CRON] Missing required environment variables:', missingVars)
+    return NextResponse.json({
+      error: 'Configuration error',
+      message: `Missing environment variables: ${missingVars.join(', ')}`,
+      timestamp: new Date().toISOString()
+    }, { status: 500 })
+  }
+
   console.log('[CRON] Starting daily deal enrichment at', new Date().toISOString())
 
   try {
-    // Execute enrichment script
-    const { stdout, stderr } = await execAsync(
-      'npx tsx scripts/daily-enrich-pending.ts --limit 20',
-      {
-        env: {
-          ...process.env,
-          NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-          SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-          TAVILY_API_KEY: process.env.TAVILY_API_KEY,
-          OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-        },
-        timeout: 240000, // 4 minute timeout
-      }
-    )
+    const result = await enrichPendingDeals({
+      limit: 20,
+      minAgeHours: 24,
+      maxAttempts: 7,
+    })
 
-    console.log('[CRON] Output:', stdout)
-    if (stderr) console.error('[CRON] Errors:', stderr)
+    console.log('[CRON] Daily enrichment completed:', result)
 
     return NextResponse.json({
       success: true,
-      message: 'Daily enrichment completed successfully',
+      message: `Daily enrichment completed: ${result.updated} updated, ${result.skipped} skipped, ${result.failed} failed`,
       timestamp: new Date().toISOString(),
-      output: stdout.substring(0, 1000) // Limit output size
+      stats: {
+        processed: result.processed,
+        updated: result.updated,
+        skipped: result.skipped,
+        failed: result.failed,
+      },
+      products: result.products.slice(0, 20), // Limit response size
     })
   } catch (error) {
     console.error('[CRON] Enrichment failed:', error)

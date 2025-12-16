@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { exec } from 'child_process'
-import { promisify } from 'util'
-
-const execAsync = promisify(exec)
+import { checkForNewEpisodes } from '@/lib/services/enrichment'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
-export const maxDuration = 600 // 10 minutes max (allows time for scraping + enrichment)
+export const maxDuration = 60 // 1 minute max (just checking, not enriching)
 
+/**
+ * Auto Episode Check Cron Job
+ *
+ * Checks TVMaze API for recently aired episodes and reports if any are missing
+ * from the database. Does NOT auto-import (Playwright scraping can't run in serverless).
+ *
+ * If missing episodes are found, run the manual workflow:
+ *   npx tsx scripts/new-episode.ts "Product Name" --season X --episode Y
+ */
 export async function GET(request: NextRequest) {
   // Verify Vercel Cron secret (security)
   const authHeader = request.headers.get('authorization')
@@ -20,8 +26,6 @@ export async function GET(request: NextRequest) {
   const requiredEnvVars = [
     'NEXT_PUBLIC_SUPABASE_URL',
     'SUPABASE_SERVICE_ROLE_KEY',
-    'TAVILY_API_KEY',
-    'OPENAI_API_KEY',
   ] as const
 
   const missingVars = requiredEnvVars.filter(v => !process.env[v])
@@ -37,49 +41,34 @@ export async function GET(request: NextRequest) {
   console.log('[CRON] Starting automated episode check at', new Date().toISOString())
 
   try {
-    // Execute auto episode workflow
-    // Lookback 72 hours (to catch Friday episodes on Saturday/Sunday)
-    const { stdout, stderr } = await execAsync(
-      'npx tsx scripts/auto-episode-workflow.ts --lookback 72',
-      {
-        env: {
-          ...process.env,
-          NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-          SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-          TAVILY_API_KEY: process.env.TAVILY_API_KEY,
-          OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-        },
-        timeout: 540000, // 9 minute timeout (leaves 1min buffer)
+    // Check for episodes in last 72 hours (catches Friday episodes on weekends)
+    const result = await checkForNewEpisodes({ lookbackHours: 72 })
+
+    console.log('[CRON] Episode check completed:', result)
+
+    // If missing episodes found, log instruction for manual import
+    if (result.missingEpisodes.length > 0) {
+      console.log('[CRON] ACTION REQUIRED: Missing episodes detected!')
+      console.log('[CRON] Run manual import for each:')
+      for (const ep of result.missingEpisodes) {
+        console.log(`[CRON]   npx tsx scripts/new-episode.ts "ProductName" --season ${ep.season} --episode ${ep.episode}`)
       }
-    )
-
-    console.log('[CRON] Auto-episode-check output:', stdout)
-    if (stderr) console.error('[CRON] Auto-episode-check stderr:', stderr)
-
-    // Parse output to extract summary
-    const productsCreatedMatch = stdout.match(/Products created: (\d+)/)
-    const productsEnrichedMatch = stdout.match(/Products enriched: (\d+)/)
-    const episodesMatch = stdout.match(/Episodes processed: (\d+)/)
-
-    const productsCreated = productsCreatedMatch ? parseInt(productsCreatedMatch[1], 10) : 0
-    const productsEnriched = productsEnrichedMatch ? parseInt(productsEnrichedMatch[1], 10) : 0
-    const episodesProcessed = episodesMatch ? parseInt(episodesMatch[1], 10) : 0
+    }
 
     return NextResponse.json({
       success: true,
-      message: `Auto episode check completed: ${episodesProcessed} episode(s), ${productsCreated} product(s) created, ${productsEnriched} enriched`,
+      message: result.message,
       timestamp: new Date().toISOString(),
       stats: {
-        episodesProcessed,
-        productsCreated,
-        productsEnriched,
+        recentEpisodes: result.recentEpisodes,
+        missingEpisodes: result.missingEpisodes.length,
       },
-      output: stdout.substring(0, 2000) // Limit output size
+      missingEpisodes: result.missingEpisodes,
     })
   } catch (error) {
-    console.error('[CRON] Auto episode check failed:', error)
+    console.error('[CRON] Episode check failed:', error)
     return NextResponse.json({
-      error: 'Auto episode check failed',
+      error: 'Episode check failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString()
     }, { status: 500 })

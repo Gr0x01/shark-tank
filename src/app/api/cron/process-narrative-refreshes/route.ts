@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { exec } from 'child_process'
-import { promisify } from 'util'
-
-const execAsync = promisify(exec)
+import { processNarrativeRefreshes } from '@/lib/services/enrichment'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -16,30 +13,37 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  // Validate required environment variables
+  const requiredEnvVars = [
+    'NEXT_PUBLIC_SUPABASE_URL',
+    'SUPABASE_SERVICE_ROLE_KEY',
+  ] as const
+
+  const missingVars = requiredEnvVars.filter(v => !process.env[v])
+  if (missingVars.length > 0) {
+    console.error('[CRON] Missing required environment variables:', missingVars)
+    return NextResponse.json({
+      error: 'Configuration error',
+      message: `Missing environment variables: ${missingVars.join(', ')}`,
+      timestamp: new Date().toISOString()
+    }, { status: 500 })
+  }
+
   console.log('[CRON] Processing scheduled narrative refreshes at', new Date().toISOString())
 
   try {
-    // Execute narrative refresh processing script
-    const { stdout, stderr } = await execAsync(
-      'npx tsx scripts/process-narrative-refreshes.ts',
-      {
-        env: {
-          NODE_ENV: process.env.NODE_ENV,
-          NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-          SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-        },
-        timeout: 30000, // 30 second timeout
-      }
-    )
+    const result = await processNarrativeRefreshes()
 
-    console.log('[CRON] Output:', stdout)
-    if (stderr) console.error('[CRON] Errors:', stderr)
+    console.log('[CRON] Narrative refresh processing completed:', result)
 
     return NextResponse.json({
       success: true,
-      message: 'Narrative refresh processing completed successfully',
+      message: `Flagged ${result.flagged} products for narrative refresh`,
       timestamp: new Date().toISOString(),
-      output: stdout.substring(0, 1000) // Limit output size
+      stats: {
+        flagged: result.flagged,
+      },
+      products: result.products.slice(0, 20), // Limit response size
     })
   } catch (error) {
     console.error('[CRON] Narrative refresh processing failed:', error)
