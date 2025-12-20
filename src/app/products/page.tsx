@@ -14,23 +14,23 @@ import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from
 export const revalidate = 43200
 
 export async function generateMetadata(): Promise<Metadata> {
-  const title = 'All Products | tankd.io'
-  const description = 'Browse every product ever pitched on Shark Tank. Filter by status, shark, category, season, and deal outcome.'
+  const title = 'All Shark Tank Products - Complete Database of Every Pitch | tankd.io'
+  const description = 'Browse all Shark Tank products ever pitched. 600+ products with deal details, business status, and where to buy. Filter by shark, category, season, and deal outcome.'
 
   return {
     title,
     description,
     keywords: [
-      'Shark Tank products',
       'all Shark Tank products',
-      'Shark Tank list',
+      'Shark Tank products',
+      'Shark Tank products list',
+      'every Shark Tank product',
+      'Shark Tank database',
       'Mark Cuban deals',
       'Lori Greiner products',
       'still in business',
       'got deal',
-      'no deal',
-      'by category',
-      'by shark'
+      'no deal'
     ],
     openGraph: {
       title,
@@ -136,7 +136,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <p className="section-label mb-2">Browse</p>
-          <h1 className="text-3xl md:text-4xl font-medium mb-2">All Products</h1>
+          <h1 className="text-3xl md:text-4xl font-medium mb-2">All Shark Tank Products</h1>
           {filters.search && (
             <p className="text-sm text-[var(--ink-500)] mb-2">
               Showing results for &ldquo;<span className="font-medium text-[var(--ink-900)]">{filters.search}</span>&rdquo;

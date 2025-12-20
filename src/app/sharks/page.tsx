@@ -7,33 +7,34 @@ import { SharkFilter } from '@/components/ui/SharkFilter'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'The Sharks - All Shark Tank Investors & Their Portfolios | Shark Tank Products',
-  description: 'Meet all Shark Tank investors. Compare Mark Cuban, Lori Greiner, Kevin O\'Leary, Barbara Corcoran, and Daymond John\'s deals, success rates, and active companies. See who invests in what and their partnership patterns.',
+  title: 'All Shark Tank Sharks - Every Investor & Their Deals | tankd.io',
+  description: 'Meet all Shark Tank sharks and investors. Compare Mark Cuban, Lori Greiner, Kevin O\'Leary, Barbara Corcoran, and Daymond John\'s deals, success rates, and portfolios.',
 
   keywords: [
+    'all Shark Tank sharks',
+    'Shark Tank sharks',
     'Shark Tank investors',
+    'who are the sharks on Shark Tank',
     'Mark Cuban deals',
     'Lori Greiner portfolio',
     'Kevin O\'Leary investments',
     'Barbara Corcoran Shark Tank',
     'Daymond John companies',
-    'Shark Tank cast',
-    'who are the sharks',
-    'Shark Tank net worth'
+    'Shark Tank cast'
   ],
 
   openGraph: {
-    title: 'All Shark Tank Investors & Portfolios',
-    description: 'Compare Mark Cuban, Lori Greiner, Kevin O\'Leary, and all Shark Tank investors. See their deals, success rates, active companies, and investment patterns.',
+    title: 'All Shark Tank Sharks - Every Investor & Their Deals',
+    description: 'Meet all Shark Tank sharks. Compare Mark Cuban, Lori Greiner, Kevin O\'Leary, and every investor\'s deals, success rates, and portfolios.',
     type: 'website',
     url: '/sharks',
-    siteName: 'Shark Tank Products',
+    siteName: 'tankd.io',
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: 'The Sharks - Shark Tank Investors',
-    description: 'Meet all Shark Tank investors and explore their investment portfolios, success rates, and active companies.',
+    title: 'All Shark Tank Sharks - Every Investor',
+    description: 'Meet all Shark Tank sharks and explore their investment portfolios, success rates, and active companies.',
   },
 
   alternates: {
@@ -75,7 +76,7 @@ export default async function SharksPage() {
       <div className="max-w-5xl mx-auto">
         <div className="mb-10">
           <p className="section-label mb-2">The Investors</p>
-          <h1 className="text-3xl md:text-4xl font-medium mb-2">Meet the Sharks</h1>
+          <h1 className="text-3xl md:text-4xl font-medium mb-2">All Shark Tank Sharks</h1>
           <p className="text-[var(--ink-500)]">
             Explore their portfolios, success rates, and investment styles
           </p>
