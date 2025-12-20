@@ -58,11 +58,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? 'Out of Business'
       : ''
 
-  const titleParts = [product.name, 'Shark Tank', dealStatus, businessStatus].filter(Boolean)
-  const title = product.seo_title || titleParts.slice(0, 3).join(' | ')
+  const currentYear = new Date().getFullYear()
+  const titleParts = [product.name, 'Shark Tank', dealStatus, businessStatus, `Update ${currentYear}`].filter(Boolean)
+  const title = product.seo_title || titleParts.slice(0, 4).join(' | ')
 
   const description = product.meta_description || product.pitch_summary || product.tagline ||
-    `${product.name} appeared on Shark Tank Season ${product.season}. Find out what happened and where to buy.`
+    `${product.name} appeared on Shark Tank Season ${product.season}. Updated ${currentYear} - find out what happened, deal details, and where to buy.`
 
   // Generate SEO keywords
   const keywords = [
