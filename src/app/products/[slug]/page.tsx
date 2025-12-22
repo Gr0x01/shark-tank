@@ -40,30 +40,78 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const { product } = result
-
-  // SEO-optimized title with deal status
-  const dealStatus = product.deal_outcome === 'deal'
-    ? product.deal_amount
-      ? `Got $${product.deal_amount.toLocaleString()} Deal`
-      : 'Got a Deal'
-    : product.deal_outcome === 'no_deal'
-      ? 'No Deal'
-      : product.deal_outcome === 'unknown'
-        ? 'Deal Pending on Shark Tank'
-        : 'Deal Fell Through'
-
-  const businessStatus = product.status === 'active'
-    ? 'Still in Business'
-    : product.status === 'out_of_business'
-      ? 'Out of Business'
-      : ''
-
   const currentYear = new Date().getFullYear()
-  const titleParts = [product.name, 'Shark Tank', dealStatus, businessStatus, `Update ${currentYear}`].filter(Boolean)
-  const title = product.seo_title || titleParts.slice(0, 4).join(' | ')
 
-  const description = product.meta_description || product.pitch_summary || product.tagline ||
-    `${product.name} appeared on Shark Tank Season ${product.season}. Updated ${currentYear} - find out what happened, deal details, and where to buy.`
+  // Generate SEO-optimized title (under 55 chars, emotional hook)
+  const generateTitle = (): string => {
+    if (product.seo_title) return product.seo_title
+
+    const name = product.name
+
+    // Active businesses - answer "still in business?" positively
+    if (product.status === 'active') {
+      if (product.deal_outcome === 'deal') {
+        return `${name} Shark Tank: Still Thriving in ${currentYear}`
+      }
+      return `${name} Shark Tank: Thriving Without a Deal`
+    }
+
+    // Out of business - morbid curiosity hook
+    if (product.status === 'out_of_business') {
+      return `${name} Shark Tank: What Went Wrong ${currentYear}`
+    }
+
+    // Unknown/new - freshness signal
+    return `${name} Shark Tank ${currentYear}: Full Update`
+  }
+
+  // Generate SEO-optimized description (150-160 chars, storytelling)
+  const generateDescription = (): string => {
+    if (product.meta_description) return product.meta_description
+
+    const name = product.name
+    const dealAmount = product.deal_amount
+      ? `$${product.deal_amount.toLocaleString()}`
+      : ''
+    const sharks = product.shark_names?.join(' and ') || 'a Shark'
+    const season = product.season || ''
+
+    // Active + Deal: Answer "still in business?" with YES
+    if (product.status === 'active' && product.deal_outcome === 'deal') {
+      const dealNote = dealAmount ? `${dealAmount} deal with ${sharks}` : `deal with ${sharks}`
+      return `Yes! ${name} is still in business after their ${dealNote} on Shark Tank. See current status, where to buy, and how they grew.`
+    }
+
+    // Active + No Deal: Triumph narrative
+    if (product.status === 'active' && product.deal_outcome === 'no_deal') {
+      return `${name} walked away from Shark Tank without a deal but built a thriving business anyway. Discover how they did it and where to buy today.`
+    }
+
+    // Active + Deal fell through
+    if (product.status === 'active' && product.deal_outcome === 'deal_fell_through') {
+      return `${name}'s Shark Tank deal fell through, but they kept building anyway. Find out what happened and where to buy their products today.`
+    }
+
+    // Out of business + Deal
+    if (product.status === 'out_of_business' && product.deal_outcome === 'deal') {
+      const dealNote = dealAmount ? `got a ${dealAmount} deal` : 'got a deal'
+      return `${name} ${dealNote} on Shark Tank but later closed. Find out what went wrong and lessons learned from this Shark Tank story.`
+    }
+
+    // Out of business + No Deal
+    if (product.status === 'out_of_business') {
+      return `${name} didn't get a Shark Tank deal and later closed. Find out what went wrong and lessons learned from this Shark Tank story.`
+    }
+
+    // Fallback for unknown/new products
+    if (product.pitch_summary) return product.pitch_summary
+    if (product.tagline) return product.tagline
+
+    return `${name} pitched on Shark Tank${season ? ` Season ${season}` : ''}. Get the full story: deal outcome, what the sharks said, and where to buy now.`
+  }
+
+  const title = generateTitle()
+  const description = generateDescription()
 
   // Generate SEO keywords
   const keywords = [

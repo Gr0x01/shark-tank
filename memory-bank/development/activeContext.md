@@ -263,3 +263,28 @@ See `archive/` directory for:
 - **Never run migrations in production without testing locally first**
 - **Rollback**: Migrations are one-way, restore from Supabase backup if needed
 - **Prevention**: Always run `npx supabase db push` locally first
+
+---
+
+### Domain Configuration (DO NOT CHANGE)
+
+**Canonical domain**: `tankd.io` (non-www)
+
+**Vercel Dashboard → Settings → Domains:**
+| Domain | Config | Notes |
+|--------|--------|-------|
+| `tankd.io` | **Production** (primary) | All canonical URLs use this |
+| `www.tankd.io` | 308 redirect → `tankd.io` | Permanent redirect for SEO |
+| `shark-tank-flame.vercel.app` | Production | Vercel default, leave as-is |
+
+**Why non-www?**
+- All code uses `https://tankd.io` (sitemaps, canonicals, OG tags)
+- Shorter URLs, modern convention
+- Already indexed by Google as non-www
+
+**DO NOT flip this configuration.** If www→non-www causes issues:
+1. Check if the issue is actually the redirect (unlikely)
+2. The code would need updates to all canonical URLs if switching to www
+3. Google would need to re-index everything (takes weeks)
+
+**History**: Dec 2025 - Configuration was accidentally inverted (tankd.io redirecting TO www). Fixed Dec 22, 2025.

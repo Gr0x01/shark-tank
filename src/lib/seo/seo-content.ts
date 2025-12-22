@@ -67,9 +67,9 @@ export async function loadSEOContent(slug: string): Promise<SEOPageContent | nul
       return null
     }
 
-    const module = await loader()
+    const loadedModule = await loader()
     // Handle both default export and direct export
-    const content = (module as { default?: unknown }).default || module
+    const content = (loadedModule as { default?: unknown }).default || loadedModule
     const validated = SEOPageContentSchema.parse(content)
     return validated
   } catch (error) {

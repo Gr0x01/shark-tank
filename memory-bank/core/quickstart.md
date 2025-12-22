@@ -70,6 +70,11 @@ npx tsx scripts/create-seo-page.ts listing "biggest-deals" "Biggest Deals"
 
 # Then generate content
 npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
+
+# === INDEXNOW SUBMISSION ===
+# Submit URLs to Bing, Yandex for faster re-indexing (after SEO changes)
+npx tsx scripts/submit-indexnow.ts           # Submit all 632 URLs
+npx tsx scripts/submit-indexnow.ts --dry-run # Preview without submitting
 ```
 
 **IMPORTANT**: Always use port 3004 for this project to avoid conflicts.
