@@ -9,9 +9,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Set metadataBase for all pages (canonical URLs, OG images, etc.)
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'
+
 // Metadata is now handled by individual pages (especially homepage in page.tsx)
-// Keeping robots directive at layout level
+// Keeping robots directive and metadataBase at layout level
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   robots: "index, follow",
 };
 
