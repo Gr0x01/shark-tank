@@ -33,7 +33,7 @@ const SEOPageContentSchema = z.object({
       content: z.string()
     })).optional()
   }),
-  stats: z.record(z.any()).optional()
+  stats: z.record(z.string(), z.any()).optional()
 })
 
 // Map of valid SEO page slugs to their import functions
