@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { searchProductDetails, searchProductStatus, combineSearchResultsCompact } from './ingestion/enrichment/shared/tavily-client';
 import { synthesize } from './ingestion/enrichment/shared/synthesis-client';
 import { TokenTracker } from './ingestion/enrichment/shared/token-tracker';
+import { searchForNarrative, generateNarrative, ProductForNarrative } from './ingestion/enrichment/shared/narrative';
 import { submitNewEpisodeToIndexNow } from '../src/lib/services/indexnow';
 import { scrapeProductPhoto } from '../src/lib/services/photo-scraper';
 
@@ -490,6 +491,54 @@ async function main() {
         console.log(`      ✅ ${product.name} (${result.source})`);
       } else {
         console.log(`      ❌ ${product.name} (no photo found)`);
+      }
+    }
+  }
+
+  // Generate narrative content for all created products
+  if (!skipEnrich && created.length > 0) {
+    console.log('\n   📖 Generating narrative content...\n');
+
+    for (const product of created) {
+      console.log(`   📝 Narrative: ${product.name}`);
+
+      try {
+        // Fetch enriched product data for context
+        const { data: productData } = await supabase
+          .from('products')
+          .select('id, name, season, episode_number, deal_outcome, status, asking_amount, asking_equity, deal_amount, deal_equity, founder_names')
+          .eq('id', product.id)
+          .single();
+
+        if (!productData) {
+          console.log(`      ⚠️  Could not fetch product data`);
+          continue;
+        }
+
+        const searchResults = await searchForNarrative(product.name);
+        const narrative = await generateNarrative(productData as ProductForNarrative, searchResults);
+
+        if (narrative) {
+          const sections = Object.values(narrative).filter(v => v !== null).length;
+          const { error } = await supabase
+            .from('products')
+            .update({
+              narrative_content: narrative,
+              narrative_version: 1,
+              narrative_generated_at: new Date().toISOString(),
+            })
+            .eq('id', product.id);
+
+          if (error) {
+            console.log(`      ❌ Save failed: ${error.message}`);
+          } else {
+            console.log(`      ✅ ${sections}/6 sections generated`);
+          }
+        } else {
+          console.log(`      ⚠️  No narrative content generated`);
+        }
+      } catch (err) {
+        console.log(`      ❌ Narrative failed: ${err}`);
       }
     }
   }

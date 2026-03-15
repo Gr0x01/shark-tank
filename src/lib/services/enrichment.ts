@@ -861,7 +861,169 @@ async function createAndEnrichProduct(
     console.log(`[AutoImport] No photo found: ${name}`)
   }
 
+  // Generate narrative content
+  await generateNarrativeForProduct(product.id, name, supabase)
+
   return { created: true, enriched: true, dealOutcome: enriched.dealOutcome }
+}
+
+// --- Narrative Generation for Auto-Import ---
+// Note: Prompt and schema are duplicated from scripts/ingestion/enrichment/shared/narrative.ts
+// because this service runs in Vercel serverless and cannot import from scripts/.
+// Keep parameters in sync: maxTokens=2500, temperature=0.5
+const NarrativeContentSchema = z.object({
+  origin_story: z.string().nullable(),
+  pitch_journey: z.string().nullable(),
+  deal_dynamics: z.string().nullable(),
+  after_tank: z.string().nullable(),
+  current_status: z.string().nullable(),
+  where_to_buy: z.string().nullable(),
+})
+
+const NARRATIVE_PROMPT = `You are a Shark Tank expert writer creating SEO-optimized product pages. Generate compelling, factual narrative content about the product.
+
+Write in a journalistic, engaging style. Include specific details, numbers, and quotes when available. Each section should be a complete narrative paragraph (not bullet points).
+
+Return ONLY valid JSON matching this schema:
+{
+  "origin_story": "150-250 words about the founder's background, what problem they discovered, and how they created their solution. Include their profession, location, and the 'aha moment' that led to the product. Make it personal and relatable. Naturally include the phrase '[Product Name] Shark Tank' somewhere in this section.",
+
+  "pitch_journey": "150-200 words describing the pitch episode. Include the ask amount/equity, which sharks showed interest, key questions asked, memorable moments, and the overall dynamic in the tank. Reference the season and episode if known.",
+
+  "deal_dynamics": "100-150 words about the deal negotiation (or why no deal happened). Include competing offers, counter-offers, and the final terms. For no-deal products, explain what went wrong - was it valuation, the sharks not believing in the product, or something else?",
+
+  "after_tank": "150-200 words about what happened after the episode aired. Include the 'Shark Tank effect' on sales, growth milestones, product expansion, any challenges overcome, and major business developments. Use phrases like 'after Shark Tank' and 'since appearing on Shark Tank' naturally.",
+
+  "current_status": "100-150 words about where the company is today. Include current revenue if known, number of products sold, retail partnerships, and overall business health. Be specific with dates and numbers. Include the phrase 'still in business' if the company is active, or explain closure if not.",
+
+  "where_to_buy": "50-100 words about purchase options. Include official website, Amazon availability, retail store locations (Target, Walmart, etc.), and price range. Focus on helping readers find and buy the product."
+}
+
+CRITICAL GUIDELINES:
+- Write for SEO: naturally include "[Product Name] Shark Tank", "after Shark Tank", "still in business" phrases
+- Be factual: only include information supported by the search results
+- Be specific: use actual numbers, dates, and names when available
+- For sections with no information, return null (don't fabricate)
+- Write in third person, present tense for current status
+- Each section should stand alone as a readable paragraph
+- NO bullet points - flowing narrative paragraphs only`
+
+async function synthesizeNarrative(
+  systemPrompt: string,
+  userPrompt: string,
+  schema: z.ZodType<z.infer<typeof NarrativeContentSchema>>
+): Promise<{ data: z.infer<typeof NarrativeContentSchema> | null; success: boolean; error?: string }> {
+  const openai = getOpenAI()
+  const model = 'gpt-4.1-mini'
+
+  try {
+    const response = await openai.chat.completions.create({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      max_tokens: 2500,
+      temperature: 0.5,
+    })
+
+    const text = response.choices[0]?.message?.content || ''
+    if (!text.trim()) {
+      return { data: null, success: false, error: 'Empty response' }
+    }
+
+    const jsonText = extractJsonFromText(text)
+    const parsed = JSON.parse(jsonText)
+    const validated = schema.parse(parsed)
+
+    return { data: validated, success: true }
+  } catch (error) {
+    return {
+      data: null,
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    }
+  }
+}
+
+async function generateNarrativeForProduct(
+  productId: string,
+  productName: string,
+  supabase: UntypedSupabase
+): Promise<boolean> {
+  try {
+    // Fetch product context
+    const { data: product } = await supabase
+      .from('products')
+      .select('season, episode_number, deal_outcome, status, asking_amount, asking_equity, deal_amount, deal_equity, founder_names')
+      .eq('id', productId)
+      .single()
+
+    if (!product) return false
+
+    // Run 3 parallel searches for narrative content
+    const year = new Date().getFullYear()
+    const [detailResults, statusResults, afterResults] = await Promise.all([
+      searchTavily(`${productName} Shark Tank deal details founders pitch episode`),
+      searchTavily(`${productName} Shark Tank still in business ${year - 1} ${year} where to buy`),
+      searchTavily(`${productName} after Shark Tank update revenue growth sales success`),
+    ])
+
+    const combinedContent = [
+      '=== PITCH & DEAL DETAILS ===',
+      detailResults.slice(0, 6).map(r => `[${r.title}]\n${r.content}`).join('\n\n').substring(0, 4000),
+      '',
+      '=== CURRENT STATUS & WHERE TO BUY ===',
+      statusResults.slice(0, 6).map(r => `[${r.title}]\n${r.content}`).join('\n\n').substring(0, 4000),
+      '',
+      '=== AFTER SHARK TANK UPDATES ===',
+      afterResults.slice(0, 6).map(r => `[${r.title}]\n${r.content}`).join('\n\n').substring(0, 4000),
+    ].join('\n')
+
+    const productContext = [
+      `Product: ${productName}`,
+      product.season ? `Season: ${product.season}` : null,
+      product.episode_number ? `Episode: ${product.episode_number}` : null,
+      product.deal_outcome ? `Deal Outcome: ${product.deal_outcome}` : null,
+      product.status ? `Current Status: ${product.status}` : null,
+      product.asking_amount ? `Asking: $${product.asking_amount.toLocaleString()} for ${product.asking_equity}%` : null,
+      product.deal_amount ? `Deal: $${product.deal_amount.toLocaleString()} for ${product.deal_equity}%` : null,
+      product.founder_names?.length ? `Founders: ${product.founder_names.join(', ')}` : null,
+    ].filter(Boolean).join('\n')
+
+    const result = await synthesizeNarrative(
+      NARRATIVE_PROMPT,
+      `${productContext}\n\nSearch Results:\n${combinedContent}`,
+      NarrativeContentSchema
+    )
+
+    if (!result.success || !result.data) {
+      console.log(`[AutoImport] Narrative generation failed for ${productName}: ${result.error}`)
+      return false
+    }
+
+    const sections = Object.values(result.data).filter(v => v !== null).length
+
+    const { error } = await supabase
+      .from('products')
+      .update({
+        narrative_content: result.data,
+        narrative_version: 1,
+        narrative_generated_at: new Date().toISOString(),
+      })
+      .eq('id', productId)
+
+    if (error) {
+      console.log(`[AutoImport] Narrative save failed for ${productName}: ${error.message}`)
+      return false
+    }
+
+    console.log(`[AutoImport] Narrative generated: ${productName} (${sections}/6 sections)`)
+    return true
+  } catch (err) {
+    console.log(`[AutoImport] Narrative error for ${productName}: ${err}`)
+    return false
+  }
 }
 
 export interface EpisodeImportResult {
