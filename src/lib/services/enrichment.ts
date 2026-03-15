@@ -146,7 +146,7 @@ function extractJsonFromText(text: string): string {
 async function synthesize<T>(
   systemPrompt: string,
   userPrompt: string,
-  schema: z.ZodSchema<T>
+  schema: z.ZodType<T>
 ): Promise<{ data: T | null; success: boolean; error?: string }> {
   const openai = getOpenAI()
   const model = 'gpt-4.1-mini'
@@ -518,7 +518,7 @@ export async function checkForNewEpisodes(options: {
       .from('products')
       .select('id')
       .eq('season', ep.season)
-      .eq('episode', ep.number)
+      .eq('episode_number', ep.number)
       .limit(1)
 
     if (!existingProducts || existingProducts.length === 0) {
@@ -545,6 +545,402 @@ export async function checkForNewEpisodes(options: {
     recentEpisodes: recentEpisodes.length,
     missingEpisodes,
     message,
+  }
+}
+
+// --- Auto Episode Import Functions ---
+
+const EpisodeProductsSchema = z.object({
+  products: z.array(z.object({
+    name: z.string(),
+  })),
+})
+
+const VALID_DEAL_TYPES = ['equity', 'royalty', 'loan', 'equity_plus_royalty', 'equity_plus_loan', 'contingent', 'unknown'] as const
+const normalizeDealType = (val: unknown) => {
+  if (typeof val === 'string' && (VALID_DEAL_TYPES as readonly string[]).includes(val)) return val
+  if (typeof val === 'string' && val.includes('contingent')) return 'contingent'
+  return 'unknown'
+}
+
+const FullEnrichmentSchema = z.object({
+  founders: z.array(z.string()).nullable(),
+  founderStory: z.string().nullable(),
+  askingAmount: z.number().nullable(),
+  askingEquity: z.number().nullable(),
+  dealType: z.preprocess(normalizeDealType, z.enum(VALID_DEAL_TYPES)),
+  dealAmount: z.number().nullable(),
+  dealEquity: z.number().nullable(),
+  royaltyPercent: z.number().nullable(),
+  royaltyTerms: z.string().nullable(),
+  dealOutcome: z.enum(['deal', 'no_deal', 'deal_fell_through', 'unknown']),
+  sharks: z.array(z.object({
+    name: z.string(),
+    amount: z.number().nullable(),
+    equity: z.number().nullable(),
+    isLead: z.boolean().optional(),
+  })),
+  status: z.enum(['active', 'out_of_business', 'acquired', 'unknown']),
+  websiteUrl: z.string().nullable(),
+  amazonUrl: z.string().nullable(),
+  lifetimeRevenue: z.number().nullable(),
+  annualRevenue: z.number().nullable(),
+  revenueYear: z.number().nullable(),
+  pitchSummary: z.string().nullable(),
+})
+
+type FullEnrichment = z.infer<typeof FullEnrichmentSchema>
+
+const FULL_ENRICHMENT_PROMPT = `You are a data extraction assistant. Extract structured information about a Shark Tank product from the provided search results.
+
+Return ONLY valid JSON matching this schema:
+{
+  "founders": ["name1", "name2"] or null,
+  "founderStory": "brief background on founders" or null,
+  "askingAmount": number in dollars or null,
+  "askingEquity": percentage as number (e.g., 10 for 10%) or null,
+  "dealType": "equity" | "royalty" | "loan" | "equity_plus_royalty" | "equity_plus_loan" | "contingent" | "unknown",
+  "dealAmount": total investment in dollars or null,
+  "dealEquity": total equity percentage or null,
+  "royaltyPercent": royalty percentage if applicable or null,
+  "royaltyTerms": "e.g. $1 per unit until $X repaid" or null,
+  "dealOutcome": "deal" | "no_deal" | "deal_fell_through" | "unknown",
+  "sharks": [
+    {"name": "Shark Name", "amount": dollars or null, "equity": percent or null, "isLead": true/false}
+  ],
+  "status": "active" | "out_of_business" | "acquired" | "unknown",
+  "websiteUrl": "official website" or null,
+  "amazonUrl": "amazon product page" or null,
+  "lifetimeRevenue": total lifetime revenue in dollars or null,
+  "annualRevenue": most recent annual revenue in dollars or null,
+  "revenueYear": year of annualRevenue figure or null,
+  "pitchSummary": "2-3 sentence summary of the pitch and outcome" or null
+}
+
+IMPORTANT:
+- For revenue, extract ACTUAL NUMBERS. If no specific number is found, use null.
+- For sharks array, include each investing shark with their individual contribution if known.
+- dealType should reflect the actual deal structure.
+- Be precise with all numbers. If information is not found, use null.`
+
+/**
+ * Discover product names for a Shark Tank episode using Tavily web search + OpenAI extraction.
+ */
+export async function discoverEpisodeProducts(season: number, episode: number): Promise<string[]> {
+  console.log(`[AutoImport] Discovering products for S${season}E${episode}`)
+
+  const results = await searchTavily(
+    `Shark Tank Season ${season} Episode ${episode} products companies pitched businesses`
+  )
+
+  if (results.length === 0) {
+    console.log('[AutoImport] No search results found')
+    return []
+  }
+
+  const content = results
+    .slice(0, 8)
+    .map(r => `[${r.title}]\n${r.content}`)
+    .join('\n\n')
+    .substring(0, 8000)
+
+  // Step 1: Extract product names
+  const result = await synthesize(
+    `Extract the names of all products or companies that were pitched on this specific Shark Tank episode. Return ONLY valid JSON: {"products": [{"name": "Product Name"}]}. Only include products/companies actually pitched on the show in this specific episode. Typically there are 3-5 products per episode. Use the SHORT official brand/company name only (e.g. "Flightpath" not "Flightpath Golf Tees", "Somnia+" not "SOMNIA+ Dorm Bed Expander Kit"). Do not include product descriptions in the name.`,
+    `Shark Tank Season ${season} Episode ${episode}\n\nSearch Results:\n${content}`,
+    EpisodeProductsSchema
+  )
+
+  if (!result.success || !result.data || result.data.products.length === 0) {
+    console.log('[AutoImport] Failed to extract product names:', result.error)
+    return []
+  }
+
+  const rawNames = result.data.products.map(p => p.name)
+  console.log(`[AutoImport] Raw discovery:`, rawNames)
+
+  // Step 2: Validate and clean names against the source data
+  const cleanResult = await synthesize(
+    `You are verifying Shark Tank product/company names. Given a list of discovered names and the original search results, return the canonical short brand name for each. Fix any issues:
+- Remove product category suffixes (e.g. "Flightpath Golf" → "Flightpath", "Rip Tie Hair" → "Rip Tie")
+- Use proper capitalization as the brand uses it (e.g. "SOMNIA+" → "Somnia+", "BRCĒ" stays "BRCĒ")
+- Merge duplicates if any
+- Remove any entries that are NOT actual pitched products (e.g. sponsor names, shark names)
+Return ONLY valid JSON: {"products": [{"name": "Canonical Name"}]}`,
+    `Discovered names: ${JSON.stringify(rawNames)}\n\nSource data:\n${content}`,
+    EpisodeProductsSchema
+  )
+
+  if (!cleanResult.success || !cleanResult.data) {
+    console.log('[AutoImport] Name cleanup failed, using raw names')
+    return rawNames
+  }
+
+  const names = cleanResult.data.products.map(p => p.name)
+  console.log(`[AutoImport] Cleaned names:`, names)
+  return names
+}
+
+/**
+ * Full enrichment for a single product using Tavily search + OpenAI synthesis.
+ */
+async function enrichProductFull(productName: string): Promise<FullEnrichment | null> {
+  // Search for deal details
+  const detailsResults = await searchTavily(
+    `${productName} Shark Tank deal details founders sharks invested`
+  )
+  // Search for current status
+  const statusResults = await searchTavily(
+    `${productName} Shark Tank still in business 2025 2026 where to buy`
+  )
+
+  const combinedContent = [
+    '=== DEAL DETAILS ===',
+    detailsResults.slice(0, 6).map(r => `[${r.title}]\n${r.content}`).join('\n\n').substring(0, 6000),
+    '',
+    '=== CURRENT STATUS ===',
+    statusResults.slice(0, 6).map(r => `[${r.title}]\n${r.content}`).join('\n\n').substring(0, 6000),
+  ].join('\n')
+
+  const result = await synthesize(
+    FULL_ENRICHMENT_PROMPT,
+    `Product: ${productName}\n\nSearch Results:\n${combinedContent}`,
+    FullEnrichmentSchema
+  )
+
+  if (!result.success || !result.data) {
+    console.log(`[AutoImport] Enrichment failed for ${productName}:`, result.error)
+    return null
+  }
+
+  return result.data
+}
+
+/**
+ * Create a product in the database and run full enrichment.
+ */
+async function createAndEnrichProduct(
+  name: string,
+  season: number,
+  episodeNumber: number,
+  episodeId: string,
+  sharkIds: Map<string, string>,
+  supabase: UntypedSupabase
+): Promise<{ created: boolean; enriched: boolean; dealOutcome?: string }> {
+  const slug = slugify(name)
+
+  // Upsert product (skip if exists)
+  const { error } = await supabase
+    .from('products')
+    .upsert({
+      name,
+      slug,
+      season,
+      episode_number: episodeNumber,
+      episode_id: episodeId,
+      enrichment_status: 'pending',
+      deal_outcome: 'unknown',
+    }, {
+      onConflict: 'slug',
+      ignoreDuplicates: true,
+    })
+
+  if (error && error.code !== 'PGRST116') {
+    console.error(`[AutoImport] Failed to create ${name}:`, error.message)
+    return { created: false, enriched: false }
+  }
+
+  // Fetch the product (may have existed already)
+  const { data: product } = await supabase
+    .from('products')
+    .select('id, created_at, enrichment_status')
+    .eq('slug', slug)
+    .single()
+
+  if (!product) {
+    return { created: false, enriched: false }
+  }
+
+  const isNew = Date.now() - new Date(product.created_at).getTime() < 10000
+  if (!isNew) {
+    console.log(`[AutoImport] Skipped (exists): ${name}`)
+    return { created: false, enriched: false }
+  }
+
+  console.log(`[AutoImport] Created: ${name}`)
+
+  // Run full enrichment
+  const enriched = await enrichProductFull(name)
+  if (!enriched) {
+    return { created: true, enriched: false }
+  }
+
+  // Update product with enrichment data
+  const nullIfZero = (val: number | null) => (val === 0 ? null : val)
+  const { error: updateError } = await supabase
+    .from('products')
+    .update({
+      founder_names: enriched.founders,
+      founder_story: enriched.founderStory,
+      asking_amount: enriched.askingAmount,
+      asking_equity: nullIfZero(enriched.askingEquity),
+      deal_type: enriched.dealType,
+      deal_amount: enriched.dealAmount,
+      deal_equity: nullIfZero(enriched.dealEquity),
+      royalty_percent: nullIfZero(enriched.royaltyPercent),
+      royalty_terms: enriched.royaltyTerms,
+      royalty_deal: enriched.dealType.includes('royalty'),
+      deal_outcome: enriched.dealOutcome,
+      status: enriched.status,
+      website_url: enriched.websiteUrl,
+      amazon_url: enriched.amazonUrl,
+      lifetime_revenue: enriched.lifetimeRevenue,
+      annual_revenue: enriched.annualRevenue,
+      revenue_year: enriched.revenueYear,
+      pitch_summary: enriched.pitchSummary,
+      enrichment_status: 'enriched',
+      last_enriched_at: new Date().toISOString(),
+    })
+    .eq('id', product.id)
+
+  if (updateError) {
+    console.error(`[AutoImport] Update failed for ${name}:`, updateError.message)
+    return { created: true, enriched: false }
+  }
+
+  // Link sharks if deal
+  if (enriched.sharks.length > 0 && enriched.dealOutcome === 'deal') {
+    await supabase.from('product_sharks').delete().eq('product_id', product.id)
+
+    for (const shark of enriched.sharks) {
+      const normalizedName = shark.name.toLowerCase()
+      const sharkSlug = SHARK_NAME_MAP[normalizedName]
+      let sharkId = sharkSlug ? sharkIds.get(sharkSlug) : sharkIds.get(normalizedName)
+
+      if (!sharkId) {
+        const newSlug = slugify(shark.name)
+        const { data: newShark } = await supabase
+          .from('sharks')
+          .insert({ name: shark.name, slug: newSlug, is_guest_shark: true })
+          .select('id')
+          .single()
+
+        if (newShark?.id) {
+          sharkId = newShark.id as string
+          sharkIds.set(normalizedName, sharkId)
+          sharkIds.set(newSlug, sharkId)
+          console.log(`[AutoImport] Created guest shark: ${shark.name}`)
+        }
+      }
+
+      if (sharkId) {
+        await supabase.from('product_sharks').insert({
+          product_id: product.id,
+          shark_id: sharkId,
+          investment_amount: shark.amount,
+          equity_percentage: shark.equity,
+          is_lead_investor: shark.isLead || false,
+        })
+      }
+    }
+  }
+
+  console.log(`[AutoImport] Enriched: ${name} -> ${enriched.dealOutcome} | ${enriched.status}`)
+  return { created: true, enriched: true, dealOutcome: enriched.dealOutcome }
+}
+
+export interface EpisodeImportResult {
+  season: number
+  episode: number
+  productsDiscovered: number
+  productsCreated: number
+  productsEnriched: number
+  productNames: string[]
+}
+
+/**
+ * Full auto-import pipeline for a missing episode:
+ * 1. Discover product names via Tavily search
+ * 2. Create episode record
+ * 3. Create and enrich each product
+ */
+export async function importMissingEpisode(
+  season: number,
+  episode: number
+): Promise<EpisodeImportResult> {
+  const supabase = getAdminSupabase()
+
+  console.log(`[AutoImport] Starting import for S${season}E${episode}`)
+
+  // Safety check: skip if episode already has products
+  const { data: existingProducts } = await supabase
+    .from('products')
+    .select('id')
+    .eq('season', season)
+    .eq('episode_number', episode)
+    .limit(1)
+
+  if (existingProducts && existingProducts.length > 0) {
+    console.log(`[AutoImport] S${season}E${episode} already has products, skipping`)
+    return { season, episode, productsDiscovered: 0, productsCreated: 0, productsEnriched: 0, productNames: [] }
+  }
+
+  // Step 1: Discover product names
+  const productNames = await discoverEpisodeProducts(season, episode)
+  if (productNames.length === 0) {
+    console.log(`[AutoImport] No products found for S${season}E${episode}, skipping`)
+    return { season, episode, productsDiscovered: 0, productsCreated: 0, productsEnriched: 0, productNames: [] }
+  }
+
+  // Step 2: Get or create episode record
+  const { data: existing } = await supabase
+    .from('episodes')
+    .select('id')
+    .eq('season', season)
+    .eq('episode_number', episode)
+    .single()
+
+  let episodeId: string
+  if (existing) {
+    episodeId = existing.id
+  } else {
+    const { data: newEp, error } = await supabase
+      .from('episodes')
+      .insert({ season, episode_number: episode, title: `Season ${season}, Episode ${episode}` })
+      .select('id')
+      .single()
+
+    if (error || !newEp) throw new Error(`Failed to create episode: ${error?.message}`)
+    episodeId = newEp.id
+  }
+
+  // Step 3: Load shark IDs for linking
+  const { data: sharks } = await supabase.from('sharks').select('id, slug, name')
+  const sharkIds = new Map<string, string>()
+  for (const shark of sharks || []) {
+    sharkIds.set(shark.slug, shark.id)
+    sharkIds.set(shark.name.toLowerCase(), shark.id)
+  }
+
+  // Step 4: Create and enrich each product
+  let created = 0
+  let enriched = 0
+
+  for (const name of productNames) {
+    const result = await createAndEnrichProduct(name, season, episode, episodeId, sharkIds, supabase)
+    if (result.created) created++
+    if (result.enriched) enriched++
+  }
+
+  console.log(`[AutoImport] S${season}E${episode} complete: ${created} created, ${enriched} enriched`)
+
+  return {
+    season,
+    episode,
+    productsDiscovered: productNames.length,
+    productsCreated: created,
+    productsEnriched: enriched,
+    productNames,
   }
 }
 

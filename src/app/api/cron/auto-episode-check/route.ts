@@ -1,31 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { checkForNewEpisodes } from '@/lib/services/enrichment'
+import { checkForNewEpisodes, importMissingEpisode } from '@/lib/services/enrichment'
+import type { EpisodeImportResult } from '@/lib/services/enrichment'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
-export const maxDuration = 60 // 1 minute max (just checking, not enriching)
+export const maxDuration = 300 // 5 minutes for full import pipeline
 
 /**
- * Auto Episode Check Cron Job
+ * Auto Episode Check & Import Cron Job
  *
- * Checks TVMaze API for recently aired episodes and reports if any are missing
- * from the database. Does NOT auto-import (Playwright scraping can't run in serverless).
+ * 1. Checks TVMaze API for recently aired episodes
+ * 2. For any missing episodes, discovers product names via Tavily web search
+ * 3. Creates products and runs full enrichment (deal details, status, sharks)
  *
- * If missing episodes are found, run the manual workflow:
- *   npx tsx scripts/new-episode.ts "Product Name" --season X --episode Y
+ * Runs daily at 6am UTC via Vercel Cron.
  */
 export async function GET(request: NextRequest) {
-  // Verify Vercel Cron secret (security)
+  // Verify Vercel Cron secret
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     console.error('[CRON] Unauthorized auto-episode-check attempt')
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // Validate required environment variables
   const requiredEnvVars = [
     'NEXT_PUBLIC_SUPABASE_URL',
     'SUPABASE_SERVICE_ROLE_KEY',
+    'TAVILY_API_KEY',
+    'OPENAI_API_KEY',
   ] as const
 
   const missingVars = requiredEnvVars.filter(v => !process.env[v])
@@ -38,37 +40,64 @@ export async function GET(request: NextRequest) {
     }, { status: 500 })
   }
 
-  console.log('[CRON] Starting automated episode check at', new Date().toISOString())
+  console.log('[CRON] Starting automated episode check & import at', new Date().toISOString())
 
   try {
-    // Check for episodes in last 72 hours (catches Friday episodes on weekends)
-    const result = await checkForNewEpisodes({ lookbackHours: 72 })
+    // Step 1: Check for missing episodes (72-hour lookback catches Friday episodes over the weekend)
+    const checkResult = await checkForNewEpisodes({ lookbackHours: 72 })
+    console.log('[CRON] Episode check:', checkResult.message)
 
-    console.log('[CRON] Episode check completed:', result)
+    if (checkResult.missingEpisodes.length === 0) {
+      return NextResponse.json({
+        success: true,
+        message: checkResult.message,
+        timestamp: new Date().toISOString(),
+        stats: { recentEpisodes: checkResult.recentEpisodes, imported: 0 },
+      })
+    }
 
-    // If missing episodes found, log instruction for manual import
-    if (result.missingEpisodes.length > 0) {
-      console.log('[CRON] ACTION REQUIRED: Missing episodes detected!')
-      console.log('[CRON] Run manual import for each:')
-      for (const ep of result.missingEpisodes) {
-        console.log(`[CRON]   npx tsx scripts/new-episode.ts "ProductName" --season ${ep.season} --episode ${ep.episode}`)
+    // Step 2: Import each missing episode
+    const importResults: EpisodeImportResult[] = []
+
+    for (const ep of checkResult.missingEpisodes) {
+      console.log(`[CRON] Importing S${ep.season}E${ep.episode}...`)
+      try {
+        const result = await importMissingEpisode(ep.season, ep.episode)
+        importResults.push(result)
+      } catch (err) {
+        console.error(`[CRON] Failed to import S${ep.season}E${ep.episode}:`, err)
+        importResults.push({
+          season: ep.season,
+          episode: ep.episode,
+          productsDiscovered: 0,
+          productsCreated: 0,
+          productsEnriched: 0,
+          productNames: [],
+        })
       }
     }
 
+    const totalCreated = importResults.reduce((sum, r) => sum + r.productsCreated, 0)
+    const totalEnriched = importResults.reduce((sum, r) => sum + r.productsEnriched, 0)
+
+    console.log(`[CRON] Import complete: ${totalCreated} products created, ${totalEnriched} enriched`)
+
     return NextResponse.json({
       success: true,
-      message: result.message,
+      message: `Imported ${totalCreated} products from ${importResults.length} episode(s)`,
       timestamp: new Date().toISOString(),
       stats: {
-        recentEpisodes: result.recentEpisodes,
-        missingEpisodes: result.missingEpisodes.length,
+        recentEpisodes: checkResult.recentEpisodes,
+        missingEpisodes: checkResult.missingEpisodes.length,
+        imported: totalCreated,
+        enriched: totalEnriched,
       },
-      missingEpisodes: result.missingEpisodes,
+      episodes: importResults,
     })
   } catch (error) {
-    console.error('[CRON] Episode check failed:', error)
+    console.error('[CRON] Episode check/import failed:', error)
     return NextResponse.json({
-      error: 'Episode check failed',
+      error: 'Episode check/import failed',
       message: error instanceof Error ? error.message : 'Unknown error',
       timestamp: new Date().toISOString()
     }, { status: 500 })
