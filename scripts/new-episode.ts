@@ -4,6 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 import { searchProductDetails, searchProductStatus, combineSearchResultsCompact } from './ingestion/enrichment/shared/tavily-client';
 import { synthesize } from './ingestion/enrichment/shared/synthesis-client';
 import { TokenTracker } from './ingestion/enrichment/shared/token-tracker';
+import { submitNewEpisodeToIndexNow } from '../src/lib/services/indexnow';
+import { scrapeProductPhoto } from '../src/lib/services/photo-scraper';
 
 dotenv.config({ path: '.env.local' });
 
@@ -464,12 +466,52 @@ async function main() {
     console.log(`\n   💰 Estimated cost: $${tracker.estimateCost().toFixed(4)}`);
   }
 
+  // Scrape photos for all created products
+  if (created.length > 0) {
+    console.log('   📸 Scraping product photos...\n');
+
+    for (const product of created) {
+      const slug = slugify(product.name);
+      // Fetch website_url from database (may have been set by enrichment)
+      const { data: productData } = await supabase
+        .from('products')
+        .select('website_url')
+        .eq('id', product.id)
+        .single();
+
+      const result = await scrapeProductPhoto({
+        productId: product.id,
+        productName: product.name,
+        slug,
+        websiteUrl: productData?.website_url,
+      });
+
+      if (result.success) {
+        console.log(`      ✅ ${product.name} (${result.source})`);
+      } else {
+        console.log(`      ❌ ${product.name} (no photo found)`);
+      }
+    }
+  }
+
   console.log('\n' + '━'.repeat(60));
   console.log('📊 Summary:');
   console.log(`   Created: ${created.length}`);
   console.log(`   Skipped: ${skipped.length}`);
   console.log(`   Failed: ${failed.length}`);
   console.log('━'.repeat(60) + '\n');
+
+  // Submit new product URLs to IndexNow
+  if (created.length > 0) {
+    console.log('   🔔 Submitting to IndexNow...');
+    const slugs = created.map(p => slugify(p.name));
+    const indexResult = await submitNewEpisodeToIndexNow(slugs, season, episodeNumber);
+    if (indexResult.success) {
+      console.log(`   ✅ IndexNow: ${indexResult.count} URLs submitted\n`);
+    } else {
+      console.log(`   ⚠️  IndexNow submission failed (non-blocking)\n`);
+    }
+  }
 }
 
 main().catch(console.error);

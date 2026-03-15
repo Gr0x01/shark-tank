@@ -8,12 +8,11 @@
 
 import { createClient } from '@supabase/supabase-js'
 import * as dotenv from 'dotenv'
+import { submitUrlsToIndexNow } from '../src/lib/services/indexnow'
 
 dotenv.config({ path: '.env.local' })
 
-const INDEXNOW_KEY = '7b7efa2918524d59b14d971a617e79aa'
 const SITE_URL = 'https://tankd.io'
-const INDEXNOW_API = 'https://api.indexnow.org/indexnow'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -28,50 +27,6 @@ async function getAllProductSlugs(): Promise<string[]> {
 
   if (error) throw error
   return data?.map(p => p.slug) || []
-}
-
-async function submitToIndexNow(urls: string[]): Promise<void> {
-  // IndexNow accepts up to 10,000 URLs per request
-  const batchSize = 10000
-
-  for (let i = 0; i < urls.length; i += batchSize) {
-    const batch = urls.slice(i, i + batchSize)
-
-    const payload = {
-      host: 'tankd.io',
-      key: INDEXNOW_KEY,
-      keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
-      urlList: batch
-    }
-
-    console.log(`\nSubmitting batch ${Math.floor(i / batchSize) + 1} (${batch.length} URLs)...`)
-
-    try {
-      const response = await fetch(INDEXNOW_API, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
-
-      if (response.ok || response.status === 202) {
-        console.log(`✓ Batch submitted successfully (status: ${response.status})`)
-      } else {
-        const text = await response.text()
-        console.error(`✗ Failed to submit batch: ${response.status} ${text}`)
-        // Continue with remaining batches even if one fails
-      }
-    } catch (error) {
-      console.error(`✗ Network error submitting batch:`, error)
-      // Continue with remaining batches
-    }
-
-    // Small delay between batches to avoid rate limiting
-    if (i + batchSize < urls.length) {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-    }
-  }
 }
 
 async function main() {
@@ -116,7 +71,7 @@ async function main() {
     return
   }
 
-  await submitToIndexNow(allUrls)
+  await submitUrlsToIndexNow(allUrls)
 
   console.log('\n=== Done ===')
   console.log('URLs have been submitted to IndexNow.')

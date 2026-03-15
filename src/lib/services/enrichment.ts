@@ -3,6 +3,7 @@ import OpenAI from 'openai'
 import { z } from 'zod'
 import crypto from 'crypto'
 import type { Database } from '../supabase/types'
+import { scrapeProductPhoto } from './photo-scraper'
 
 // --- Supabase Admin Client ---
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -846,6 +847,20 @@ async function createAndEnrichProduct(
   }
 
   console.log(`[AutoImport] Enriched: ${name} -> ${enriched.dealOutcome} | ${enriched.status}`)
+
+  // Scrape product photo
+  const photoResult = await scrapeProductPhoto({
+    productId: product.id,
+    productName: name,
+    slug,
+    websiteUrl: enriched.websiteUrl,
+  })
+  if (photoResult.success) {
+    console.log(`[AutoImport] Photo scraped: ${name} (${photoResult.source})`)
+  } else {
+    console.log(`[AutoImport] No photo found: ${name}`)
+  }
+
   return { created: true, enriched: true, dealOutcome: enriched.dealOutcome }
 }
 

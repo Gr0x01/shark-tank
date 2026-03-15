@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkForNewEpisodes, importMissingEpisode } from '@/lib/services/enrichment'
 import type { EpisodeImportResult } from '@/lib/services/enrichment'
+import { submitNewEpisodeToIndexNow } from '@/lib/services/indexnow'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -81,6 +82,16 @@ export async function GET(request: NextRequest) {
     const totalEnriched = importResults.reduce((sum, r) => sum + r.productsEnriched, 0)
 
     console.log(`[CRON] Import complete: ${totalCreated} products created, ${totalEnriched} enriched`)
+
+    // Submit new product URLs to IndexNow for faster search engine indexing
+    for (const result of importResults) {
+      if (result.productsCreated > 0) {
+        const slugs = result.productNames.map(name =>
+          name.toLowerCase().replace(/['']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+        )
+        await submitNewEpisodeToIndexNow(slugs, result.season, result.episode)
+      }
+    }
 
     return NextResponse.json({
       success: true,
