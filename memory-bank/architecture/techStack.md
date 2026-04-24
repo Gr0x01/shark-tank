@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-14
+Last-Updated: 2026-03-16
 Maintainer: RB
 Status: Live - Production
 ---
@@ -10,14 +10,14 @@ Status: Live - Production
 Modern web stack optimized for rapid development and minimal operational overhead.
 
 ### Backend
-- **Runtime**: Node.js 18+ (via Next.js API routes)
-- **Framework**: Next.js 14+ (App Router)
+- **Runtime**: Node.js 24+ (via Next.js API routes)
+- **Framework**: Next.js 16.1.6 (App Router)
 - **Database**: Supabase (PostgreSQL)
 - **Storage**: Supabase Storage (for product photos)
 - **Authentication**: Supabase Auth (for admin tools)
 
 ### Frontend
-- **Framework**: Next.js 14+ with React 18
+- **Framework**: Next.js 16.1.6 with React 19.2.4
 - **State Management**: React Context + useState/useReducer
 - **Styling**: Tailwind CSS
 - **UI Components**: Headless UI + custom components
@@ -38,7 +38,7 @@ Modern web stack optimized for rapid development and minimal operational overhea
 ## Development Tools
 
 ### Code Quality
-- **Linting**: ESLint with Next.js config
+- **Linting**: ESLint 9 with Next.js config (ESLint 10 blocked upstream — eslint-plugin-react doesn't support it yet)
 - **Formatting**: Prettier with Tailwind plugin
 - **Type Checking**: TypeScript (strict mode)
 - **Testing**: Jest + React Testing Library (unit tests), Playwright (e2e)
@@ -50,7 +50,7 @@ Modern web stack optimized for rapid development and minimal operational overhea
 - **Environment**: Local development with Next.js dev server
 
 ### Specialized Tools
-- **Data Validation**: Zod for runtime type checking
+- **Data Validation**: Zod 4 for runtime type checking
 - **Environment Variables**: Next.js built-in env support
 
 ### LLM & AI Tools
@@ -104,14 +104,15 @@ Modern web stack optimized for rapid development and minimal operational overhea
 ## Dependencies
 ```json
 {
-  "next": "14+",
-  "react": "18+", 
+  "next": "16.1.6",
+  "react": "19.2.4",
   "typescript": "5+",
-  "tailwindcss": "3+",
-  "@headlessui/react": "^1.7.0",
-  "@supabase/supabase-js": "^2.38.0",
-  "posthog-js": "^1.302.0",
-  "zod": "^3.22.0"
+  "tailwindcss": "4.2.1",
+  "@headlessui/react": "^2.2.9",
+  "@supabase/supabase-js": "^2.99.1",
+  "@supabase/ssr": "^0.9.0",
+  "posthog-js": "^1.360.2",
+  "zod": "^4.3.6"
 }
 ```
 

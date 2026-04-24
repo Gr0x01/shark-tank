@@ -1,5 +1,5 @@
 ---
-Last-Updated: 2025-12-14
+Last-Updated: 2026-03-16
 Maintainer: RB
 Status: Phase 4 - Launch & Growth
 ---
@@ -41,14 +41,18 @@ Status: Phase 4 - Launch & Growth
 | 22 | Manual Seed Products Import | Dec 13 | ✅ Complete (18 products) |
 | 23 | Delayed Narrative Refresh System | Dec 13 | ✅ Complete |
 | 24 | ISR + React Cache Optimization | Dec 14 | ✅ Complete |
+| 25 | Dependency Upgrade (Next 16.1, React 19.2, Zod 4, etc.) | Mar 16 | ✅ Complete |
+| 26 | Auto Photo Scraping in Episode Pipeline | Mar 16 | ✅ Complete |
+| 27 | IndexNow Auto-Submit for New Products | Mar 16 | ✅ Complete |
 
-## Current Status (as of Dec 14, 2025)
+## Current Status (as of Mar 16, 2026)
 
-**Products**: 618 total
+**Products**: 642 total
 - 306 deals (with shark investments)
 - 243 no deal
 - 69 deal fell through
-- ALL 618 with narrative content enriched
+- ALL enriched with narrative content
+- 641/642 have product photos (auto-scraped)
 - Includes 29 manually curated "greatest hits" products
 
 **Sharks**: 47 total (8 main + 39 guest sharks)
@@ -66,7 +70,7 @@ Status: Phase 4 - Launch & Growth
 - Category pages, season pages, episode pages
 - Full SEO metadata and structured data
 
-**Stack**: Next.js 14, Supabase, Tailwind CSS, Playwright
+**Stack**: Next.js 16.1.6, React 19.2.4, Supabase, Tailwind CSS 4.2, Zod 4, Playwright
 **Site**: LIVE at https://tankd.io (Dec 12, 2025)
 
 ---
@@ -102,7 +106,7 @@ Status: Phase 4 - Launch & Growth
 - Cost monitoring: ~$3.82/month (OpenAI + Tavily)
 
 ### Future Enhancements
-1. [ ] Product photo scraping/enrichment
+1. [x] Product photo scraping/enrichment ✅ (Mar 16)
 2. [ ] PostHog analytics integration
 3. [ ] Affiliate link management system
 4. [ ] Performance monitoring and optimization

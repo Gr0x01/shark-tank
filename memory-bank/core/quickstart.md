@@ -1,7 +1,7 @@
 ---
-Last-Updated: 2025-12-13
+Last-Updated: 2026-03-16
 Maintainer: RB
-Status: Live - Awaiting Google Indexing
+Status: Live - Phase 4
 ---
 
 # Quickstart: tankd.io
@@ -41,6 +41,8 @@ npx tsx scripts/batch-enrich.ts --concurrency 20
 npx tsx scripts/enrich-narratives.ts --limit 10              # Product narratives
 npx tsx scripts/enrich-shark-narratives.ts --shark "Mark"    # Shark narratives
 npx tsx scripts/enrich-shark-narratives.ts --all             # All sharks
+npx tsx scripts/scrape-photos.ts                             # Scrape photos for products missing them
+npx tsx scripts/scrape-photos.ts --dry-run                   # Preview without scraping
 
 # === CONTENT MAINTENANCE ===
 # When product status changes, narrative is auto-flagged for immediate refresh (database trigger)
@@ -72,8 +74,9 @@ npx tsx scripts/create-seo-page.ts listing "biggest-deals" "Biggest Deals"
 npx tsx scripts/enrich-seo-pages.ts --page how-to-apply
 
 # === INDEXNOW SUBMISSION ===
-# Submit URLs to Bing, Yandex for faster re-indexing (after SEO changes)
-npx tsx scripts/submit-indexnow.ts           # Submit all 632 URLs
+# IndexNow is auto-submitted when new products are created (both manual & cron)
+# Manual bulk submission for all URLs:
+npx tsx scripts/submit-indexnow.ts           # Submit all URLs
 npx tsx scripts/submit-indexnow.ts --dry-run # Preview without submitting
 ```
 
@@ -82,7 +85,7 @@ npx tsx scripts/submit-indexnow.ts --dry-run # Preview without submitting
 ## Friday Episode Workflow
 1. Episode airs Friday 8pm ET
 2. Find product names (Google, Reddit r/sharktank, competitor)
-3. Run `new-episode.ts` with product names → pages go live with backstory
+3. Run `new-episode.ts` with product names → pages go live with backstory + photos + IndexNow submitted
 4. Watch episode, note deals
 5. Run `update-deal.ts` for each product as you watch → deal details added
    - **Multiple updates are OK!** System batches them together with 1-hour cooldown
@@ -101,7 +104,8 @@ npx tsx scripts/submit-indexnow.ts --dry-run # Preview without submitting
 1. **Automated Episode Detection** (6am UTC / 1am ET)
    - Checks TVMaze API for new episodes aired in last 72 hours
    - Scrapes competitor site for product names
-   - Auto-creates products and runs enrichment
+   - Auto-creates products, runs enrichment, and scrapes product photos
+   - Submits new URLs to IndexNow for faster search indexing
    - **Catches missed episodes automatically**
    - Cost: ~$0.20/month
 
@@ -139,8 +143,9 @@ npx tsx scripts/submit-indexnow.ts --dry-run # Preview without submitting
 - [Architecture Patterns](../architecture/patterns.md)
 
 ## Database Status
-- **Products**: 618 total (306 deals, 243 no deal, 69 fell through)
-  - ALL 618 enriched with narrative content
+- **Products**: 642 total (306 deals, 243 no deal, 69 fell through)
+  - ALL enriched with narrative content
+  - 641/642 have product photos (auto-scraped from website og:image or Tavily)
   - Includes 29 manually curated "greatest hits" (Bombas, Poppi, Scrub Daddy, The Comfy, etc.)
 - **Sharks**: 47 (8 main + 39 guest)
   - All have photos in Supabase Storage

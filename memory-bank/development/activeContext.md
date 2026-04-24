@@ -1,14 +1,14 @@
 ---
-Last-Updated: 2025-12-14
+Last-Updated: 2026-03-16
 Maintainer: RB
-Status: Live - Awaiting Google Indexing
+Status: Live - Phase 4
 ---
 
 # Active Context: tankd.io
 
 ## Current Status
 - **Environment**: LIVE at https://tankd.io
-- **Data**: 618 products, 47 sharks (all enriched with narrative content)
+- **Data**: 642 products, 47 sharks (all enriched with narrative content, 641/642 with photos)
 - **Focus**: Google indexing, external link building, Friday episode workflow
 
 ## Current Blockers
@@ -43,6 +43,7 @@ See `core/quickstart.md` for full command reference.
 - **Vercel Cron - Narrative Refresh Processing**: Runs every 3 hours, flags products after 1-hour cooldown (`/api/cron/process-narrative-refreshes`)
 - **Narrative Refresh Trigger (Immediate)**: Auto-flags products for re-enrichment when status changes
 - **Narrative Refresh Trigger (Delayed)**: Schedules refresh 1 hour after deal detail changes (prevents wasted regenerations during live episode updates)
+- **IndexNow Auto-Submit**: New products automatically submitted to Bing/Yandex via IndexNow (both manual `new-episode.ts` and cron `auto-episode-check`)
 - **Google Analytics**: GA4 + Plausible tracking active
 
 ### Available Tools
@@ -114,6 +115,10 @@ CRON_SECRET=...
 - Deal filter pages: `/deals/under-100k`, `/deals/100k-to-500k`, `/deals/over-500k`
 
 ## Recent Changes
+- **Mar 16**: IndexNow auto-submission for new products — shared utility in `src/lib/services/indexnow.ts`, integrated into both manual and cron pipelines
+- **Mar 16**: Auto photo scraping integrated into new-episode pipeline and cron job; backfilled 52 missing photos
+- **Mar 16**: Full dependency upgrade — Next.js 16.1.6, React 19.2.4, Zod 4, Supabase 2.99, Tailwind 4.2, Playwright 1.58, and more
+  - ESLint 10 deferred: blocked upstream (eslint-plugin-react doesn't support it yet)
 - **Dec 14**: ISR + React Cache optimization deployed for 60-80% database query reduction
 - **Dec 13**: Delayed narrative refresh system deployed - 1-hour cooldown for deal changes
 - **Dec 13**: SEO audit completed - no blockers found, site ready for indexing
