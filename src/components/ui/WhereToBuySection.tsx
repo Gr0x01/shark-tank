@@ -1,4 +1,5 @@
 import { addAmazonAffiliateTag } from '@/lib/utils'
+import { AffiliateLink } from './AffiliateLink'
 
 interface WhereToBuySectionProps {
   productName: string
@@ -94,12 +95,12 @@ export function WhereToBuySection({
 
           {/* Amazon Card - Featured */}
           {affiliateAmazonUrl && (
-            <a
+            <AffiliateLink
               href={affiliateAmazonUrl}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
+              placement="where_to_buy"
+              productName={productName}
               className="retailer-card retailer-featured"
-              aria-label={`Buy ${productName} on Amazon (opens in new tab) - Fast Prime shipping, easy returns, customer reviews`}
+              ariaLabel={`Buy ${productName} on Amazon (opens in new tab) - Fast Prime shipping, easy returns, customer reviews`}
             >
               <div className="retailer-badge">Recommended</div>
               <div className="retailer-icon retailer-icon-amazon">
@@ -115,7 +116,7 @@ export function WhereToBuySection({
                 Buy on Amazon
                 <ArrowIcon />
               </span>
-            </a>
+            </AffiliateLink>
           )}
 
           {/* Official Website Card */}

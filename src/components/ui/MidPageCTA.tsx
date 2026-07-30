@@ -1,4 +1,5 @@
 import { addAmazonAffiliateTag } from '@/lib/utils'
+import { AffiliateLink } from './AffiliateLink'
 
 interface MidPageCTAProps {
   productName: string
@@ -56,15 +57,15 @@ export function MidPageCTA({
           </p>
           <div className="cta-card-buttons">
             {affiliateAmazonUrl && (
-              <a
+              <AffiliateLink
                 href={affiliateAmazonUrl}
-                target="_blank"
-                rel="noopener noreferrer sponsored"
+                placement="mid_page"
+                productName={productName}
                 className="btn-amazon btn-amazon-large"
               >
                 <AmazonIcon />
                 Buy on Amazon
-              </a>
+              </AffiliateLink>
             )}
             {websiteUrl && (
               <a

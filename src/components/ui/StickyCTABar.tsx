@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { addAmazonAffiliateTag } from '@/lib/utils'
+import { AffiliateLink } from './AffiliateLink'
 
 interface StickyCTABarProps {
   productName: string
@@ -61,14 +62,14 @@ export function StickyCTABar({
         </div>
         <div className="sticky-cta-buttons">
           {affiliateAmazonUrl && (
-            <a
+            <AffiliateLink
               href={affiliateAmazonUrl}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
+              placement="sticky_bar"
+              productName={productName}
               className="btn-sticky-primary"
             >
               Amazon
-            </a>
+            </AffiliateLink>
           )}
           {websiteUrl && (
             <a
