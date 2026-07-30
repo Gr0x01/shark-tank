@@ -295,53 +295,64 @@ export default async function SharkPage({ params, searchParams }: Props) {
         />
       )}
 
-      <main className="min-h-screen py-12 px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Back link */}
-          <div className="mb-8">
-            <Link href="/sharks" className="text-sm text-[var(--cyan-600)] hover:underline underline-offset-4 font-display">
-              ← All Sharks
-            </Link>
-          </div>
+      <main className="min-h-screen">
+        {/* Hero — name, style, and the headline portfolio stats */}
+        <section className="shark-hero">
+          <div className="max-w-7xl mx-auto px-6">
+            <Link href="/sharks" className="shark-hero-back">← All Sharks</Link>
 
-          {/* Hero section - Full width */}
-          <div className="flex flex-col md:flex-row gap-8 mb-12">
-            <SharkImage
-              src={shark.photo_url}
-              name={shark.name}
-              size="xl"
-              className="shrink-0"
-            />
-            <div>
-              <h1 className="text-3xl md:text-4xl font-medium mb-2">
-                {shark.name}
-                {shark.is_retired && (
-                  <span className="ml-3 text-sm font-normal px-3 py-1 rounded-full bg-[var(--ink-100)] text-[var(--ink-600)] border border-[var(--ink-200)]">
-                    No Longer on Shark Tank
-                  </span>
+            <div className="shark-hero-main">
+              <SharkImage
+                src={shark.photo_url}
+                name={shark.name}
+                size="xl"
+                className="shark-hero-photo shrink-0"
+              />
+              <div className="shark-hero-copy">
+                <span className="shark-hero-kicker">
+                  {shark.is_retired ? 'Former Shark Tank investor' : 'Shark Tank investor'}
+                </span>
+                <h1>{shark.name}</h1>
+                {shark.investment_style && (
+                  <p className="shark-hero-style">{shark.investment_style}</p>
                 )}
-              </h1>
-              {shark.investment_style && (
-                <p className="text-xl text-[var(--cyan-600)] font-display mb-4">{shark.investment_style}</p>
-              )}
-              {shark.bio && (
-                <p className="text-[var(--ink-600)] leading-relaxed">{shark.bio}</p>
-              )}
+              </div>
             </div>
+
+            {stats && (
+              <dl className="shark-hero-stats">
+                <div>
+                  <dt>Total deals</dt>
+                  <dd>{stats.total_deals}</dd>
+                </div>
+                <div className="gold">
+                  <dt>Invested</dt>
+                  <dd>{stats.total_invested ? `$${(stats.total_invested / 1000000).toFixed(1)}M` : '—'}</dd>
+                </div>
+                <div>
+                  <dt>Active companies</dt>
+                  <dd>{stats.active_companies}</dd>
+                </div>
+                <div className="cyan">
+                  <dt>Success rate</dt>
+                  <dd>{stats.success_rate ? `${stats.success_rate}%` : '—'}</dd>
+                </div>
+              </dl>
+            )}
+
+            {shark.bio && <p className="shark-hero-bio">{shark.bio}</p>}
           </div>
+        </section>
 
-          {/* Main content + Sidebar layout */}
-          <div className="shark-profile-layout">
-            {/* Main Content */}
-            <div className="shark-main-content">
-              {/* Co-Investors */}
-              <SharkCoInvestors coInvestors={coInvestors} sharkName={shark.name} />
-
-              {/* Top Deals */}
+        <div className="max-w-7xl mx-auto px-6 py-12">
+              {/* Top Deals — the shark's own highlights come first */}
               <SharkTopDeals
                 topDeals={topPerformers}
                 sharkName={shark.name}
               />
+
+              {/* Co-Investors */}
+              <SharkCoInvestors coInvestors={coInvestors} sharkName={shark.name} />
 
               {/* Narrative Content */}
               {hasNarrative && narrative && (
@@ -384,48 +395,6 @@ export default async function SharkPage({ params, searchParams }: Props) {
                   </div>
                 </article>
               )}
-            </div>
-
-            {/* Sidebar */}
-            <aside className="shark-sidebar" aria-label="Shark portfolio summary">
-              {/* Stats Card */}
-              {stats && (
-                <div className="sidebar-card">
-                  <h3 className="sidebar-card-label">Portfolio Metrics</h3>
-                  <div className="sidebar-stats">
-                    <div className="sidebar-stat">
-                      <div className="stat-number text-2xl">{stats.total_deals}</div>
-                      <div className="stat-label">Total Deals</div>
-                    </div>
-                    <div className="sidebar-stat">
-                      <div className="stat-number text-2xl text-[var(--cyan-600)]">
-                        {stats.total_invested ? `$${(stats.total_invested / 1000000).toFixed(1)}M` : '—'}
-                      </div>
-                      <div className="stat-label">Invested</div>
-                    </div>
-                    <div className="sidebar-stat">
-                      <div className="stat-number text-2xl text-[var(--cyan-600)]">{stats.active_companies}</div>
-                      <div className="stat-label">Active</div>
-                    </div>
-                    <div className="sidebar-stat">
-                      <div className="stat-number text-2xl">
-                        {stats.success_rate ? `${stats.success_rate}%` : '—'}
-                      </div>
-                      <div className="stat-label">Success Rate</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Investment Style Card */}
-              {shark.investment_style && (
-                <div className="sidebar-card sidebar-style-card">
-                  <h3 className="sidebar-card-label">Investment Style</h3>
-                  <div className="sidebar-style-text">{shark.investment_style}</div>
-                </div>
-              )}
-            </aside>
-          </div>
 
           {/* Portfolio - Full width below sidebar layout */}
           <section className="mb-12">

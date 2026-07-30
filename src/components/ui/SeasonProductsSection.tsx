@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ProductCardCommerce } from './ProductCardCommerce'
 import type { ProductWithSharks } from '@/lib/supabase/types'
+import { useSpoilerContext } from '@/contexts/SpoilerContext'
 
 interface SeasonProductsSectionProps {
   products: ProductWithSharks[]
@@ -16,11 +17,13 @@ type DealFilter = 'all' | 'deal' | 'no_deal'
 
 export function SeasonProductsSection({ products, season, totalProducts, sharkPhotos }: SeasonProductsSectionProps) {
   const [filter, setFilter] = useState<DealFilter>('all')
+  const { spoilersHidden } = useSpoilerContext()
+  const activeFilter = spoilersHidden ? 'all' : filter
 
   const filteredProducts = products.filter((product) => {
-    if (filter === 'all') return true
-    if (filter === 'deal') return product.deal_outcome === 'deal'
-    if (filter === 'no_deal') return product.deal_outcome === 'no_deal' || product.deal_outcome === 'deal_fell_through'
+    if (activeFilter === 'all') return true
+    if (activeFilter === 'deal') return product.deal_outcome === 'deal'
+    if (activeFilter === 'no_deal') return product.deal_outcome === 'no_deal' || product.deal_outcome === 'deal_fell_through'
     return true
   })
 
@@ -32,12 +35,12 @@ export function SeasonProductsSection({ products, season, totalProducts, sharkPh
       <div className="max-w-6xl mx-auto px-6">
         <div className="products-header">
           <h2 className="products-title">Season {season}</h2>
-          <Link href="/products" className="products-link">
-            View all {totalProducts} →
+          <Link href={`/seasons/${season}`} className="products-link">
+            View full season →
           </Link>
         </div>
         
-        <div className="season-filters">
+        {!spoilersHidden && <div className="season-filters">
           <button
             className={`season-filter-btn ${filter === 'all' ? 'active' : ''}`}
             onClick={() => setFilter('all')}
@@ -56,7 +59,7 @@ export function SeasonProductsSection({ products, season, totalProducts, sharkPh
           >
             No Deal ({noDealCount})
           </button>
-        </div>
+        </div>}
         
         <div className="products-grid-home">
           {filteredProducts.map((product) => (
@@ -64,7 +67,6 @@ export function SeasonProductsSection({ products, season, totalProducts, sharkPh
               key={product.id}
               product={product}
               sharkPhotos={sharkPhotos}
-              spoiler={true}
               hideBadges={true}
             />
           ))}
@@ -76,7 +78,7 @@ export function SeasonProductsSection({ products, season, totalProducts, sharkPh
 
         <div className="products-cta">
           <Link href="/products" className="btn-browse">
-            Browse All Products
+            Browse all {totalProducts} products
           </Link>
         </div>
       </div>

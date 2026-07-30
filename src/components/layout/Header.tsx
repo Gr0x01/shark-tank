@@ -51,7 +51,12 @@ export function Header() {
       }
     }
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    const handleOpenSearch = () => setSearchOpen(true)
+    window.addEventListener('tankd:open-search', handleOpenSearch)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('tankd:open-search', handleOpenSearch)
+    }
   }, [])
 
   // Reset selected index when query changes or results become empty
@@ -105,12 +110,12 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-[var(--white)]/95 backdrop-blur-sm border-b border-[var(--ink-100)]">
+    <header className="site-header">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="flex h-16 items-center justify-between">
+        <div className="site-header-inner">
           <Link href="/" className="flex items-center gap-1.5 group">
-            <span className="font-display font-bold text-lg tracking-tight text-[var(--ink-900)]">
-              tankd.io
+            <span className="site-wordmark">
+              tankd<span>.io</span>
             </span>
           </Link>
           
@@ -140,7 +145,7 @@ export function Header() {
               <kbd className="search-kbd">⌘K</kbd>
             </button>
             
-            <nav className="hidden sm:flex items-center gap-6">
+            <nav className="site-desktop-nav">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
@@ -148,8 +153,8 @@ export function Header() {
                   className={clsx(
                     'font-display text-sm font-medium transition-colors',
                     pathname.startsWith(item.href)
-                      ? 'text-[var(--coral)]'
-                      : 'text-[var(--ink-500)] hover:text-[var(--ink-900)]'
+                      ? 'active'
+                      : ''
                   )}
                 >
                   {item.name}
@@ -183,8 +188,9 @@ export function Header() {
                   aria-activedescendant={selectedIndex >= 0 ? `result-${selectedIndex}` : undefined}
                   aria-autocomplete="list"
                 />
-                <button type="button" onClick={() => setSearchOpen(false)} className="search-close">
+                <button type="button" onClick={() => setSearchOpen(false)} className="search-close" aria-label="Close search">
                   <kbd>ESC</kbd>
+                  <span className="search-close-x" aria-hidden="true">✕</span>
                 </button>
               </div>
             </form>

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { ProductWithSharks } from '@/lib/supabase/types'
 import { useSpoilerContext } from '@/contexts/SpoilerContext'
 
@@ -34,10 +34,18 @@ export function ProductCardCommerce({ product, compact = false, spoiler, hideBad
   const productSharks = product.shark_names || []
   const firstShark = productSharks[0]
   const firstSharkPhoto = firstShark ? sharkPhotos[firstShark] : null
+
+  useEffect(() => {
+    if (spoilersHidden) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRevealed(false)
+    }
+  }, [spoilersHidden])
   
   return (
-    <Link href={`/products/${product.slug}`} className={`season-card ${compact ? 'compact' : ''}`}>
-      <div className="season-card-image">
+    <article className={`season-card ${compact ? 'compact' : ''}`}>
+      <Link href={`/products/${product.slug}`} className="season-card-link">
+        <div className="season-card-image">
         {product.photo_url && !imgError ? (
           <Image
             src={product.photo_url}
@@ -57,9 +65,9 @@ export function ProductCardCommerce({ product, compact = false, spoiler, hideBad
         {!hideBadges && product.status === 'active' && (
           <span className="season-card-badge">Active</span>
         )}
-      </div>
+        </div>
       
-      <div className="season-card-body">
+        <div className="season-card-body">
         {showEpisode && product.episode_number && (
           <span className="season-card-episode">
             Episode {product.episode_number}
@@ -72,7 +80,8 @@ export function ProductCardCommerce({ product, compact = false, spoiler, hideBad
         )}
 
         <h3 className="season-card-name">{product.name}</h3>
-      </div>
+        </div>
+      </Link>
       
       <button
         className={`season-card-spoiler ${showDealInfo ? 'revealed' : ''}`}
@@ -124,6 +133,6 @@ export function ProductCardCommerce({ product, compact = false, spoiler, hideBad
           </div>
         )}
       </button>
-    </Link>
+    </article>
   )
 }
