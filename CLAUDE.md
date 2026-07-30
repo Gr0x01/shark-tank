@@ -1,34 +1,26 @@
 # CLAUDE AI ASSISTANT RULES
 
-## MEMORY BANK – START PROCEDURE
+## PROJECT MEMORY – START PROCEDURE
 
-I am Claude, an expert software engineer whose memory resets between sessions. The memory bank is the single source of truth that gets me back up to speed. Read only what is required, keep it lean, and update it when reality changes.
+This project uses the Koda memory layout. Project knowledge for the agent lives in `.koda/memory/`; documents the user reads live in `Documents/`.
 
-### Memory Bank Layout
-```
-core/           → must-read startup context
-development/    → active engineering focus + operations
-architecture/   → current system map + approved patterns
-archive/        → historical narrative and deprecated guidance
-```
+### Startup (read these first)
+1. `.koda/memory/MEMORY.md` – index, one line per note
+2. `.koda/memory/active-context.md` – current focus, state snapshot, open items
 
-### Core Files (Read In Order)
-YOU MUST READ THESE FILES BEFORE ANYTHING ELSE.
-1. `/memory-bank/core/quickstart.md` – one-page situational awareness + commands
-2. `/memory-bank/core/projectbrief.md` – enduring product promise and scope
-3. `/memory-bank/development/activeContext.md` – current sprint goals + blockers
-4. `/memory-bank/development/progress.md` – quarterly highlights of shipped work
-5. `/memory-bank/architecture/techStack.md` – current stack, deployments, references
+Then open only the topic notes the task needs (`automation.md`, `tech-stack.md`, `patterns.md`, `llm-models.md`, `content-enrichment.md`, `page-templates.md`). Historical detail is in `.koda/memory/archive/` (optional).
 
-Read additional docs only if needed (`architecture/patterns.md`, `development/daily-log/`, etc.). Long-form history now lives under `memory-bank/archive/` and is optional.
+### User-Facing Documents (`Documents/`)
+- `Documents/Project Brief.md` – product vision and scope
+- `Documents/Changelog.md` – shipped milestones (add a line when a feature ships)
+- `Documents/Runbooks/Friday Episode Workflow.md` – episode ingestion process + full command reference
+- `Documents/Runbooks/Monitoring & Troubleshooting.md` – monitoring cadence, SEO playbook, costs, fixes, domain config
 
 ### Documentation Updates
-Update the memory bank when:
-- You finish a feature or change operational flow.
-- Architecture/tooling shifts (new dependency, command, deployment change).
-- You discover a pattern that should guide future work.
-
-Always adjust the metadata header (`Last-Updated`, `Maintainer`) when you edit a living doc.
+- Finish a feature or change an operational flow → add a `Documents/Changelog.md` line and update the topic note it touched.
+- Keep `active-context.md` to one page of one-liners; remove finished items the same session they ship.
+- Create a NEW memory note only for a genuinely new system or decision — otherwise update the existing note. Keep the `MEMORY.md` index in sync.
+- Long narratives and superseded guidance move to `.koda/memory/archive/`.
 
 ## BEHAVIORAL RULES
 
@@ -73,11 +65,11 @@ Always adjust the metadata header (`Last-Updated`, `Maintainer`) when you edit a
 ### LLM Model Usage - CRITICAL
 **NEVER change LLM model names or configurations without explicit authorization.**
 
-- The project has a model reference with correct pricing and model names in `/memory-bank/architecture/techStack.md`
+- The project has a model reference with correct pricing and model names in `.koda/memory/llm-models.md`
 - Current OpenAI models in use: `gpt-5-mini`, `gpt-5-nano`, etc.
 - **DO NOT** change model configurations based on assumed errors
 - If you believe there's an error in model naming, ASK FIRST before changing anything
-- The pricing and model names in the memory bank are authoritative - use them as reference
+- The pricing and model names in `.koda/memory/llm-models.md` are authoritative - use them as reference
 
 ## SUBAGENTS & DELEGATION
 
@@ -130,7 +122,7 @@ Subagents are helpful but not mandatory for every tiny change. Use judgment:
 - **Consider**: Minor suggestions, but skip if they add unnecessary complexity
 - **Ignore**: Over-engineering, premature optimization, or enterprise patterns for simple MVP features
 - When in doubt about a suggestion's value, ask the user before implementing
-- Document significant subagent recommendations in memory bank
+- Document significant subagent recommendations in the relevant `.koda/memory/` note
 
 ## SKILLS
 
@@ -172,7 +164,7 @@ Subagents are helpful but not mandatory for every tiny change. Use judgment:
 - **Result Type** - Explicit success/failure handling without exceptions
 - **Schema Validation** - Runtime type validation with Zod for external data
 
-See `architecture/patterns.md` for implementation examples and anti-patterns to avoid.
+See `.koda/memory/patterns.md` for implementation examples and anti-patterns to avoid.
 
 ### Quality & Performance
 - Write clean, maintainable code
@@ -189,8 +181,8 @@ See `architecture/patterns.md` for implementation examples and anti-patterns to 
 - **Debugging failures**: Use `npm run test:e2e:debug` for step-by-step test debugging
 - Use `code-reviewer` subagent after significant code changes; address Critical issues before handoff
 - Keep diffs surgical—strip logs, commented code, and unused exports
-- Update docs as part of the definition of done; long narratives move to `archive/`
-- Document significant subagent feedback in commit messages or memory bank when relevant
+- Update docs as part of the definition of done; long narratives move to `.koda/memory/archive/`
+- Document significant subagent feedback in commit messages or memory notes when relevant
 
 ### Performance Guidelines
 - Follow established performance patterns
@@ -204,9 +196,8 @@ See `architecture/patterns.md` for implementation examples and anti-patterns to 
 - Follow established code style and conventions
 - **Use Playwright tests** to verify UI changes work correctly across browsers and devices
 - **Reference TESTING.md** for test writing guidelines and best practices
-- Coordinate via `development/daily-log/` for deep-dive debugging or incident notes
 - Use subagents proactively for their specialized domains
 - Backend changes should leverage `backend-architect` for architecture decisions before implementation
 - When unsure, ask. Surprises slow the team more than questions
 
-Stay focused, keep the memory bank tight, and maintain fast feedback loops.
+Stay focused, keep the project memory tight, and maintain fast feedback loops.
