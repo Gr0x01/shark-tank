@@ -6,7 +6,8 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 | # | Name | Date | Notes |
 |---|------|------|-------|
-| 29 | PostHog Analytics + Session Replay | Jul 30, 2026 | `src/instrumentation-client.ts`; PostHog project "Tankd" (534816), replay on. Plausible removed, GA4 kept. Live on next deploy |
+| 30 | Affiliate Click Tracking + Analytics Dashboard | Jul 30, 2026 | `affiliate_link_clicked` event via shared `AffiliateLink.tsx` on all 4 Amazon CTAs; "Traffic & Affiliate Revenue" dashboard (7 tiles); privacy policy updated for PostHog |
+| 29 | PostHog Analytics + Session Replay | Jul 30, 2026 | `src/instrumentation-client.ts`; PostHog project "Tankd" (534816). Replay sampled 30%, Web Vitals + error tracking + heatmaps on. Plausible removed, GA4 kept |
 | 28 | S17 Episode Backfill (E3, E14–E17) | Apr 25, 2026 | 20 products via new `scripts/backfill-episodes.ts` (reusable for future cron gaps) |
 | 27 | IndexNow Auto-Submit for New Products | Mar 16, 2026 | Shared utility in `src/lib/services/indexnow.ts`, wired into manual + cron pipelines |
 | 26 | Auto Photo Scraping in Episode Pipeline | Mar 16, 2026 | og:image/Tavily scraping in pipeline; backfilled 52 missing photos |
@@ -46,7 +47,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 ## Up Next
 
-- [ ] PostHog analytics integration
+- [ ] Fix 5 products whose `amazon_url` is a bare slug (e.g. `amazon.com/clean-bottle`) and 404s — those clicks earn nothing
 - [ ] Affiliate link management system
 - [ ] Email alerts for new episodes
 - [ ] Admin dashboard for content management
