@@ -17,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'Most Successful Shark Tank Products | ' + SITE_NAME,
       description: 'Discover the biggest Shark Tank success stories and what made them winners.',
+      robots: { index: false, follow: false },
     }
   }
 

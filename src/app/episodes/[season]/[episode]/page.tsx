@@ -23,7 +23,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ])
 
   if (!episodeData && products.length === 0) {
-    return { title: 'Episode Not Found' }
+    return {
+      title: 'Episode Not Found',
+      robots: { index: false, follow: false },
+    }
   }
 
   const title = episodeData?.seo_title ||

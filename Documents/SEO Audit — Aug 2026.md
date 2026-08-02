@@ -5,6 +5,69 @@ Audit of tankd.io's code-level SEO: metadata, structured data, indexability, int
 > [!IMPORTANT]
 > The foundation is genuinely good — canonicals on every route, a complete sitemap, 700–1,000 words of unique server-rendered narrative per product page, WebSite + SearchAction schema, clean 404s for bad slugs. The issues below are what's being left on the table, ordered by impact.
 
+## Fresh pre-indexing audit — Aug 2, 2026
+
+This follow-up deliberately ignored the completed checklist below and asked a different question: **what material SEO work is still being left on the table across the current site and content set?**
+
+> [!WARNING]
+> Do not request Google reindexing yet. Fix the truth and freshness issues in Blockers 1–3 first. The catalogue backfill can continue in phases after that; it should not delay every future crawl.
+
+### Blocker 1 — the site's “every product / every pitch” promise is not true
+
+The database contains 664 products. Seasons 1–16 contain only 34–43 products each; Season 17 contains 70. A normal modern season has roughly four pitches across about 20 episodes, and current competitors advertise 1,400+ U.S. pitches. The homepage, products page, seasons page, Organization schema, About page, and social-image alt text nevertheless claim “every Shark Tank product,” “every pitch,” or a “complete database.”
+
+This is both a content gap and a trust problem. The site currently has strong depth on the products it tracks, but roughly half-scale breadth compared with the complete-show search intent it targets.
+
+**Before reindexing:** change public claims to precise language such as “664 Shark Tank products tracked” or “Shark Tank product updates, deals, and business status.”
+
+**Growth project:** backfill historical seasons systematically from authoritative episode/product lists. Prioritize seasons and products already receiving impressions in Search Console, then complete one season at a time.
+
+### Blocker 2 — the evergreen editorial pages are stale, and one is materially wrong
+
+Ten SEO content files were generated in December 2025 and were not refreshed with the catalogue. Multiple live articles still say the site tracks 589 products, 417 active businesses, and 280 deals. The live database now has 664 products.
+
+The `/how-to-apply` guide is the most urgent problem. It is titled for 2025 and claims a $100 application fee, a late-September-to-November window, external reviewers, an “Innovation Weekend,” an annual meeting, and a cash-prize final. ABC's current official casting information instead describes two routes—online application or an official open call—and says official casting communication comes from `@sharktanktv.com`. The existing article appears to combine Shark Tank with an unrelated application process.
+
+**Before reindexing:** temporarily noindex `/how-to-apply` until it is rewritten from ABC's current official casting pages. Refresh the other editorial pages from live database stats and verify every dated financial claim.
+
+### Blocker 3 — freshness is being implied rather than earned
+
+- 616 of 664 product narratives were last enriched before 2026.
+- 324 narratives mention 2025 and 328 mention 2024.
+- Only 2 products have `last_verified` populated.
+- All 664 products have no `air_date`.
+- The `{year}` substitution makes stored titles and descriptions display 2026 even when the underlying facts were researched in 2025.
+- Product Article schema falls back to `created_at` when `air_date` is absent, so a historical pitch such as Scrub Daddy is published in structured data with its December 2025 database-import date.
+
+**Before reindexing:** stop using automatic year replacement as a freshness signal unless the page was actually verified that year. Remove or correct misleading Article publication dates. Show a visible, evidence-backed verification date only where one exists.
+
+### Priority 2 — crawl depth is still weak at the back of the catalogue
+
+The product directory has 14 pages, but pagination exposes only Previous and Next links and the sitemap contains only `/products`, not the canonical page 2–14 URLs. Products on the last page can sit 13 pagination clicks from the directory root unless another listing happens to link them.
+
+**Fix:** add numbered pagination with first/last shortcuts and include the canonical unfiltered pagination URLs in the sitemap.
+
+### Priority 2 — Product schema does not currently qualify for product results
+
+All 664 records have `current_price = null`. The Product schema therefore emits no Offer; there are also no review or aggregate-rating fields. Google's product-result eligibility normally requires an Offer, Review, or AggregateRating, so the current markup describes products but does not create the rich-result opportunity the earlier audit expected.
+
+**Fix:** either populate trustworthy current offer data with a maintenance plan, or treat Product schema as entity description rather than a promised rich-result win. Do not inject stale prices merely to satisfy markup.
+
+### Priority 3 — title and intent expansion
+
+- 245 of 664 generated product titles exceed 55 characters; 17 exceed 60. This is a truncation/clarity cleanup, not a blocker.
+- The site has strong product, shark, season, status, category, and deal-size templates but very little editorial coverage beyond the original December 2025 set. Competitors target gift guides, shark rankings, biggest failures, valuation/ROI questions, and updated “where are they now?” roundups.
+- Build new hubs only from demonstrated Search Console demand. The first candidates should come from queries already earning impressions, not a generic keyword list.
+
+### Recommended sequence
+
+1. Correct the “every product” promise and noindex/rewrite the application guide.
+2. Refresh the nine non-legal editorial pages with live stats and verified sources.
+3. Remove cosmetic `{year}` freshness and repair Article dates.
+4. Improve pagination crawl depth and sitemap coverage.
+5. Deploy, validate production output, then request indexing for the homepage and the refreshed hubs; resubmit the sitemap.
+6. Start the historical catalogue backfill and Search Console-led content expansion as ongoing growth work.
+
 ## Priority 1 — real traffic being lost
 
 ### 1. The spoiler feature hides deal info from Google — ✅ FIXED Aug 2, 2026
@@ -123,7 +186,15 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 ## Where this stands — Aug 2, 2026
 
 > [!NOTE]
-> All code-level SEO audit fixes #1–#8 and the Priority 3 cleanup are deployed from `main`. The final production build generated all 725 pages successfully.
+> All original code-level SEO audit fixes #1–#8 and the Priority 3 cleanup are deployed from `main`. A final pre-indexing hygiene patch is built and verified locally; deploy it before requesting Google reindexing.
+
+### Final pre-indexing pass — built and verified Aug 2, 2026
+
+- Removed `/_next/` from `robots.txt` disallows so Google and answer engines can fetch the CSS and JavaScript used for rendering.
+- Replaced the nonexistent `/logo.png` Article publisher image with the valid 1200×630 default brand image.
+- Added explicit `noindex, nofollow` metadata to generated-content failures and invalid product, category, shark, episode, and season routes.
+- Fixed nonexistent seasons such as `/seasons/999`, which previously returned a thin HTTP 200 page, to return the branded 404.
+- Verified with `NODE_ENV=production npm run build`: all 725 pages generated successfully. Browser checks confirmed the new 404/noindex behavior, robots output, and publisher image URL.
 
 **Done Aug 2** — deal info and shark links now crawlable (#1); unique titles and descriptions for all 664 products (#2); shark attribution repaired; two duplicate product pages merged; three 308 redirects added.
 
@@ -140,3 +211,4 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] Return real 404/noindex responses when generated SEO content is unavailable (#6) — deployed Aug 2, 2026
 - [x] Replace synthetic sitemap dates with real modification dates (#7) — deployed Aug 2, 2026
 - [x] Allow answer-engine discovery while keeping training crawlers blocked (#8) — deployed Aug 2, 2026
+- [ ] Deploy and production-check the final pre-indexing hygiene patch above

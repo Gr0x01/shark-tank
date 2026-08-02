@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { getSeasonNumbers, getSeasonStats, getEpisodesBySeason, getProductsBySeason, getSharkPhotos } from '@/lib/queries/cached'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
@@ -15,6 +16,23 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { number } = await params
+  const seasonNum = Number(number)
+
+  if (!Number.isInteger(seasonNum) || seasonNum < 1) {
+    return {
+      title: 'Season Not Found',
+      robots: { index: false, follow: false },
+    }
+  }
+
+  const stats = await getSeasonStats(seasonNum)
+
+  if (stats.total === 0) {
+    return {
+      title: 'Season Not Found',
+      robots: { index: false, follow: false },
+    }
+  }
 
   const title = `Season ${number} | tankd.io`
   const description = `All products from Shark Tank Season ${number}. See what deals were made, which companies are still in business, and where to buy.`
@@ -63,7 +81,11 @@ export async function generateStaticParams() {
 
 export default async function SeasonPage({ params }: Props) {
   const { number } = await params
-  const seasonNum = parseInt(number)
+  const seasonNum = Number(number)
+
+  if (!Number.isInteger(seasonNum) || seasonNum < 1) {
+    notFound()
+  }
 
   const [products, stats, episodes, sharkPhotos] = await Promise.all([
     getProductsBySeason(seasonNum),
@@ -71,6 +93,10 @@ export default async function SeasonPage({ params }: Props) {
     getEpisodesBySeason(seasonNum),
     getSharkPhotos(),
   ])
+
+  if (stats.total === 0) {
+    notFound()
+  }
 
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: 'Home', url: SITE_URL },

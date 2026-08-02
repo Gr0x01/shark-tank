@@ -21,6 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: `${PAGE_TITLE} | ${SITE_NAME}`,
       description: 'Browse small Shark Tank deals under $100K and discover the products, founders, and sharks behind them.',
+      robots: { index: false, follow: false },
     }
   }
 

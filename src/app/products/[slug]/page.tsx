@@ -45,7 +45,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const result = await getProductBySlug(slug)
 
   if (!result) {
-    return { title: 'Product Not Found' }
+    return {
+      title: 'Product Not Found',
+      robots: { index: false, follow: false },
+    }
   }
 
   const { product } = result

@@ -20,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: `${PAGE_TITLE} | ${SITE_NAME}`,
       description: 'Complete guide to best shark tank deals.',
+      robots: { index: false, follow: false },
     }
   }
 

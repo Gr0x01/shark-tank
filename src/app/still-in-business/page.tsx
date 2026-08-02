@@ -17,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'Shark Tank Products Still in Business | ' + SITE_NAME,
       description: 'Find active Shark Tank businesses still thriving today.',
+      robots: { index: false, follow: false },
     }
   }
 

@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/admin/', '/_next/'],
+        disallow: ['/api/', '/admin/'],
       },
       // Let answer engines discover and cite tankd.io without granting training use.
       {
@@ -21,7 +21,7 @@ export default function robots(): MetadataRoute.Robots {
           'Perplexity-User',
         ],
         allow: '/',
-        disallow: ['/api/', '/admin/', '/_next/'],
+        disallow: ['/api/', '/admin/'],
       },
       // Block crawlers used for model training or bulk dataset collection.
       {

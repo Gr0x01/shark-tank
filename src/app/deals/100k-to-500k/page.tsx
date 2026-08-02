@@ -21,6 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: `${PAGE_TITLE} | ${SITE_NAME}`,
       description: 'Browse Shark Tank deals between $100K-$500K.',
+      robots: { index: false, follow: false },
     }
   }
 

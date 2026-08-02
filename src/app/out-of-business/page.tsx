@@ -17,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'Shark Tank Products That Failed | ' + SITE_NAME,
       description: 'Explore the Shark Tank businesses that closed and what went wrong.',
+      robots: { index: false, follow: false },
     }
   }
 

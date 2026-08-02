@@ -19,7 +19,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = await getCategoryBySlug(slug)
 
   if (!category) {
-    return { title: 'Category Not Found' }
+    return {
+      title: 'Category Not Found',
+      robots: { index: false, follow: false },
+    }
   }
 
   const title = `${category.name} Products | tankd.io`

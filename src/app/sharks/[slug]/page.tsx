@@ -42,7 +42,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ])
 
   if (!shark) {
-    return { title: 'Shark Not Found' }
+    return {
+      title: 'Shark Not Found',
+      robots: { index: false, follow: false },
+    }
   }
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'

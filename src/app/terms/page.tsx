@@ -16,6 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: `${PAGE_TITLE} | ${SITE_NAME}`,
       description: 'Terms of Service governing your use of tankd.io.',
+      robots: { index: false, follow: false },
     }
   }
 

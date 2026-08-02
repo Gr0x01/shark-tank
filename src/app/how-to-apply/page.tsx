@@ -13,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'How to Get on Shark Tank: Application Guide | ' + SITE_NAME,
       description: 'Complete guide to applying for Shark Tank. Learn what casting looks for and how to prepare.',
+      robots: { index: false, follow: false },
     }
   }
 

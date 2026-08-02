@@ -166,7 +166,7 @@ export function createArticleSchema(params: {
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
-        url: `${SITE_URL}/logo.png`,
+        url: SCHEMA_ORG_LOGO,
       },
     },
     ...(params.image && {
