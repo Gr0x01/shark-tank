@@ -209,14 +209,13 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 
 ## Where this stands — Aug 2, 2026
 
-> [!CAUTION]
-> **None of this is live. `main` is 5 commits ahead of `origin/main` — nothing has been pushed, so Vercel has never built any of it.**
+> [!NOTE]
+> **Deployment is deliberately batched.** Work accumulates on local `main` and ships in a single push once the outstanding items are done, rather than deploying each fix as it lands. Production therefore lags this document by design — as of Aug 2, 2026 it still serves the old homepage title, the 2025 application guide, and `Disallow: /_next/`.
 >
-> Verified against production Aug 2, 2026: the homepage still returns "tankd.io | Every Shark Tank Product, Deal & Business Status", `/how-to-apply` still returns "Complete Application Guide for 2025", and `robots.txt` still carries `Disallow: /_next/`.
+> Two consequences worth keeping straight:
 >
-> This includes `0fdff84`, the "final pre-indexing hygiene" patch from the previous session, which this document had recorded as deployed and production-checked. It was committed and never pushed. The checkbox was ticked on the strength of the commit rather than a check against the live site.
->
-> **Nothing in the sequence below can start until these are pushed.** Treat any "deployed" claim in this document as unverified unless it names the production symptom that was checked.
+> - **"Committed" is not "deployed" anywhere in this document.** `0fdff84` was recorded here as deployed and production-checked when it had only been committed; the box was ticked from the commit log rather than the live site. Any completion claim should name the production symptom that was checked, or it has not been checked.
+> - **The `/how-to-apply` correction stays unshipped while the batch fills.** That page currently tells readers Shark Tank charges a $100 application fee. That is an accepted cost of batching, not an oversight — but it is the item that should set the deadline for how long the batch is allowed to grow.
 
 > [!NOTE]
 > **Every code-level audit item and all three blockers are fixed and committed to `main`** (`6570ef9` SEO truth/freshness, `a9f6ab5` doc corrections, `91dd932` status reconciliation, `07c5ba0` sequencing, on top of `0fdff84`). What remains after deployment is crawl-depth polish, one schema decision, and growth work — see the staged sequence in **Remaining** below, which deliberately splits correcting false content from asking Google to recrawl the catalogue.
@@ -249,25 +248,25 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] **Blocker 1** — remove the “every product / complete database” claims — done Aug 2, 2026
 - [x] **Blocker 2** — rewrite `/how-to-apply` from ABC sources; tokenize and regenerate the stale editorial pages — done Aug 2, 2026
 - [x] **Blocker 3** — retire the cosmetic `{year}` token and remove false Article publication dates — done Aug 2, 2026
-> [!IMPORTANT]
-> **Broad indexing waits for the backfill; the false-content correction does not.** These are two different asks and conflating them costs either accuracy or crawl budget. Requesting a full recrawl now would have Google discover a URL structure that numbered pagination is about to change, and index hundreds of freshly backfilled products that have no meta description yet. But a page that is currently telling readers something untrue should be corrected in the index the day it is fixed.
+### Before the deploy — finish the batch
 
-### Now — correcting content that is live and wrong
-
-- [ ] **Push `main` to `origin`.** This is the blocker for everything else — 5 commits are sitting locally and Vercel has built none of them. Then confirm the deploy and spot-check `/how-to-apply`, `/still-in-business`, and `robots.txt` in production. Note curl gets a 429 Security Checkpoint from the Vercel firewall; check with a real browser.
-- [ ] **Request reindexing for `/how-to-apply` specifically.** It has been live since December claiming a $100 application fee and a Houston "Innovation Weekend", neither of which exists. Every day it stays in the index it misinforms people acting on it. This is a correction, not an optimisation — it does not wait for anything.
-- [ ] **Request reindexing for the homepage and `/about`**, whose "every Shark Tank product" claim was the other untrue thing on the site.
-
-Do **not** resubmit the sitemap or request broad recrawling at this stage.
-
-### Next — before asking Google to recrawl the catalogue
-
-- [ ] **Run `enrich-product-meta.ts` once the backfill settles.** Every backfilled product arrives with no `seo_title`/`meta_description` and falls back to the shared template strings — exactly the duplicate-description problem audit item #2 fixed. Verified open: the first 21 backfilled products had none. Indexing before this runs bakes the problem in.
-- [ ] **Priority 2 — pagination crawl depth.** Confirmed still open: `/products` exposes only Previous/Next (`src/app/products/page.tsx`), and `src/app/sitemap.ts` lists only `/products`, not the numbered pages. Back-of-catalogue products sit many clicks from the root, and the backfill worsens it with every season. **Fix this before the sitemap resubmission**, so Google discovers the final structure once.
+- [ ] **Catalogue backfill** to complete (in progress; the catalogue moved 664 → 694 during the afternoon of Aug 2).
+- [ ] **Run `enrich-product-meta.ts` once the backfill settles.** Every backfilled product arrives with no `seo_title`/`meta_description` and falls back to the shared template strings — exactly the duplicate-description problem audit item #2 fixed. Verified open: the first 21 backfilled products had none. Shipping before this runs deploys the problem.
+- [x] **Priority 2 — pagination crawl depth** — done Aug 2, 2026. `/products` now renders numbered pages with first/last shortcuts and an elided window (`src/components/ui/Pagination.tsx`), so any page is two hops from the root instead of up to fourteen sequential Next clicks. `sitemap.ts` emits the canonical `?page=2..N` URLs — 14 of them at the time of writing. `PRODUCTS_PER_PAGE` moved to `src/lib/seo/constants.ts` so the directory and the sitemap cannot drift into advertising pages that paginate to nothing. Verified: page 8 shows `1 … 7 8 9 … 15`, page 16 returns 404, sitemap page count matches the UI. Numbered links are hidden below 640px, where Previous/Next still reaches everything.
 - [ ] **`air_date`** is empty on every product and the `episodes` table holds 12 rows with none. Prerequisite for honest `Article.datePublished`; cheapest to fold into the backfill while episode data is already in hand.
-- [ ] **Then**: resubmit the sitemap and request indexing for the refreshed hubs.
 
-### Independent of indexing
+### The deploy
+
+- [ ] **Push `main` to `origin`** and confirm Vercel builds.
+- [ ] **Verify against production, not the commit log.** Check the homepage title, `/how-to-apply`, `/still-in-business`, and `robots.txt`. The Vercel firewall returns a 429 Security Checkpoint to curl — use a real browser.
+- [ ] **Load a product added late in the backfill.** `/products/[slug]` sets `dynamicParams = false`, which should fix the valid-slug list at build time, yet an earlier session concluded production renders on demand. Both cannot be true. If the slug list is fixed, anything the backfill adds after the build 404s until the next deploy — worth knowing before it bites on a Friday episode.
+
+### After the deploy — indexing
+
+- [ ] **Request reindexing for `/how-to-apply`, the homepage, and `/about` first.** These held content that was untrue rather than merely thin, so they are the ones where a stale index entry has a real cost.
+- [ ] **Then resubmit the sitemap** for the catalogue at large. Doing this only after the pagination fix means Google discovers the final URL structure once rather than twice.
+
+### Independent of the deploy
 
 - [ ] **5 products have a bare-slug `amazon_url`** (e.g. `amazon.com/clean-bottle`) that 404s. Those clicks earn nothing — the only item here with direct revenue impact, and it does not depend on any of the above.
 - [ ] **Priority 2 — Product schema decision.** Every product still has `current_price = null`, so no Offer is emitted and there are no review/rating fields. Either commit to maintaining real offer data or accept Product schema as entity description and stop expecting rich results. Do not inject stale prices to satisfy markup.

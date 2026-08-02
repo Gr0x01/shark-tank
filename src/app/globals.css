@@ -233,6 +233,62 @@ h3, h4, h5, h6 {
   color: white;
 }
 
+.products-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.products-pagination-list {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.products-pagination-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-700);
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.products-pagination-link:hover {
+  border-color: var(--ink-200);
+  color: var(--ink-900);
+}
+
+.products-pagination-link.is-current {
+  border-color: var(--ink-900);
+  background: var(--ink-900);
+  color: white;
+}
+
+.products-pagination-gap {
+  padding: 0 0.25rem;
+  color: var(--ink-400);
+}
+
+/* The numbered list is the first thing to go on a phone — Previous/Next still reach
+   every page, and 15+ tap targets in a row is worse than not having them. */
+@media (max-width: 640px) {
+  .products-pagination-list {
+    display: none;
+  }
+}
+
 .episode-hero {
   background: var(--shark-blue-dark);
   position: relative;

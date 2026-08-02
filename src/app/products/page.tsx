@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { getProducts, getProductStats, getSharkPhotos, getCategories, getSharks } from '@/lib/queries/cached'
@@ -8,8 +7,9 @@ import { FilterSidebar } from '@/components/ui/FilterSidebar'
 import { FilterChips } from '@/components/ui/FilterChips'
 import { MobileFilters } from '@/components/ui/MobileFilters'
 import { InterstitialBand } from '@/components/ui/InterstitialBand'
+import { Pagination } from '@/components/ui/Pagination'
 import type { ProductStatus, DealOutcome } from '@/lib/supabase/types'
-import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE, PRODUCTS_PER_PAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
 // ISR: Revalidate every 12 hours (products updated monthly)
@@ -66,7 +66,6 @@ export async function generateMetadata({ searchParams }: ProductsPageProps): Pro
 
 // Current season - update when new season starts
 const CURRENT_SEASON = 17
-const PRODUCTS_PER_PAGE = 48
 
 /**
  * Parse and validate season parameter
@@ -140,6 +139,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
   // Check if any filters are active
   const hasActiveFilters = filters.status || filters.dealOutcome || filters.season || filters.categorySlug || filters.sharkSlug || filters.search
+
+  // Only the unfiltered directory gets numbered pages: stats.total counts the whole
+  // catalogue, and applying it to a filtered view would advertise pages that don't exist.
+  // Filtered views carry a canonical back to /products anyway, so there's no depth to win.
+  const totalPages = hasActiveFilters
+    ? undefined
+    : Math.max(1, Math.ceil(stats.total / PRODUCTS_PER_PAGE))
 
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: 'Home', url: SITE_URL },
@@ -240,17 +246,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               </div>
             )}
 
-            {(page > 1 || hasNextPage) && (
-              <nav aria-label="Product pages" className="flex items-center justify-between gap-4 mt-10">
-                {page > 1 ? (
-                  <Link href={buildPageHref(params, page - 1)} className="btn-secondary">← Previous</Link>
-                ) : <span />}
-                <span className="text-sm text-[var(--ink-500)]">Page {page}</span>
-                {hasNextPage ? (
-                  <Link href={buildPageHref(params, page + 1)} className="btn-secondary">Next →</Link>
-                ) : <span />}
-              </nav>
-            )}
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              hasNextPage={hasNextPage}
+              buildHref={target => buildPageHref(params, target)}
+            />
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { createStaticClient } from '@/lib/supabase/server'
+import { PRODUCTS_PER_PAGE } from '@/lib/seo/constants'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'
 
@@ -76,6 +77,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily',
       priority: 0.9,
     },
+    // Pages 2..N of the unfiltered directory. Without these the only route to the back of
+    // the catalogue is clicking Next repeatedly, which buries those products however many
+    // pages deep they happen to sit.
+    ...Array.from(
+      { length: Math.max(0, Math.ceil((products?.length || 0) / PRODUCTS_PER_PAGE) - 1) },
+      (_, i): MetadataRoute.Sitemap[number] => ({
+        url: `${SITE_URL}/products?page=${i + 2}`,
+        changeFrequency: 'daily',
+        priority: 0.5,
+      })
+    ),
     {
       url: `${SITE_URL}/sharks`,
       changeFrequency: 'weekly',
