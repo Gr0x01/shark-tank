@@ -23,6 +23,7 @@ import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { computePortfolioStats } from '@/lib/utils/portfolioStats'
 import type { Category, ProductStatus, DealOutcome } from '@/lib/supabase/types'
 import { isSharkNarrative } from '@/lib/supabase/types'
+import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_HEIGHT, DEFAULT_OG_IMAGE_WIDTH } from '@/lib/seo/constants'
 
 // ISR: Revalidate every 24 hours (portfolio changes weekly at most)
 export const revalidate = 86400
@@ -53,6 +54,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Rich description with stats
   const description = shark.meta_description ||
     `${shark.name} has made ${stats?.total_deals || 0} deals on Shark Tank with a ${stats?.success_rate || 0}% success rate. ${stats?.active_companies || 0} active companies. Explore portfolio, top investments, and partnerships.`
+  const socialImage = shark.photo_url ? {
+    url: shark.photo_url,
+    width: 800,
+    height: 800,
+    alt: shark.name,
+  } : {
+    url: DEFAULT_OG_IMAGE,
+    width: DEFAULT_OG_IMAGE_WIDTH,
+    height: DEFAULT_OG_IMAGE_HEIGHT,
+    alt: 'tankd.io — Every Shark Tank Product, Deal & Business Status',
+  }
 
   return {
     title,
@@ -62,12 +74,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${shark.name} - Shark Tank Investor`,
       description,
-      images: shark.photo_url ? [{
-        url: shark.photo_url,
-        width: 800,
-        height: 800,
-        alt: shark.name
-      }] : [],
+      images: [socialImage],
       type: 'profile',
       siteName: 'Shark Tank Products',
       url: `${SITE_URL}/sharks/${slug}`,
@@ -78,7 +85,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary',
       title: `${shark.name} - Shark Tank`,
       description,
-      images: shark.photo_url ? [shark.photo_url] : [],
+      images: [socialImage],
     },
 
     // Canonical URL (always base URL, even for filtered pages)

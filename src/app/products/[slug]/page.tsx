@@ -12,6 +12,7 @@ import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { AffiliateLink } from '@/components/ui/AffiliateLink'
 import { addAmazonAffiliateTag } from '@/lib/utils'
 import { createArticleSchema, escapeJsonLd } from '@/lib/seo/schemas'
+import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_HEIGHT, DEFAULT_OG_IMAGE_WIDTH } from '@/lib/seo/constants'
 
 // ISR: Revalidate every 12 hours (narratives/deals change monthly)
 export const revalidate = 43200
@@ -120,6 +121,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = generateTitle()
   const description = generateDescription()
+  const socialImage = product.photo_url
+    ? { url: product.photo_url, alt: product.name }
+    : {
+        url: DEFAULT_OG_IMAGE,
+        width: DEFAULT_OG_IMAGE_WIDTH,
+        height: DEFAULT_OG_IMAGE_HEIGHT,
+        alt: 'tankd.io — Every Shark Tank Product, Deal & Business Status',
+      }
 
   // Generate SEO keywords
   const keywords = [
@@ -140,7 +149,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${product.name} - Shark Tank`,
       description: product.pitch_summary || product.tagline || '',
-      images: product.photo_url ? [{ url: product.photo_url }] : [],
+      images: [socialImage],
       type: 'website',
       siteName: 'Shark Tank Products',
       url: `/products/${slug}`,
@@ -149,7 +158,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: `${product.name} - Shark Tank`,
       description: product.pitch_summary || product.tagline || description,
-      images: product.photo_url ? [product.photo_url] : [],
+      images: [socialImage],
     },
     alternates: {
       canonical: `/products/${slug}`,

@@ -124,8 +124,8 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 
 - [x] Spoiler gate → CSS-hide so deal content + shark links are in the HTML (#1) — done Aug 2, 2026
 - [x] Batch-generate unique titles/descriptions for all products (#2) — done Aug 2, 2026
-- [ ] **PNG OG image + fallbacks (#3)** ← next
-- [ ] Products pagination + episode links from product pages (#4)
+- [x] PNG OG image + fallbacks (#3) — done Aug 2, 2026
+- [ ] **Products pagination + episode links from product pages (#4)** ← next
 - [ ] Product schema + populated ItemLists + expanded FAQs (#5)
 - [ ] The Priority 3 quick wins in one cleanup pass
 - [ ] Decide on the AI-crawler policy (#8)
