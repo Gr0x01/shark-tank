@@ -94,7 +94,10 @@ export default async function Deals100kTo500kPage() {
     content.title,
     content.meta_description,
     `${SITE_URL}${PAGE_URL}`,
-    products.length
+    products.map(product => ({
+      name: product.name,
+      url: `${SITE_URL}/products/${product.slug}`,
+    }))
   )
 
   const percentage = stats.total > 0

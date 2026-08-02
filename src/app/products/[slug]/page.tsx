@@ -11,7 +11,7 @@ import { StickyCTABar } from '@/components/ui/StickyCTABar'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { AffiliateLink } from '@/components/ui/AffiliateLink'
 import { addAmazonAffiliateTag } from '@/lib/utils'
-import { createArticleSchema, escapeJsonLd } from '@/lib/seo/schemas'
+import { createArticleSchema, createProductSchema, escapeJsonLd } from '@/lib/seo/schemas'
 import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_HEIGHT, DEFAULT_OG_IMAGE_WIDTH } from '@/lib/seo/constants'
 
 // ISR: Revalidate every 12 hours (narratives/deals change monthly)
@@ -215,6 +215,22 @@ export default async function ProductPage({ params }: Props) {
     image: product.photo_url || undefined,
   })
 
+  const affiliateAmazonUrl = addAmazonAffiliateTag(product.amazon_url)
+  const productJsonLd = createProductSchema({
+    name: product.name,
+    description: withYear(product.meta_description || product.tagline || product.pitch_summary || product.description || ''),
+    url: `${SITE_URL}/products/${slug}`,
+    brand: product.company_name || product.name,
+    image: product.photo_url,
+    buyUrl: affiliateAmazonUrl || product.website_url,
+    price: product.current_price,
+    available: product.status === 'active' || product.status === 'acquired'
+      ? true
+      : product.status === 'out_of_business'
+        ? false
+        : undefined,
+  })
+
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -235,21 +251,41 @@ export default async function ProductPage({ params }: Props) {
     ],
   }
 
-  const faqJsonLd = narrative?.current_status ? {
+  const faqItems = [
+    ...(narrative?.current_status ? [{
+      question: `Is ${product.name} still in business?`,
+      answer: narrative.current_status,
+    }] : []),
+    ...(product.deal_outcome !== 'unknown' ? [{
+      question: `Did ${product.name} get a deal on Shark Tank?`,
+      answer: product.deal_outcome === 'deal'
+        ? `${product.name} made an on-air deal${product.shark_names.length > 0 ? ` with ${product.shark_names.join(' and ')}` : ''}.`
+        : product.deal_outcome === 'deal_fell_through'
+          ? `${product.name} made a deal on Shark Tank, but the deal later fell through.`
+          : `${product.name} did not make a deal on Shark Tank.`,
+    }] : []),
+    ...(product.deal_outcome === 'deal' && product.shark_names.length > 0 ? [{
+      question: `Which sharks made a deal with ${product.name}?`,
+      answer: `${product.shark_names.join(' and ')} made an on-air deal with ${product.name}.`,
+    }] : []),
+    ...(narrative?.where_to_buy ? [{
+      question: `Where can you buy ${product.name}?`,
+      answer: narrative.where_to_buy,
+    }] : []),
+  ]
+
+  const faqJsonLd = faqItems.length > 0 ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [{
+    mainEntity: faqItems.map(item => ({
       '@type': 'Question',
-      name: `Is ${product.name} still in business?`,
+      name: item.question,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: narrative.current_status,
+        text: item.answer,
       },
-    }],
+    })),
   } : null
-
-  // Convert Amazon URL to affiliate link
-  const affiliateAmazonUrl = addAmazonAffiliateTag(product.amazon_url)
 
   return (
     <>
@@ -258,6 +294,12 @@ export default async function ProductPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: escapeJsonLd(articleJsonLd)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: escapeJsonLd(productJsonLd)
         }}
       />
       <script
@@ -498,6 +540,20 @@ export default async function ProductPage({ params }: Props) {
             </section>
           )}
         </div>
+      )}
+
+      {faqItems.length > 0 && (
+        <section className="product-narrative">
+          <div className="max-w-3xl mx-auto px-6">
+            <h2 className="narrative-heading">Frequently Asked Questions</h2>
+            {faqItems.map(item => (
+              <div key={item.question} className="narrative-section">
+                <h3 className="font-display text-xl font-medium mb-2">{item.question}</h3>
+                <p className="narrative-text">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Where to Buy Section - Final conversion zone */}

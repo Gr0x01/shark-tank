@@ -90,7 +90,10 @@ export default async function CategoryPage({ params }: Props) {
     `${category.name} Products`,
     category.description || `${category.name} products from Shark Tank`,
     `${SITE_URL}/categories/${slug}`,
-    products.length
+    products.map(product => ({
+      name: product.name,
+      url: `${SITE_URL}/products/${product.slug}`,
+    }))
   )
 
   return (
@@ -138,4 +141,3 @@ export default async function CategoryPage({ params }: Props) {
     </>
   )
 }
-

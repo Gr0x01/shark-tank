@@ -6,6 +6,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 | # | Name | Date | Notes |
 |---|------|------|-------|
+| 37 | Product + Listing Structured Data | Aug 2, 2026 | Product pages now emit Product schema and 2–4 visible, matching FAQs; priced buy links can emit complete Offer data. ItemLists now contain the actual linked products, categories, or seasons shown across all listing pages |
 | 36 | Crawlable Product Pagination + Episode Links | Aug 2, 2026 | `/products` now exposes all 664 products through stable 48-item pages with filter-preserving Previous/Next links, page-specific canonicals, and 404s for invalid pages. Product episode badges link to episode pages; historical episode pages now work even when the newer `episodes` table has no row |
 | 35 | Social Sharing Image Fallbacks | Aug 2, 2026 | Replaced the unsupported default SVG with a 1200×630 PNG; product and shark pages now fall back to it when a photo is missing, with explicit image dimensions |
 | 34 | Duplicate Product Pages Merged | Aug 2, 2026 | Wicked Good Cupcakes and The Bouqs Company each existed twice (Dec 2025 import); kept the stronger record of each, 308-redirected the dead URLs. Catalogue 666 → 664 |
@@ -53,7 +54,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 ## Up Next
 
-- [ ] Product schema, populated ItemLists, and expanded product FAQs (SEO audit #5)
+- [ ] Priority 3 SEO cleanup pass (fonts/analytics loading, copy bugs, icons, custom 404, IndexNow wiring)
 - [ ] Fix 5 products whose `amazon_url` is a bare slug (e.g. `amazon.com/clean-bottle`) and 404s — those clicks earn nothing
 - [ ] Affiliate link management system
 - [ ] Email alerts for new episodes

@@ -82,7 +82,10 @@ export default async function SeasonPage({ params }: Props) {
     `Shark Tank Season ${number}`,
     `All products from Season ${number} of Shark Tank`,
     `${SITE_URL}/seasons/${number}`,
-    stats.total
+    products.map(product => ({
+      name: product.name,
+      url: `${SITE_URL}/products/${product.slug}`,
+    }))
   )
 
   return (
@@ -165,4 +168,3 @@ export default async function SeasonPage({ params }: Props) {
     </>
   )
 }
-

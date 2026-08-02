@@ -92,7 +92,10 @@ export default async function OutOfBusinessPage() {
     content.title,
     content.meta_description,
     `${SITE_URL}/out-of-business`,
-    products.length
+    products.map(product => ({
+      name: product.name,
+      url: `${SITE_URL}/products/${product.slug}`,
+    }))
   )
 
   const percentage = stats.total > 0

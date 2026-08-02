@@ -146,12 +146,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     { name: 'Products' }
   ])
 
-  const collectionSchema = createCollectionPageSchema(
-    'All Shark Tank Products',
+  const collectionSchema = !hasActiveFilters ? createCollectionPageSchema(
+    `All Shark Tank Products${page > 1 ? ` — Page ${page}` : ''}`,
     'Complete database of every product pitched on Shark Tank',
-    `${SITE_URL}/products`,
-    stats.total
-  )
+    `${SITE_URL}${buildPageHref(params, page)}`,
+    visibleProducts.map(product => ({
+      name: product.name,
+      url: `${SITE_URL}/products/${product.slug}`,
+    }))
+  ) : null
 
   return (
     <>
@@ -160,10 +163,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: escapeJsonLd(breadcrumbSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: escapeJsonLd(collectionSchema) }}
-      />
+      {collectionSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: escapeJsonLd(collectionSchema) }}
+        />
+      )}
 
       <main className="min-h-screen py-12 px-6">
       <div className="max-w-6xl mx-auto">

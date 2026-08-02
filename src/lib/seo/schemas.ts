@@ -5,6 +5,11 @@ interface BreadcrumbItem {
   url?: string
 }
 
+interface CollectionItem {
+  name: string
+  url: string
+}
+
 export function createBreadcrumbSchema(items: BreadcrumbItem[]) {
   return {
     '@context': SCHEMA_CONTEXT,
@@ -22,7 +27,7 @@ export function createCollectionPageSchema(
   name: string,
   description: string,
   url: string,
-  numberOfItems: number
+  items: CollectionItem[]
 ) {
   return {
     '@context': SCHEMA_CONTEXT,
@@ -32,8 +37,53 @@ export function createCollectionPageSchema(
     url,
     mainEntity: {
       '@type': 'ItemList',
-      numberOfItems
+      numberOfItems: items.length,
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        url: item.url,
+      })),
     }
+  }
+}
+
+export function createProductSchema(params: {
+  name: string
+  description: string
+  url: string
+  brand?: string | null
+  image?: string | null
+  buyUrl?: string | null
+  price?: number | null
+  available?: boolean
+}) {
+  return {
+    '@context': SCHEMA_CONTEXT,
+    '@type': 'Product',
+    name: params.name,
+    description: params.description,
+    url: params.url,
+    ...(params.brand && {
+      brand: {
+        '@type': 'Brand',
+        name: params.brand,
+      },
+    }),
+    ...(params.image && { image: params.image }),
+    ...(params.buyUrl && params.price && {
+      offers: {
+        '@type': 'Offer',
+        url: params.buyUrl,
+        price: params.price,
+        priceCurrency: 'USD',
+        ...(params.available !== undefined && {
+          availability: params.available
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+        }),
+      },
+    }),
   }
 }
 

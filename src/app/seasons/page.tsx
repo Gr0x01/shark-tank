@@ -67,7 +67,10 @@ export default async function SeasonsPage() {
     'All Shark Tank Seasons',
     'Browse products from every season of Shark Tank',
     `${SITE_URL}/seasons`,
-    seasons.length
+    seasons.map(season => ({
+      name: `Season ${season}`,
+      url: `${SITE_URL}/seasons/${season}`,
+    }))
   )
 
   return (

@@ -126,6 +126,6 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] Batch-generate unique titles/descriptions for all products (#2) — done Aug 2, 2026
 - [x] PNG OG image + fallbacks (#3) — done Aug 2, 2026
 - [x] Products pagination + episode links from product pages (#4) — done Aug 2, 2026
-- [ ] **Product schema + populated ItemLists + expanded FAQs (#5)** ← next
-- [ ] The Priority 3 quick wins in one cleanup pass
+- [x] Product schema + populated ItemLists + expanded FAQs (#5) — done Aug 2, 2026
+- [ ] **The Priority 3 quick wins in one cleanup pass** ← next
 - [ ] Decide on the AI-crawler policy (#8)

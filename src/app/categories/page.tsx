@@ -63,7 +63,10 @@ export default async function CategoriesPage() {
     'Product Categories',
     'Browse all Shark Tank products organized by category',
     `${SITE_URL}/categories`,
-    categories.length
+    sortedCategories.map(category => ({
+      name: category.name,
+      url: `${SITE_URL}/categories/${category.slug}`,
+    }))
   )
 
   return (
