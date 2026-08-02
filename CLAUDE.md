@@ -138,10 +138,20 @@ Subagents are helpful but not mandatory for every tiny change. Use judgment:
 - Combine with subagents: Read skill → Use ui-designer/frontend-developer → code-reviewer
 
 ### Testing Workflow
-- **BEFORE COMPLETION**: Run `npm run test:e2e` to verify functionality across browsers
-- **VISUAL CHANGES**: Use `npm run test:e2e:ui` for interactive testing during development
-- **DEBUGGING FAILURES**: Use `npm run test:e2e:debug` for step-by-step debugging
-- **REGRESSION TESTING**: Always run full test suite after significant changes
+
+**There is no automated test suite.** Playwright is installed and the `test:e2e` scripts
+exist, but no specs were ever written — `npm run test:e2e` exits "No tests found", and
+`src/lib/seo/__tests__/` is empty. Do not report a change as "tested" on the strength of
+running it.
+
+Verification before completion means:
+- `npx tsc --noEmit` and `npm run lint` — both must be clean
+- `NODE_ENV=production npm run build` — must exit 0 (see the NODE_ENV note in
+  `.koda/memory/tech-stack.md` before reporting a build failure)
+- Drive the actual page. Start the dev server, load the routes you touched, and check the
+  rendered output — server HTML for anything SEO-related, since that is what crawlers get.
+
+If you write specs, put them under `e2e/` and update this section.
 
 ## ARCHITECTURE GROUND TRUTH
 
@@ -176,9 +186,8 @@ See `.koda/memory/patterns.md` for implementation examples and anti-patterns to 
 
 ### Quality Gates
 - Run linting and type checking before handoff
-- **Test changes thoroughly**: Run `npm run test:e2e` before marking features complete
-- **Visual/UI changes**: Use `npm run test:e2e:ui` for interactive testing during development
-- **Debugging failures**: Use `npm run test:e2e:debug` for step-by-step test debugging
+- **Verify by running it**, not by reading it — see the Testing Workflow section above for
+  what that means in this repo (there is no test suite to lean on)
 - Use `code-reviewer` subagent after significant code changes; address Critical issues before handoff
 - Keep diffs surgical—strip logs, commented code, and unused exports
 - Update docs as part of the definition of done; long narratives move to `.koda/memory/archive/`

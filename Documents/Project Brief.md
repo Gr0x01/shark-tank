@@ -1,6 +1,9 @@
 # Project Brief: tankd.io
 
-A comprehensive directory of every product ever pitched on Shark Tank, with real-time tracking of business status, where to buy, and deal details. Built to outcompete existing sites through better data freshness, filtering, and affiliate optimization.
+A directory of Shark Tank products with tracking of business status, where to buy, and deal details. Built to outcompete existing sites through better data freshness, filtering, and affiliate optimization.
+
+> [!IMPORTANT]
+> **Depth first, breadth second.** The catalogue holds 665 products against roughly 1,400+ aired pitches — strong depth on what it tracks, about half the breadth of the "every pitch" sites. Public copy says "tracked", never "every product" or "complete database"; those claims were removed site-wide on Aug 2, 2026. Closing the breadth gap is an ongoing backfill, not a claim to make in advance.
 
 > [!NOTE]
 > **Status**: Live at https://tankd.io since Dec 12, 2025 — currently in Phase 4 (Launch & Growth).

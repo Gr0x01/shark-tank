@@ -57,7 +57,7 @@ Two tools run side by side: **PostHog** (product analytics, session replay, Core
 
 **Things that look broken but aren't:**
 - **No replays from localhost.** Replay is locked to `tankd.io` (the project token is public in client JS). Events still capture locally; only replay is domain-restricted.
-- **Nothing from Playwright/E2E runs.** posthog-js filters headless browsers as bots, so `npm run test:e2e` can't pollute analytics.
+- **Nothing from Playwright/E2E runs.** posthog-js filters headless browsers as bots, so driving the site with Playwright cannot pollute analytics.
 - **Your own browsing is excluded** from dashboard tiles — localhost traffic is flagged as an internal user and every tile filters test accounts.
 
 ## Costs
