@@ -42,7 +42,7 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
         <div className="latest-ep-header">
           <div className="latest-ep-copy">
             <span className="ep-badge">New episode</span>
-            <h1>The latest pitches, tracked.</h1>
+            <h1>Catch up on the latest Shark Tank pitches</h1>
             <p>Season {episode.season} · Episode {episode.episode_number}</p>
           </div>
         </div>
