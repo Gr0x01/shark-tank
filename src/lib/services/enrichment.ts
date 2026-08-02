@@ -238,6 +238,24 @@ function slugify(name: string): string {
     .replace(/^-|-$/g, '')
 }
 
+/**
+ * Shark names arrive from the model with curly apostrophes and occasional honorifics
+ * ("Kevin O’Leary", "Sir Richard Branson") while the tables hold straight ones. Any
+ * lookup miss silently creates a duplicate guest shark, which is how a second Kevin
+ * O'Leary record collected 17 deals during the Aug 2026 catalogue backfill.
+ * Use this for BOTH sides of a name comparison.
+ */
+export function normalizeSharkName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[‘’ʼ`´]/g, "'")
+    // Only real honorifics — "Mr. Wonderful" is O'Leary's nickname and a SHARK_NAME_MAP key,
+    // so stripping "Mr." there would break the alias it exists to resolve.
+    .replace(/^(sir|dame|dr\.?)\s+/, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 // --- Main Enrichment Function ---
 export interface EnrichmentResult {
   processed: number
@@ -294,7 +312,7 @@ export async function enrichPendingDeals(options: {
   const sharkIds = new Map<string, string>()
   for (const shark of sharks || []) {
     sharkIds.set(shark.slug, shark.id)
-    sharkIds.set(shark.name.toLowerCase(), shark.id)
+    sharkIds.set(normalizeSharkName(shark.name), shark.id)
   }
 
   const result: EnrichmentResult = {
@@ -395,7 +413,7 @@ export async function enrichPendingDeals(options: {
         await supabase.from('product_sharks').delete().eq('product_id', product.id)
 
         for (const shark of dealInfo.sharks) {
-          const normalizedName = shark.name.toLowerCase()
+          const normalizedName = normalizeSharkName(shark.name)
           const sharkSlug = SHARK_NAME_MAP[normalizedName]
           let sharkId = sharkSlug ? sharkIds.get(sharkSlug) : sharkIds.get(normalizedName)
 
@@ -620,7 +638,7 @@ Return ONLY valid JSON matching this schema:
 
 IMPORTANT:
 - For revenue, extract ACTUAL NUMBERS. If no specific number is found, use null.
-- For sharks array, include each investing shark with their individual contribution if known.
+- For sharks array, include ONLY the sharks who closed the final accepted deal and actually invested. Exclude any shark who merely made an offer that was declined or beaten, counter-offered, negotiated, or expressed interest without being part of the accepted deal. Most deals involve exactly one shark; only list several when they explicitly went in together.
 - dealType should reflect the actual deal structure.
 - Be precise with all numbers. If information is not found, use null.`
 
@@ -720,7 +738,7 @@ async function enrichProductFull(productName: string): Promise<FullEnrichment | 
 /**
  * Create a product in the database and run full enrichment.
  */
-async function createAndEnrichProduct(
+export async function createAndEnrichProduct(
   name: string,
   season: number,
   episodeNumber: number,
@@ -814,7 +832,7 @@ async function createAndEnrichProduct(
     await supabase.from('product_sharks').delete().eq('product_id', product.id)
 
     for (const shark of enriched.sharks) {
-      const normalizedName = shark.name.toLowerCase()
+      const normalizedName = normalizeSharkName(shark.name)
       const sharkSlug = SHARK_NAME_MAP[normalizedName]
       let sharkId = sharkSlug ? sharkIds.get(sharkSlug) : sharkIds.get(normalizedName)
 
@@ -1096,7 +1114,7 @@ export async function importMissingEpisode(
   const sharkIds = new Map<string, string>()
   for (const shark of sharks || []) {
     sharkIds.set(shark.slug, shark.id)
-    sharkIds.set(shark.name.toLowerCase(), shark.id)
+    sharkIds.set(normalizeSharkName(shark.name), shark.id)
   }
 
   // Step 4: Create and enrich each product
