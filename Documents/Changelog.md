@@ -6,6 +6,9 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 | # | Name | Date | Notes |
 |---|------|------|-------|
+| 43 | Episode Air Dates | Aug 2, 2026 | `scripts/backfill-air-dates.ts` parses Wikipedia's per-season `{{Episode list}}` templates (structured `OriginalAirDate` fields, not model-summarised prose) and stamps products from their episode: 377 episodes across S1–S17, 761 products dated, 2009-09-13 → 2026-04-22. `Article.datePublished` now carries the real broadcast date instead of being omitted. `--fill-episodes` resolved 21 products that had a season but no episode number, including Scrub Daddy and Bombas. Fixed an off-by-one day found while verifying — a date-only column parsed as UTC midnight rendered the *previous* day in US Central, so Scrub Daddy's page said Oct 25 while its own schema said Oct 26; now centralised in `formatAirDate()`. Idempotent: **re-run after any batch that adds products** |
+| 42 | Numbered Pagination + Paginated Sitemap | Aug 2, 2026 | `/products` gained numbered pages with first/last shortcuts and an elided window, so any page is two hops from the root instead of up to fourteen sequential Next clicks; the sitemap now carries the canonical `?page=2..N` URLs. `PRODUCTS_PER_PAGE` moved to `src/lib/seo/constants.ts` so the directory and sitemap can't drift into advertising pages that 404. Numbered links hide below 640px where Previous/Next still reaches everything |
+| 41 | Catalogue Backfill — Season 16 | Aug 2, 2026 | Diffed the full show catalogue against sharktanksuccess.com's episode-by-episode list and found we held 594 of 1,440 pitches for seasons 1–16. Backfilled Season 16 as the first stage: 46 new products, each with deal, status, founders, photo, 6-section narrative, and search meta, plus real episode records linking them. Fixed a shark-attribution bug found during the check — the extraction prompt was crediting sharks who only *made an offer* (TRUFIT Customs listed four investors when Rashaun Williams alone closed it); this affected the Friday episode workflow too. Added `scripts/backfill-catalog.ts` with a fuzzy duplicate guard, since we store descriptive names ("Morrison Outdoors Sleeping Bags") where the reference uses short brands |
 | 40 | SEO Truth & Freshness Pass | Aug 2, 2026 | Closed audit Blockers 1–3. Dropped the "every product / complete database" claims site-wide; rewrote `/how-to-apply` by hand from ABC's official casting pages (the old version invented a $100 fee and a Houston pitch weekend); made catalogue figures in editorial prose live tokens substituted at render, so they can't go stale again, and regenerated the four pages still quoting 589 products; retired the cosmetic `{year}` token from product copy in favour of the year each fact was actually researched; stopped Article schema claiming a December 2025 publication date for decade-old pitches. Also fixed `enrich-seo-pages.ts`, silently broken since the Zod 4 upgrade, and removed an invented "how we verify" section describing a research team that doesn't exist |
 | 39 | SEO Audit Completion | Aug 2, 2026 | Closed audit #6–#8 and the final indexing pass: genuine 404/noindex handling across invalid routes, trustworthy sitemap dates, crawlable rendering assets, valid publisher schema, and answer-engine access while training crawlers remain blocked. Production build passed all 725 pages |
 | 38 | Mobile-First Redesign + SEO Launch | Aug 2, 2026 | Deployed the redesigned homepage, mobile navigation, shark index/profiles, and product-page polish from `main` alongside SEO audit fixes #1–#5. Vercel completed successfully; the 725-page build and public phone-size checks covered navigation, sharks, product FAQs/schema, spoiler reveal, and `{year}` replacement |
@@ -49,15 +52,18 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 ## Current Status (as of Aug 2, 2026)
 
-- **Products**: 665 total; all narrative-enriched with unique SEO titles and descriptions; Season 17 complete through E18
-- **Sharks**: 50 total, including 2 retired; every recorded deal has its investor linked
-- **Frontend**: Mobile-first redesign live across the homepage, navigation, shark pages, and product pages; catalogue fully paginated and historical product-to-episode navigation restored
-- **Stack**: Next.js 16.1.6, React 19.2.4, Supabase, Tailwind CSS 4.2, Zod 4, Playwright
-- **Site**: Live at https://tankd.io; redesign + code-level SEO audit #1–#8 deployed Aug 2, 2026
+- **Products**: growing — the catalogue backfill is mid-run (801 at the time of writing, from 664 that morning). Query the database rather than trusting a number written here. All narrative-enriched; Season 17 complete through E18; 761 carry a real air date
+- **Sharks**: 51, including 2 retired; every recorded deal has its investor linked
+- **Frontend**: Mobile-first redesign live across the homepage, navigation, shark pages, and product pages; catalogue paginated with numbered pages and historical product-to-episode navigation restored
+- **Stack**: Next.js 16.1.6, React 19.2.4, Supabase, Tailwind CSS 4.2, Zod 4, Playwright (no test specs — see CLAUDE.md)
+- **Site**: Live at https://tankd.io. Deployed through the Priority 3 SEO cleanup; **everything from milestone 39 onward is committed but not yet pushed**, awaiting one batched deploy. Production therefore lags this changelog — see `Documents/SEO Audit — Aug 2026.md`
 
 ## Up Next
 
+- [ ] Push the batch and verify against production (see the SEO audit doc for the staged sequence)
+- [ ] Re-run `backfill-air-dates.ts` and `enrich-product-meta.ts` once the catalogue backfill finishes — both leave new products behind
 - [ ] Fix 5 products whose `amazon_url` is a bare slug (e.g. `amazon.com/clean-bottle`) and 404s — those clicks earn nothing
+- [ ] Resolve 12 products with no air date: 6 rebranded (Ring/Doorbot, Poppi/Mother Beverage, Sleep Styler, Spatty, Chirp, The Swim Brief) and 6 with episodes that don't exist (S1E15, S2E15, S16E37)
 - [ ] Affiliate link management system
 - [ ] Email alerts for new episodes
 - [ ] Admin dashboard for content management

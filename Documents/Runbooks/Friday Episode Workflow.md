@@ -64,9 +64,24 @@ npx tsx scripts/enrich-product-meta.ts --force --limit 50    # Rewrite products 
 # Backfill missed episodes (gap recovery when the cron's 72-hour lookback misses one)
 npx tsx scripts/backfill-episodes.ts 17:14 17:15 17:16       # Full pipeline: discovery + enrich + photo + narrative + IndexNow
 
+# Air dates — run after ANY batch that adds products, including a new episode
+npx tsx scripts/backfill-air-dates.ts --dry-run              # Preview, write nothing
+npx tsx scripts/backfill-air-dates.ts                        # Upsert episodes + stamp products
+npx tsx scripts/backfill-air-dates.ts --season 17            # One season only
+npx tsx scripts/backfill-air-dates.ts --fill-episodes        # Also resolve missing episode numbers
+
 # Daily safety net (also runs via cron)
 npx tsx scripts/daily-enrich-pending.ts
 ```
+
+> [!IMPORTANT]
+> **New products arrive with no `air_date`.** Nothing in the ingestion pipeline sets it, so
+> `Article.datePublished` is omitted on those pages until `backfill-air-dates.ts` runs. It
+> reads Wikipedia's per-season episode tables, is idempotent, and is safe to re-run — make
+> it part of the Friday routine and of any catalogue backfill.
+>
+> Wikipedia usually publishes a new episode's air date around broadcast, but if the season
+> article has not been updated yet the episode simply won't be found; re-run in a day or two.
 
 ## Content Maintenance
 
