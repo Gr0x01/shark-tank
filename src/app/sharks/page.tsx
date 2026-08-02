@@ -72,16 +72,21 @@ export default async function SharksPage() {
   const maxSuccess = Math.max(...stats.map(s => s.success_rate || 0), 1)
 
   return (
-    <main className="min-h-screen py-12 px-6">
-      <div className="max-w-5xl mx-auto">
-        <div className="mb-10">
-          <p className="section-label mb-2">The Investors</p>
-          <h1 className="text-3xl md:text-4xl font-medium mb-2">All Shark Tank Sharks</h1>
-          <p className="text-[var(--ink-500)]">
-            Explore their portfolios, success rates, and investment styles
-          </p>
+    <main className="min-h-screen">
+      {/* Dark hero band — matches the shark profile pages */}
+      <section className="shark-hero">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="shark-hero-copy">
+            <span className="shark-hero-kicker">The investors</span>
+            <h1>All Shark Tank Sharks</h1>
+            <p className="shark-hero-style">
+              Explore their portfolios, success rates, and investment styles
+            </p>
+          </div>
         </div>
+      </section>
 
+      <div className="max-w-5xl mx-auto px-6 py-12">
         {/* Leaderboard */}
         <SharkLeaderboard
           mostDeals={leaderboard.mostDeals}

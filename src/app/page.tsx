@@ -4,6 +4,7 @@ import { getProductStats, getLatestEpisodeProducts, getSeasonProducts, getCatego
 import { LatestEpisodeSection } from '@/components/ui/LatestEpisodeSection'
 import { SeasonProductsSection } from '@/components/ui/SeasonProductsSection'
 import { InterstitialBand } from '@/components/ui/InterstitialBand'
+import { HomeSearchLauncher } from '@/components/ui/HomeSearchLauncher'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createOrganizationSchema, createSearchActionSchema, escapeJsonLd } from '@/lib/seo/schemas'
 
@@ -81,6 +82,9 @@ export default async function Home() {
       />
 
       <main className="min-h-screen bg-[var(--warm-white)]">
+      <section className="home-search-mobile">
+        <HomeSearchLauncher productCount={stats.total} />
+      </section>
       <section className="category-nav">
         <div className="max-w-6xl mx-auto px-6">
           <div className="category-nav-inner">
@@ -111,15 +115,6 @@ export default async function Home() {
         />
       )}
 
-      <InterstitialBand
-        title="The Biggest Winners"
-        description="Discover the most successful products from Shark Tank history and what made them thrive."
-        ctaText="View Success Stories"
-        ctaHref="/success-stories"
-        variant="cyan"
-        stat={{ value: `${stats.active}`, label: 'Active Products' }}
-      />
-
       <SeasonProductsSection
         products={seasonData.products}
         season={currentSeason}
@@ -143,6 +138,15 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <InterstitialBand
+        title="The Biggest Winners"
+        description="Discover the most successful products from Shark Tank history and what made them thrive."
+        ctaText="View Success Stories"
+        ctaHref="/success-stories"
+        variant="cyan"
+        stat={{ value: `${stats.active}`, label: 'Active Products' }}
+      />
 
       <InterstitialBand
         title="Want to be on Shark Tank?"

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { SpoilerProvider } from "@/contexts/SpoilerContext";
 
 export const viewport: Viewport = {
@@ -33,7 +34,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@200;300;500;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-8G8CLL4K3F"></script>
@@ -53,6 +54,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          <MobileBottomNav />
         </SpoilerProvider>
       </body>
     </html>

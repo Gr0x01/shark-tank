@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { ProductWithSharks } from '@/lib/supabase/types'
@@ -24,6 +24,13 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
   const [imgError, setImgError] = useState<Record<string, boolean>>({})
   const [revealed, setRevealed] = useState<Record<string, boolean>>({})
 
+  useEffect(() => {
+    if (spoilersHidden) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setRevealed({})
+    }
+  }, [spoilersHidden])
+
   if (rawProducts.length === 0) return null
 
   const products = rawProducts
@@ -33,15 +40,10 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
     <section className="latest-ep-section">
       <div className="max-w-6xl mx-auto px-6">
         <div className="latest-ep-header">
-          <div className="latest-ep-title">
-            <span className="ep-badge">JUST AIRED</span>
-            <h2>Season {episode.season}, Episode {episode.episode_number}</h2>
-          </div>
-          
-          <div className="latest-ep-actions">
-            <Link href={`/seasons/${episode.season}`} className="ep-view-all">
-              All Season {episode.season} →
-            </Link>
+          <div className="latest-ep-copy">
+            <span className="ep-badge">New episode</span>
+            <h1>The latest pitches, tracked.</h1>
+            <p>Season {episode.season} · Episode {episode.episode_number}</p>
           </div>
         </div>
 
@@ -54,8 +56,9 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
             const firstSharkPhoto = firstShark ? sharkPhotos[firstShark] : null
             
             return (
-              <Link key={product.id} href={`/products/${product.slug}`} className="ep-card">
-                <div className="ep-card-image">
+              <article key={product.id} className="ep-card">
+                <Link href={`/products/${product.slug}`} className="ep-card-link">
+                  <div className="ep-card-image">
                   {product.photo_url && !imgError[product.id] ? (
                     <Image
                       src={product.photo_url}
@@ -79,7 +82,8 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
                       <span className="ep-card-ask-inline unknown">Ask unknown</span>
                     )}
                   </div>
-                </div>
+                  </div>
+                </Link>
                 
                 
                 <button
@@ -97,7 +101,7 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
                         <div className="ep-card-spoiler-shark-placeholder" />
                         <span className="ep-card-spoiler-fake-deal">$???K / ??%</span>
                       </div>
-                      <span className="ep-card-spoiler-hint">tap to reveal</span>
+                      <span className="ep-card-spoiler-hint">Outcome hidden · Tap to reveal</span>
                     </div>
                   ) : (
                     <div className="ep-card-spoiler-content">
@@ -132,7 +136,7 @@ export function LatestEpisodeSection({ episode, products: rawProducts, sharkPhot
                     </div>
                   )}
                 </button>
-              </Link>
+              </article>
             )
           })}
         </div>
