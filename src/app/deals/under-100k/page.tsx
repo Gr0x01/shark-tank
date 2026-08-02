@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!content) {
     return {
       title: `${PAGE_TITLE} | ${SITE_NAME}`,
-      description: 'Browse small shark tank deals under k from Shark Tank.',
+      description: 'Browse small Shark Tank deals under $100K and discover the products, founders, and sharks behind them.',
     }
   }
 

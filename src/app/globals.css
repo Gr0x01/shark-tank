@@ -32,8 +32,8 @@
   --warning: #d97706;
   --danger: #dc2626;
   
-  --font-display: 'Barlow Condensed', sans-serif;
-  --font-body: 'Manrope', sans-serif;
+  --font-display: var(--font-barlow-condensed), sans-serif;
+  --font-body: var(--font-manrope), sans-serif;
 }
 
 * {

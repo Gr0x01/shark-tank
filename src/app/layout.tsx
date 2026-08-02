@@ -1,9 +1,24 @@
 import type { Metadata, Viewport } from "next";
+import { Barlow_Condensed, Manrope } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import { SpoilerProvider } from "@/contexts/SpoilerContext";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-barlow-condensed",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -29,33 +44,26 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon-32x32.png" type="image/png" sizes="32x32" />
-        <link rel="icon" href="/icon-16x16.png" type="image/png" sizes="16x16" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8G8CLL4K3F"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-8G8CLL4K3F');
-            `,
-          }}
-        />
       </head>
-      <body className="antialiased">
+      <body className={`${manrope.variable} ${barlowCondensed.variable} antialiased`}>
         <SpoilerProvider>
           <Header />
           {children}
           <Footer />
           <MobileBottomNav />
         </SpoilerProvider>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-8G8CLL4K3F"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8G8CLL4K3F');
+          `}
+        </Script>
       </body>
     </html>
   );

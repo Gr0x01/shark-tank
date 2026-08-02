@@ -9,6 +9,7 @@ interface ProductImageProps {
   alt: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   className?: string
+  priority?: boolean
 }
 
 const sizeClasses = {
@@ -25,7 +26,7 @@ const iconSizes = {
   xl: 'w-16 h-16',
 }
 
-export function ProductImage({ src, alt, size = 'md', className }: ProductImageProps) {
+export function ProductImage({ src, alt, size = 'md', className, priority = false }: ProductImageProps) {
   const [error, setError] = useState(false)
   const showPlaceholder = !src || error
 
@@ -68,6 +69,7 @@ export function ProductImage({ src, alt, size = 'md', className }: ProductImageP
         className="object-cover"
         onError={() => setError(true)}
         sizes={size === 'xl' ? '(max-width: 768px) 100vw, 50vw' : '200px'}
+        priority={priority}
       />
     </div>
   )

@@ -81,11 +81,13 @@ robots.ts blocks GPTBot, ChatGPT-User, Claude, CCBot, Google-Extended, and more;
 
 ## Priority 3 — quick wins
 
-- **Fonts + analytics loading:** Google Fonts via `<link>` and GA via a raw `<head>` script both cost LCP; move to `next/font` and `next/script`. The product hero image (the LCP element on 618 pages) also lacks `priority`.
-- **Copy bugs:** About page title renders as "About tankd.io | tankd.io"; the `/deals/under-100k` fallback description reads "Browse small shark tank deals under k" (missing "$100"); `content/seo-pages/about.json` (524 words) is written but never rendered — the live About page hardcodes ~200 thinner words.
-- **Dead icon links:** `icon-16x16.png` / `icon-32x32.png` are referenced in the layout but not served (wrong location for the app-router convention) — two 404s per page load.
-- **No custom `not-found.tsx`** — unknown slugs get Next's unbranded default 404 with zero links back in.
-- **IndexNow is built but never runs** — `submit-indexnow.ts` exists but isn't called from any cron, so Bing/DuckDuckGo never get pinged when Friday episodes land.
+### ✅ Fixed locally Aug 2, 2026 — awaiting deployment
+
+- **Fonts + analytics loading:** moved Google Fonts to `next/font`, GA to `next/script`, and prioritized the product hero image.
+- **Copy bugs:** fixed the duplicated About title and broken under-$100K fallback description; the full prepared About article now renders instead of the thinner hardcoded version.
+- **Dead icon links:** removed the manual icon references; the app-router favicon remains the single source of truth.
+- **404:** added a branded `not-found.tsx` with working links to Home, Products, and Seasons.
+- **IndexNow audit correction:** no code change was needed. Automatic submission has been wired into the episode cron since Mar 16, 2026 (`src/app/api/cron/auto-episode-check/route.ts`), as well as the manual import scripts.
 
 ## Data problems found while fixing these
 
@@ -111,10 +113,8 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 
 ## Where this stands — Aug 2, 2026
 
-> [!WARNING]
-> **Nothing here is deployed yet.** The branch `seo/crawlable-deal-info` holds 5 commits, and production is currently half-changed: the database work is live (it was written directly to production), but the code that reads it is not.
->
-> The one live consequence: 109 products store a `{year}` token in their meta description, and the code that swaps it for the current year ships with this branch. Until you deploy, those descriptions show a literal `{year}` to Google as the 12-hour page caches expire. Merging and deploying resolves it — there's nothing else to do.
+> [!NOTE]
+> SEO fixes #1–#5 are deployed from `main` and publicly verified. The Priority 3 cleanup is complete and verified with a 725-page production build plus browser checks; it is ready to deploy.
 
 **Done Aug 2** — deal info and shark links now crawlable (#1); unique titles and descriptions for all 664 products (#2); shark attribution repaired; two duplicate product pages merged; three 308 redirects added.
 
@@ -127,5 +127,5 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] PNG OG image + fallbacks (#3) — done Aug 2, 2026
 - [x] Products pagination + episode links from product pages (#4) — done Aug 2, 2026
 - [x] Product schema + populated ItemLists + expanded FAQs (#5) — done Aug 2, 2026
-- [ ] **The Priority 3 quick wins in one cleanup pass** ← next
+- [x] **The Priority 3 quick wins in one cleanup pass** — done locally Aug 2, 2026; deploy next
 - [ ] Decide on the AI-crawler policy (#8)

@@ -344,6 +344,7 @@ export default async function ProductPage({ params }: Props) {
                 src={product.photo_url}
                 alt={product.name}
                 size="xl"
+                priority
               />
             </div>
 

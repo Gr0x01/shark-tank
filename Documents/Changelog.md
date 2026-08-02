@@ -6,7 +6,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 | # | Name | Date | Notes |
 |---|------|------|-------|
-| 38 | Mobile-First Redesign + SEO Launch | Aug 2, 2026 | Merged the redesigned homepage, mobile navigation, shark index/profiles, and product-page polish into `main` alongside SEO audit fixes #1–#5. Combined build generated 725 pages; phone-size browser checks covered navigation, sharks, product FAQs, and spoiler reveal |
+| 38 | Mobile-First Redesign + SEO Launch | Aug 2, 2026 | Deployed the redesigned homepage, mobile navigation, shark index/profiles, and product-page polish from `main` alongside SEO audit fixes #1–#5. Vercel completed successfully; the 725-page build and public phone-size checks covered navigation, sharks, product FAQs/schema, spoiler reveal, and `{year}` replacement |
 | 37 | Product + Listing Structured Data | Aug 2, 2026 | Product pages now emit Product schema and 2–4 visible, matching FAQs; priced buy links can emit complete Offer data. ItemLists now contain the actual linked products, categories, or seasons shown across all listing pages |
 | 36 | Crawlable Product Pagination + Episode Links | Aug 2, 2026 | `/products` now exposes all 664 products through stable 48-item pages with filter-preserving Previous/Next links, page-specific canonicals, and 404s for invalid pages. Product episode badges link to episode pages; historical episode pages now work even when the newer `episodes` table has no row |
 | 35 | Social Sharing Image Fallbacks | Aug 2, 2026 | Replaced the unsupported default SVG with a 1200×630 PNG; product and shark pages now fall back to it when a photo is missing, with explicit image dimensions |
@@ -49,13 +49,13 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 - **Products**: 664 total; all narrative-enriched with unique SEO titles and descriptions; 663/664 with photos; Season 17 complete through E18
 - **Sharks**: 50 total, including 2 retired; every recorded deal has its investor linked
-- **Frontend**: All core pages shipped; product catalogue fully paginated and historical product-to-episode navigation restored
+- **Frontend**: Mobile-first redesign live across the homepage, navigation, shark pages, and product pages; catalogue fully paginated and historical product-to-episode navigation restored
 - **Stack**: Next.js 16.1.6, React 19.2.4, Supabase, Tailwind CSS 4.2, Zod 4, Playwright
-- **Site**: Live at https://tankd.io since Dec 12, 2025
+- **Site**: Live at https://tankd.io; redesign + SEO audit #1–#5 deployed and publicly verified Aug 2, 2026
 
 ## Up Next
 
-- [ ] Priority 3 SEO cleanup pass (fonts/analytics loading, copy bugs, icons, custom 404, IndexNow wiring)
+- [ ] Deploy the completed Priority 3 SEO cleanup (font/analytics loading, copy fixes, icon cleanup, branded 404); IndexNow was already wired
 - [ ] Fix 5 products whose `amazon_url` is a bare slug (e.g. `amazon.com/clean-bottle`) and 404s — those clicks earn nothing
 - [ ] Affiliate link management system
 - [ ] Email alerts for new episodes

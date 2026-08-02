@@ -23,22 +23,12 @@
       },
       {
         "heading": "The Mission: Spoiler-Free Shopping",
-        "content": "My mission with tankd.io is simple: make it easy and fun for Shark Tank fans to find and buy products without the fear of spoilers lurking around every corner. I want tankd.io to be the go-to place where you can explore hundreds of Shark Tank products (we’re talking nearly 600 and counting!), check their current business status, and get the info you need — all without accidentally spoiling the episode you’re watching. This isn’t about just listing products; it’s about preserving the thrill of discovery while helping you support the entrepreneurs you root for. Because let’s face it, we all love the show for the drama, the pitches, and the surprises — and that should stay intact."
+        "content": "My mission with tankd.io is simple: make it easy and fun for Shark Tank fans to find and buy products without the fear of spoilers lurking around every corner. I want tankd.io to be the go-to place where you can explore more than 660 Shark Tank products, check their current business status, and get the info you need — all without accidentally spoiling the episode you’re watching. This isn’t about just listing products; it’s about preserving the thrill of discovery while helping you support the entrepreneurs you root for. Because let’s face it, we all love the show for the drama, the pitches, and the surprises — and that should stay intact."
       },
       {
         "heading": "A Solo Dev’s Passion Project",
         "content": "Tankd.io isn’t a corporate website or some big company’s side hustle. It’s just me — a Shark Tank fan and developer — building something I wish existed. I’ve spent countless hours coding, researching, and updating the site to keep it spoiler-free and packed with useful info. Sure, it’s an MVP and not perfect (yet!), but it’s built with love and a genuine passion for the show and its amazing entrepreneurs. So when you use tankd.io, you’re supporting a real person who’s just as obsessed with Shark Tank as you are and who hates spoilers just as much. Thanks for stopping by — and happy spoiler-free shopping!"
       }
     ]
-  },
-  "stats": {
-    "total": 589,
-    "active": 417,
-    "outOfBusiness": 145,
-    "gotDeal": 280,
-    "noDeal": 239,
-    "successRate": "70.8",
-    "failureRate": "24.6",
-    "dealRate": "47.5"
   }
 }
