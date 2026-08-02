@@ -6,6 +6,7 @@ export interface ProductFilters {
   status?: ProductStatus
   dealOutcome?: DealOutcome
   season?: number
+  episodeNumber?: number
   categorySlug?: string
   sharkSlug?: string
   search?: string
@@ -22,6 +23,7 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
     .from('products_with_sharks')
     .select('*')
     .order('air_date', { ascending: false, nullsFirst: false })
+    .order('id', { ascending: true })
   
   if (filters.status) {
     query = query.eq('status', filters.status)
@@ -33,6 +35,10 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
   
   if (filters.season) {
     query = query.eq('season', filters.season)
+  }
+
+  if (filters.episodeNumber) {
+    query = query.eq('episode_number', filters.episodeNumber)
   }
   
   if (filters.categorySlug) {

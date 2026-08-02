@@ -1,4 +1,6 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { getProducts, getProductStats, getSharkPhotos, getCategories, getSharks } from '@/lib/queries/cached'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
@@ -13,9 +15,14 @@ import { createBreadcrumbSchema, createCollectionPageSchema, escapeJsonLd } from
 // ISR: Revalidate every 12 hours (products updated monthly)
 export const revalidate = 43200
 
-export async function generateMetadata(): Promise<Metadata> {
-  const title = 'All Shark Tank Products - Complete Database of Every Pitch | tankd.io'
+export async function generateMetadata({ searchParams }: ProductsPageProps): Promise<Metadata> {
+  const params = await searchParams
+  const page = parsePageParam(params.page)
+  const pageLabel = page > 1 ? ` - Page ${page}` : ''
+  const title = `All Shark Tank Products${pageLabel} - Complete Database of Every Pitch | tankd.io`
   const description = 'Browse all Shark Tank products ever pitched. 600+ products with deal details, business status, and where to buy. Filter by shark, category, season, and deal outcome.'
+  const hasFilters = Object.entries(params).some(([key, value]) => key !== 'page' && value !== undefined)
+  const canonical = page > 1 && !hasFilters ? `${SITE_URL}/products?page=${page}` : `${SITE_URL}/products`
 
   return {
     title,
@@ -35,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `${SITE_URL}/products`,
+      url: canonical,
       siteName: SITE_NAME,
       images: [{
         url: DEFAULT_OG_IMAGE,
@@ -52,13 +59,14 @@ export async function generateMetadata(): Promise<Metadata> {
       images: [DEFAULT_OG_IMAGE]
     },
     alternates: {
-      canonical: `${SITE_URL}/products`
+      canonical
     }
   }
 }
 
 // Current season - update when new season starts
 const CURRENT_SEASON = 17
+const PRODUCTS_PER_PAGE = 48
 
 /**
  * Parse and validate season parameter
@@ -73,12 +81,32 @@ function parseSeasonParam(param: string | string[] | undefined): number | undefi
   return parsed
 }
 
+function parsePageParam(param: string | string[] | undefined): number {
+  const value = Array.isArray(param) ? param[0] : param
+  const parsed = Number.parseInt(value || '1', 10)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1
+}
+
+function buildPageHref(params: { [key: string]: string | string[] | undefined }, page: number): string {
+  const query = new URLSearchParams()
+
+  for (const [key, value] of Object.entries(params)) {
+    if (key === 'page' || value === undefined) continue
+    for (const item of Array.isArray(value) ? value : [value]) query.append(key, item)
+  }
+
+  if (page > 1) query.set('page', String(page))
+  const queryString = query.toString()
+  return queryString ? `/products?${queryString}` : '/products'
+}
+
 interface ProductsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const params = await searchParams
+  const page = parsePageParam(params.page)
 
   // Parse filter params
   const statusParam = params.status
@@ -94,7 +122,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     categorySlug: Array.isArray(categoryParam) ? categoryParam[0] : categoryParam,
     sharkSlug: Array.isArray(sharkParam) ? sharkParam[0] : sharkParam,
     search: Array.isArray(params.q) ? params.q[0] : params.q,
-    limit: 100,
+    limit: PRODUCTS_PER_PAGE + 1,
+    offset: (page - 1) * PRODUCTS_PER_PAGE,
   }
 
   const [products, stats, categories, sharks, sharkPhotos] = await Promise.all([
@@ -104,6 +133,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     getSharks(),
     getSharkPhotos(),
   ])
+  const hasNextPage = products.length > PRODUCTS_PER_PAGE
+  const visibleProducts = products.slice(0, PRODUCTS_PER_PAGE)
+
+  if (page > 1 && visibleProducts.length === 0) notFound()
 
   // Check if any filters are active
   const hasActiveFilters = filters.status || filters.dealOutcome || filters.season || filters.categorySlug || filters.sharkSlug || filters.search
@@ -144,7 +177,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           )}
           <p className="text-[var(--ink-500)]">
             {hasActiveFilters ? (
-              <>{products.length} results</>
+              <>Page {page}{visibleProducts.length ? ` · ${visibleProducts.length} products shown` : ''}</>
             ) : (
               <>{stats.total} products · {stats.gotDeal} deals · {stats.active} still active</>
             )}
@@ -191,15 +224,27 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           {/* Product Grid */}
           <div className="flex-1">
             <div className="products-grid-home">
-              {products.map(product => (
+              {visibleProducts.map(product => (
                 <ProductCardCommerce key={product.id} product={product} sharkPhotos={sharkPhotos} />
               ))}
             </div>
 
-            {products.length === 0 && (
+            {visibleProducts.length === 0 && (
               <div className="text-center py-16 text-[var(--ink-400)] card">
                 <p className="font-display">No products match your filters.</p>
               </div>
+            )}
+
+            {(page > 1 || hasNextPage) && (
+              <nav aria-label="Product pages" className="flex items-center justify-between gap-4 mt-10">
+                {page > 1 ? (
+                  <Link href={buildPageHref(params, page - 1)} className="btn-secondary">← Previous</Link>
+                ) : <span />}
+                <span className="text-sm text-[var(--ink-500)]">Page {page}</span>
+                {hasNextPage ? (
+                  <Link href={buildPageHref(params, page + 1)} className="btn-secondary">Next →</Link>
+                ) : <span />}
+              </nav>
             )}
           </div>
         </div>

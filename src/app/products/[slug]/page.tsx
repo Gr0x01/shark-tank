@@ -309,11 +309,16 @@ export default async function ProductPage({ params }: Props) {
             <div className="product-hero-info">
               {/* Episode Badge + Status Badge */}
               <div className="product-episode-meta">
-                {product.season && (
-                  <span className="product-episode-badge">
-                    Season {product.season}{product.episode_number ? `, Episode ${product.episode_number}` : ''}
-                  </span>
-                )}
+                {product.season && product.episode_number ? (
+                  <Link
+                    href={`/episodes/${product.season}/${product.episode_number}`}
+                    className="product-episode-badge"
+                  >
+                    Season {product.season}, Episode {product.episode_number}
+                  </Link>
+                ) : product.season ? (
+                  <span className="product-episode-badge">Season {product.season}</span>
+                ) : null}
                 {product.status && (
                   <StatusBadge status={product.status} verbose />
                 )}
@@ -565,8 +570,8 @@ export default async function ProductPage({ params }: Props) {
               ))}
             </div>
 
-            <Link href={`/seasons/${product.season}`} className="btn-cta-primary mt-6">
-              View All Season {product.season} Products
+            <Link href={`/episodes/${product.season}/${product.episode_number}`} className="btn-cta-primary mt-6">
+              View Full Episode
             </Link>
           </div>
         </section>

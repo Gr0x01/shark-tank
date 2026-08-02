@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getEpisode, getEpisodeProducts, getSharkPhotos } from '@/lib/queries/cached'
+import { getEpisode, getProducts, getSharkPhotos } from '@/lib/queries/cached'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/seo/constants'
 import { createBreadcrumbSchema, createTVEpisodeSchema, escapeJsonLd } from '@/lib/seo/schemas'
@@ -15,25 +15,30 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { season, episode: ep } = await params
-  const episodeData = await getEpisode(parseInt(season), parseInt(ep))
+  const seasonNum = parseInt(season)
+  const episodeNum = parseInt(ep)
+  const [episodeData, products] = await Promise.all([
+    getEpisode(seasonNum, episodeNum),
+    getProducts({ season: seasonNum, episodeNumber: episodeNum }),
+  ])
 
-  if (!episodeData) {
+  if (!episodeData && products.length === 0) {
     return { title: 'Episode Not Found' }
   }
 
-  const title = episodeData.seo_title ||
-    `Season ${season} Episode ${ep}${episodeData.title ? ` - ${episodeData.title}` : ''} | tankd.io`
+  const title = episodeData?.seo_title ||
+    `Season ${season} Episode ${ep}${episodeData?.title ? ` - ${episodeData.title}` : ''} | tankd.io`
 
-  const description = episodeData.meta_description ||
-    `Products from Shark Tank Season ${season} Episode ${ep}. ${episodeData.air_date ? `Aired ${new Date(episodeData.air_date).toLocaleDateString()}.` : ''} See what deals were made and where to buy.`
+  const description = episodeData?.meta_description ||
+    `Products from Shark Tank Season ${season} Episode ${ep}. ${episodeData?.air_date ? `Aired ${new Date(episodeData.air_date).toLocaleDateString()}.` : ''} See what deals were made and where to buy.`
 
   // Build keywords dynamically
   const keywords = [
     `Shark Tank Season ${season} Episode ${ep}`,
     `S${season}E${ep}`,
     'Shark Tank episode',
-    ...(episodeData.title ? [episodeData.title] : []),
-    ...(episodeData.air_date ? [
+    ...(episodeData?.title ? [episodeData.title] : []),
+    ...(episodeData?.air_date ? [
       new Date(episodeData.air_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     ] : []),
     'products',
@@ -76,7 +81,7 @@ export default async function EpisodePage({ params }: Props) {
 
   const [episodeData, products, sharkPhotos] = await Promise.all([
     getEpisode(seasonNum, episodeNum),
-    getEpisodeProducts(seasonNum, episodeNum),
+    getProducts({ season: seasonNum, episodeNumber: episodeNum }),
     getSharkPhotos(),
   ])
 
@@ -160,4 +165,3 @@ export default async function EpisodePage({ params }: Props) {
     </>
   )
 }
-
