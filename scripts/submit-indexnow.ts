@@ -20,13 +20,23 @@ const supabase = createClient(
 )
 
 async function getAllProductSlugs(): Promise<string[]> {
-  const { data, error } = await supabase
-    .from('products')
-    .select('slug')
-    .order('updated_at', { ascending: false })
+  // PostgREST caps an unbounded select at 1000 rows, so this quietly submitted only
+  // the 1000 most recently updated products once the catalogue outgrew that.
+  const slugs: string[] = []
+  const pageSize = 1000
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await supabase
+      .from('products')
+      .select('slug')
+      .order('updated_at', { ascending: false })
+      .range(from, from + pageSize - 1)
 
-  if (error) throw error
-  return data?.map(p => p.slug) || []
+    if (error) throw error
+    if (!data?.length) break
+    slugs.push(...data.map(p => p.slug))
+    if (data.length < pageSize) break
+  }
+  return slugs
 }
 
 async function main() {

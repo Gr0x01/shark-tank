@@ -1,20 +1,17 @@
 import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type { Episode, ProductWithSharks, Product } from '@/lib/supabase/types'
+import { selectAll } from '@/lib/supabase/select-all'
 
 export async function getSeasons(): Promise<number[]> {
   const supabase = await createClient()
 
-  const { data, error } = await supabase
-    .from('products')
-    .select('season')
-    .not('season', 'is', null)
-    .order('season', { ascending: false })
+  // One row per product, ordered by season descending — truncation drops the OLDEST
+  // seasons entirely, which is how /seasons lost seasons 1-6.
+  const products = await selectAll<Pick<Product, 'season'>>(() =>
+    supabase.from('products').select('season').not('season', 'is', null).order('season', { ascending: false })
+  )
 
-  if (error) throw error
-
-  const products = (data as Pick<Product, 'season'>[]) || []
-  const seasons = [...new Set(products.map(p => p.season).filter((s): s is number => s !== null))]
-  return seasons
+  return [...new Set(products.map(p => p.season).filter((s): s is number => s !== null))]
 }
 
 /**
@@ -23,15 +20,10 @@ export async function getSeasons(): Promise<number[]> {
 export async function getSeasonNumbers(): Promise<number[]> {
   const supabase = createStaticClient()
 
-  const { data, error } = await supabase
-    .from('products')
-    .select('season')
-    .not('season', 'is', null)
-    .order('season', { ascending: false })
+  const products = await selectAll<Pick<Product, 'season'>>(() =>
+    supabase.from('products').select('season').not('season', 'is', null).order('season', { ascending: false })
+  )
 
-  if (error) throw error
-
-  const products = (data as Pick<Product, 'season'>[]) || []
   return [...new Set(products.map(p => p.season).filter((s): s is number => s !== null))]
 }
 

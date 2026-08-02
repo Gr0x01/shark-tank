@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createStaticClient } from '@/lib/supabase/server'
 import { PRODUCTS_PER_PAGE } from '@/lib/seo/constants'
+import { selectAll } from '@/lib/supabase/select-all'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://tankd.io'
 
@@ -25,27 +26,6 @@ interface SeasonData {
 interface EpisodeSlug {
   season: number
   episode_number: number
-}
-
-/**
- * PostgREST caps an unbounded select at 1000 rows. The catalogue passed that on
- * Aug 2, 2026 and the sitemap silently dropped ~595 products — no error, just a
- * short list. Page through explicitly so the sitemap can't quietly truncate again.
- */
-async function selectAll<T>(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  build: () => any,
-  pageSize = 1000
-): Promise<T[]> {
-  const rows: T[] = []
-  for (let from = 0; ; from += pageSize) {
-    const { data, error } = await build().range(from, from + pageSize - 1)
-    if (error) throw new Error(`sitemap query failed: ${error.message}`)
-    if (!data?.length) break
-    rows.push(...(data as T[]))
-    if (data.length < pageSize) break
-  }
-  return rows
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

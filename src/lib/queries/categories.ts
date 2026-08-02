@@ -1,5 +1,6 @@
 import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type { Category, ProductWithSharks, Product } from '@/lib/supabase/types'
+import { selectAll } from '@/lib/supabase/select-all'
 
 export async function getCategories(): Promise<Category[]> {
   const supabase = await createClient()
@@ -81,13 +82,10 @@ export async function getCategoriesWithCounts(): Promise<(Category & { product_c
   
   const categories = (categoriesData as Category[]) || []
   
-  const { data: productsData, error: prodError } = await supabase
-    .from('products')
-    .select('category_id')
-  
-  if (prodError) throw prodError
-  
-  const products = (productsData as Pick<Product, 'category_id'>[]) || []
+  // Counts every product per category, so a truncated read understates every category.
+  const products = await selectAll<Pick<Product, 'category_id'>>(() =>
+    supabase.from('products').select('category_id')
+  )
   
   const counts = new Map<string, number>()
   products.forEach(p => {

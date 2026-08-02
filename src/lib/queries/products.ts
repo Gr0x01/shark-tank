@@ -1,6 +1,7 @@
 import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type { ProductWithSharks, ProductStatus, DealOutcome, Category, Product } from '@/lib/supabase/types'
 import { sanitizeSearchQuery } from '@/lib/utils/search'
+import { selectAll } from '@/lib/supabase/select-all'
 
 export interface ProductFilters {
   status?: ProductStatus
@@ -155,19 +156,26 @@ export async function getProductsByEpisode(
 /**
  * Get product slugs for generateStaticParams (build-time, no cookies).
  */
-// Default covers the whole catalogue (666 products) — this feeds generateStaticParams,
-// and a short limit silently 404s every product outside it. 1000 is Supabase's max-rows cap.
-export async function getProductSlugs(limit = 1000): Promise<string[]> {
+// Feeds generateStaticParams, so a short list silently drops products from the build.
+// Pass a limit only to deliberately cap it; the default covers the whole catalogue
+// however large it grows.
+export async function getProductSlugs(limit?: number): Promise<string[]> {
   const supabase = createStaticClient()
 
-  const { data, error } = await supabase
-    .from('products')
-    .select('slug')
-    .order('air_date', { ascending: false, nullsFirst: false })
-    .limit(limit)
+  const build = () =>
+    supabase
+      .from('products')
+      .select('slug')
+      .order('air_date', { ascending: false, nullsFirst: false })
 
-  if (error) throw error
-  return (data || []).map((p: { slug: string }) => p.slug)
+  if (limit !== undefined) {
+    const { data, error } = await build().limit(limit)
+    if (error) throw error
+    return (data || []).map((p: { slug: string }) => p.slug)
+  }
+
+  const rows = await selectAll<{ slug: string }>(build)
+  return rows.map(p => p.slug)
 }
 
 export async function getActiveProducts(limit = 20): Promise<ProductWithSharks[]> {
@@ -180,15 +188,13 @@ export async function getRecentProducts(limit = 10): Promise<ProductWithSharks[]
 
 export async function getProductStats() {
   const supabase = await createClient()
-  
-  const { data, error } = await supabase
-    .from('products')
-    .select('status, deal_outcome')
-  
-  if (error) throw error
-  
-  const products = (data as Pick<Product, 'status' | 'deal_outcome'>[]) || []
-  
+
+  // These numbers are substituted into editorial copy as {total}/{active}/{deals}, so a
+  // truncated read makes the site state a wrong catalogue size as fact.
+  const products = await selectAll<Pick<Product, 'status' | 'deal_outcome'>>(() =>
+    supabase.from('products').select('status, deal_outcome')
+  )
+
   const stats = {
     total: products.length,
     active: products.filter(p => p.status === 'active').length,
