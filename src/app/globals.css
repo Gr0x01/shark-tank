@@ -3962,6 +3962,23 @@ h3, h4, h5, h6 {
 }
 
 /* Spoiler button - inline blurred placeholder */
+/* Wraps the real outcome + the decoy; the gated result is taken out of flow so
+   the decoy alone sets the size and the outcome can't be inferred from layout. */
+.deal-stats-gate {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.deal-stats-result.is-gated {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .deal-stats-spoiler {
   display: inline-flex;
   align-items: center;

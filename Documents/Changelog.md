@@ -6,6 +6,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 | # | Name | Date | Notes |
 |---|------|------|-------|
+| 31 | SEO Fix: Deal Info + Shark Links Now Crawlable | Aug 2, 2026 | Spoiler gate hides the real outcome with CSS instead of removing it from the DOM — 666 product pages now carry their deal figures and shark links in the HTML. Also fixed `getProductSlugs()` silently capping `generateStaticParams` at 100 |
 | 30 | Affiliate Click Tracking + Analytics Dashboard | Jul 30, 2026 | `affiliate_link_clicked` event via shared `AffiliateLink.tsx` on all 4 Amazon CTAs; "Traffic & Affiliate Revenue" dashboard (7 tiles); privacy policy updated for PostHog |
 | 29 | PostHog Analytics + Session Replay | Jul 30, 2026 | `src/instrumentation-client.ts`; PostHog project "Tankd" (534816). Replay sampled 30%, Web Vitals + error tracking + heatmaps on. Plausible removed, GA4 kept |
 | 28 | S17 Episode Backfill (E3, E14–E17) | Apr 25, 2026 | 20 products via new `scripts/backfill-episodes.ts` (reusable for future cron gaps) |

@@ -1,0 +1,92 @@
+# SEO Audit — August 2026
+
+Audit of tankd.io's code-level SEO: metadata, structured data, indexability, internal linking, and description copy. Database checked Aug 2, 2026 (666 products).
+
+> [!IMPORTANT]
+> The foundation is genuinely good — canonicals on every route, a complete sitemap, 700–1,000 words of unique server-rendered narrative per product page, WebSite + SearchAction schema, clean 404s for bad slugs. The issues below are what's being left on the table, ordered by impact.
+
+## Priority 1 — real traffic being lost
+
+### 1. The spoiler feature hides deal info from Google — ✅ FIXED Aug 2, 2026
+
+> [!NOTE]
+> Fixed. The real outcome now stays in the HTML and is hidden with CSS; the decoy is unchanged for visitors, so the spoiler experience is identical. Verified: the shark link and real deal figure are in the server HTML while gated, and the "No Deal" case still can't be read from the decoy's shape.
+>
+> Found while verifying: `getProductSlugs()` was capped at 100 despite a comment claiming "render all 618", so `generateStaticParams` only ever listed 100 products — 85% of product pages 404'd in local dev. Production was unaffected (product pages render on demand there), but the cap is gone now.
+
+
+Spoiler mode defaults to ON, and the deal section (`DealRevealSection`) conditionally *removes* the real content from the page instead of visually covering it. What Google sees on every product page:
+
+- A fake placeholder deal — literally "$200K for 20%" — instead of the real deal amount and equity.
+- **No links to shark pages.** The shark avatars in the deal section are the product→shark links, and they're behind the gate. That's ~666 pages' worth of internal links to shark profiles that don't exist as far as Google is concerned.
+- A meta description that says "Yes! X is still in business after their $100,000 deal…" while the page body doesn't contain that number — a mismatch Google notices.
+
+**Fix:** render the real content in the HTML and hide it with CSS (blur overlay), so the spoiler experience for viewers is identical but crawlers see the truth. Small change, big footprint.
+
+### 2. Meta descriptions: 0 of 666 products have a custom one
+
+The `seo_title` and `meta_description` columns exist and the code prefers them — but they're empty for every product. All 666 pages fall back to six template strings:
+
+| Segment | Products | Shared description |
+|---|---|---|
+| Active + deal | 266 | "Yes! X is still in business after their $Y deal…" |
+| Active + no deal | 171 | "X walked away from Shark Tank without a deal but…" |
+| Out of business | 149 | "Find out what went wrong and lessons learned…" |
+
+The templates are decent CTR copy, but when 266 pages end with the identical sentence, Google increasingly rewrites them and nothing stands out in results. This is the "dull descriptions" instinct — confirmed.
+
+**Fix:** batch-generate a unique `seo_title` + `meta_description` per product from the narrative fields we already have (no new research needed — the origin story, deal dynamics, and current status are already in the DB). One script in the style of `enrich-narratives.ts`, roughly $1–2 total with gpt-5-mini, one-time. The Friday episode workflow would generate them for new products going forward.
+
+### 3. Share previews are broken almost everywhere
+
+- The default OG image is `og-default.svg` — **Facebook, X, LinkedIn, Slack, and iMessage do not render SVG og:images.** Every page without a product photo shares as a blank card.
+- Product OG images have no width/height and no fallback when the photo is missing.
+- The `/sharks` index declares a large-image Twitter card but provides **no image at all**.
+
+**Fix:** one 1200×630 PNG default, use it as the fallback everywhere, add dimensions. Optionally a dynamic OG image later (product photo + deal stamp) — nice-to-have, not required.
+
+### 4. ~500 products and all episode pages are barely linked internally
+
+- `/products` renders only the first 100 of 666 with **no pagination**. Roughly 500 product pages are reachable only via the sitemap and "related products" grids — weak internal linking that suppresses their crawl priority.
+- Product pages never link to their own episode page (they link to the season instead), so episode pages are orphaned from the 600+ pages that should feed them.
+
+**Fix:** add pagination (or an A–Z index) to `/products`, and make the episode badge on product pages a link to `/episodes/{season}/{episode}`.
+
+## Priority 2 — structured data and indexing hygiene
+
+### 5. Structured data gaps
+
+- **No Product schema anywhere** — product pages emit `Article` only. Adding `Product` (with brand, image, and offer/availability where we have a buy link) is the path to product rich results.
+- `ItemList` on every listing page is a stub — it declares a count but lists **zero items**. Populating `itemListElement` is easy and makes carousels possible.
+- Product FAQ schema has exactly one question, and only when `current_status` exists. We have material for 3–4 (still in business? did they get a deal? who invested? where to buy?).
+- `/sharks` index emits no JSON-LD at all; `Organization.sameAs` is empty (should list the site's social profiles); the About page's `datePublished` churns on every render.
+
+### 6. Indexable failure pages
+
+If an SEO-content JSON fails to load, pages like `/best-deals` return **HTTP 200 with a literal dev instruction** ("Please run: npx tsx scripts/enrich-seo-pages.ts…") and no noindex. Should be a hard error or noindex.
+
+### 7. Sitemap lastModified is meaningless
+
+Most entries use `new Date()`, so every crawl says everything changed today. Google learns to ignore lastmod. Use real `updated_at` where we have it and omit it where we don't.
+
+### 8. AI crawlers are fully blocked — a deliberate trade-off worth revisiting
+
+robots.ts blocks GPTBot, ChatGPT-User, Claude, CCBot, Google-Extended, and more; `next.config.ts` adds a `noai` header. This was a reasonable anti-training stance, but in 2026 it also means **tankd.io can never be cited by ChatGPT search, Perplexity, or Gemini** — which is exactly where "is X from Shark Tank still in business?" questions get asked now. Options: keep the block (protective), or allow the *search/answer* crawlers while still blocking pure training bots. Your call — flagging it because for a product-discovery site the forfeited referral surface is real.
+
+## Priority 3 — quick wins
+
+- **Fonts + analytics loading:** Google Fonts via `<link>` and GA via a raw `<head>` script both cost LCP; move to `next/font` and `next/script`. The product hero image (the LCP element on 618 pages) also lacks `priority`.
+- **Copy bugs:** About page title renders as "About tankd.io | tankd.io"; the `/deals/under-100k` fallback description reads "Browse small shark tank deals under k" (missing "$100"); `content/seo-pages/about.json` (524 words) is written but never rendered — the live About page hardcodes ~200 thinner words.
+- **Dead icon links:** `icon-16x16.png` / `icon-32x32.png` are referenced in the layout but not served (wrong location for the app-router convention) — two 404s per page load.
+- **No custom `not-found.tsx`** — unknown slugs get Next's unbranded default 404 with zero links back in.
+- **IndexNow is built but never runs** — `submit-indexnow.ts` exists but isn't called from any cron, so Bing/DuckDuckGo never get pinged when Friday episodes land.
+
+## Suggested order of attack
+
+- [x] Spoiler gate → CSS-hide so deal content + shark links are in the HTML (#1) — done Aug 2, 2026
+- [ ] Batch-generate unique titles/descriptions for all 666 products (#2)
+- [ ] PNG OG image + fallbacks (#3)
+- [ ] Products pagination + episode links from product pages (#4)
+- [ ] Product schema + populated ItemLists + expanded FAQs (#5)
+- [ ] The Priority 3 quick wins in one cleanup pass
+- [ ] Decide on the AI-crawler policy (#8)

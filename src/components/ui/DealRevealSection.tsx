@@ -65,28 +65,13 @@ export function DealRevealSection({
       <div className="deal-stats-row">
         <span className="deal-stats-label">The Deal</span>
 
-        {!showDealInfo ? (
-          // Blurred placeholder - always shows fake deal layout
-          <button
-            className="deal-stats-spoiler"
-            onClick={() => setRevealed(true)}
-            aria-label="Reveal the deal outcome"
+        <div className="deal-stats-gate">
+          {/* The real outcome stays in the DOM even while gated so crawlers see the
+              deal and the shark links; the decoy below is what a visitor sees. */}
+          <div
+            className={`deal-stats-result${showDealInfo ? '' : ' is-gated'}`}
+            inert={!showDealInfo}
           >
-            <div className="deal-stats-spoiler-content">
-              <div className="deal-stats-sharks">
-                <span className="deal-stats-shark-placeholder" />
-                <span className="deal-stats-shark-placeholder" />
-              </div>
-              <span className="deal-stats-deal">
-                <span className="deal-stats-money">$200K</span>
-                <span className="deal-stats-equity">for 20%</span>
-              </span>
-            </div>
-            <span className="deal-stats-spoiler-hint">Reveal</span>
-          </button>
-        ) : (
-          // Actual content
-          <div className="deal-stats-result">
             {gotDeal && (
               <>
                 <div className="deal-stats-sharks">
@@ -131,7 +116,28 @@ export function DealRevealSection({
               <span className="deal-stats-pending">Deal Pending</span>
             )}
           </div>
-        )}
+
+          {!showDealInfo && (
+            // Decoy: a fixed fake layout, so the real outcome can't be read from its silhouette
+            <button
+              className="deal-stats-spoiler"
+              onClick={() => setRevealed(true)}
+              aria-label="Reveal the deal outcome"
+            >
+              <div className="deal-stats-spoiler-content">
+                <div className="deal-stats-sharks">
+                  <span className="deal-stats-shark-placeholder" />
+                  <span className="deal-stats-shark-placeholder" />
+                </div>
+                <span className="deal-stats-deal">
+                  <span className="deal-stats-money">$200K</span>
+                  <span className="deal-stats-equity">for 20%</span>
+                </span>
+              </div>
+              <span className="deal-stats-spoiler-hint">Reveal</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

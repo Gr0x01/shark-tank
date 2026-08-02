@@ -149,7 +149,9 @@ export async function getProductsByEpisode(
 /**
  * Get product slugs for generateStaticParams (build-time, no cookies).
  */
-export async function getProductSlugs(limit = 100): Promise<string[]> {
+// Default covers the whole catalogue (666 products) — this feeds generateStaticParams,
+// and a short limit silently 404s every product outside it. 1000 is Supabase's max-rows cap.
+export async function getProductSlugs(limit = 1000): Promise<string[]> {
   const supabase = createStaticClient()
 
   const { data, error } = await supabase

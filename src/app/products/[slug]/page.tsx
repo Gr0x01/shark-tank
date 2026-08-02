@@ -152,7 +152,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams() {
   // Pre-render all products at build time for instant page loads
-  const slugs = await getProductSlugs()  // No limit - render all 618 products
+  const slugs = await getProductSlugs()
   return slugs.map(slug => ({ slug }))
 }
 
