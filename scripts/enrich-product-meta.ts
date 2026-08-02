@@ -11,8 +11,9 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// Titles and descriptions carry a "{year}" token instead of a literal year so they
-// stay fresh — the product page swaps it for the current year at render time.
+// Descriptions state a year only when the source material dates the fact. Rendering a
+// current year over research done in an earlier one turned "as of {year}" into a claim
+// the underlying narrative never supported.
 // The title cap is per-product: a few product names are long enough that a hard 60
 // would make the task impossible and burn every retry.
 // Normalise curly apostrophes so "O'Leary" and "O’Leary" compare equal.
@@ -108,7 +109,7 @@ HARD RULES:
 - Shark attribution must be exact. If several sharks invested, name them all or write "the sharks" — never credit one shark for a deal that several made. If no shark is listed, do not name one.
 - When investors are listed below, name only those sharks — never name another shark, not even to say they passed or made an offer. When NO investor is listed, you may name a shark the background text names, but describe what actually happened: an offer that fell through is not an investment, and "no deal" means nobody invested.
 - The source material may be cut off mid-sentence. Stop at what it actually says; never finish the thought from your own knowledge.
-- Write "{year}" (with the braces) wherever you want the current year. Never write a literal year like 2026 unless it is a historical date from the source material (an air date, a closure year).
+- Never claim a fact is current "as of" a year the source material does not support. Use a year only when the source material states it (an air date, a closure year, the year a revenue figure was reported). Prefer describing what is true without dating it at all.
 - The title must not exceed 60 characters. The description must not exceed 158 characters. Count carefully.
 - Do not end the title with the site name — that is added elsewhere.`;
 

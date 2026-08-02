@@ -19,8 +19,8 @@ export async function generateMetadata({ searchParams }: ProductsPageProps): Pro
   const params = await searchParams
   const page = parsePageParam(params.page)
   const pageLabel = page > 1 ? ` - Page ${page}` : ''
-  const title = `All Shark Tank Products${pageLabel} - Complete Database of Every Pitch | tankd.io`
-  const description = 'Browse all Shark Tank products ever pitched. 600+ products with deal details, business status, and where to buy. Filter by shark, category, season, and deal outcome.'
+  const title = `Shark Tank Products${pageLabel} - Deals, Status & Where to Buy | tankd.io`
+  const description = 'Browse Shark Tank products with deal details, business status, and where to buy. Filter by shark, category, season, and deal outcome.'
   const hasFilters = Object.entries(params).some(([key, value]) => key !== 'page' && value !== undefined)
   const canonical = page > 1 && !hasFilters ? `${SITE_URL}/products?page=${page}` : `${SITE_URL}/products`
 
@@ -31,7 +31,7 @@ export async function generateMetadata({ searchParams }: ProductsPageProps): Pro
       'all Shark Tank products',
       'Shark Tank products',
       'Shark Tank products list',
-      'every Shark Tank product',
+      'Shark Tank product list',
       'Shark Tank database',
       'Mark Cuban deals',
       'Lori Greiner products',
@@ -48,7 +48,7 @@ export async function generateMetadata({ searchParams }: ProductsPageProps): Pro
         url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: 'Browse All Shark Tank Products'
+        alt: 'Browse Shark Tank Products'
       }],
       type: 'website'
     },
@@ -147,8 +147,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   ])
 
   const collectionSchema = !hasActiveFilters ? createCollectionPageSchema(
-    `All Shark Tank Products${page > 1 ? ` — Page ${page}` : ''}`,
-    'Complete database of every product pitched on Shark Tank',
+    `Shark Tank Products${page > 1 ? ` — Page ${page}` : ''}`,
+    'Shark Tank products with deal outcomes and current business status',
     `${SITE_URL}${buildPageHref(params, page)}`,
     visibleProducts.map(product => ({
       name: product.name,
@@ -174,7 +174,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <p className="section-label mb-2">Browse</p>
-          <h1 className="text-3xl md:text-4xl font-medium mb-2">All Shark Tank Products</h1>
+          <h1 className="text-3xl md:text-4xl font-medium mb-2">Shark Tank Products</h1>
           {filters.search && (
             <p className="text-sm text-[var(--ink-500)] mb-2">
               Showing results for &ldquo;<span className="font-medium text-[var(--ink-900)]">{filters.search}</span>&rdquo;

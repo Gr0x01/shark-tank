@@ -9,10 +9,15 @@ Audit of tankd.io's code-level SEO: metadata, structured data, indexability, int
 
 This follow-up deliberately ignored the completed checklist below and asked a different question: **what material SEO work is still being left on the table across the current site and content set?**
 
-> [!WARNING]
-> Do not request Google reindexing yet. Fix the truth and freshness issues in Blockers 1–3 first. The catalogue backfill can continue in phases after that; it should not delay every future crawl.
+> [!NOTE]
+> **Blockers 1–3 are fixed as of Aug 2, 2026.** The completeness claims, the wrong application guide, the stale editorial stats, the cosmetic `{year}` freshness, and the false Article dates are all resolved — details in each section below. Priority 2 (pagination crawl depth, Product offers) and the catalogue backfill remain open, and neither needs to block reindexing.
 
-### Blocker 1 — the site's “every product / every pitch” promise is not true
+### Blocker 1 — the site's “every product / every pitch” promise is not true — ✅ FIXED Aug 2, 2026
+
+> [!NOTE]
+> Every completeness claim is gone. The homepage is now "Shark Tank Products: Deals, Updates & Business Status", the products page dropped "Complete Database of Every Pitch", and the seasons page, Organization schema, collection schemas, and all four social-image alt texts were reworded to describe tracking rather than completeness. No count is hardcoded anywhere, so nothing here needs maintaining as the catalogue grows.
+>
+> The generator now also forbids the model from reintroducing "every product", "complete database", or "comprehensive" into regenerated copy — the December 2025 pages had picked up that language on their own.
 
 The database contains 664 products. Seasons 1–16 contain only 34–43 products each; Season 17 contains 70. A normal modern season has roughly four pitches across about 20 episodes, and current competitors advertise 1,400+ U.S. pitches. The homepage, products page, seasons page, Organization schema, About page, and social-image alt text nevertheless claim “every Shark Tank product,” “every pitch,” or a “complete database.”
 
@@ -22,7 +27,16 @@ This is both a content gap and a trust problem. The site currently has strong de
 
 **Growth project:** backfill historical seasons systematically from authoritative episode/product lists. Prioritize seasons and products already receiving impressions in Search Console, then complete one season at a time.
 
-### Blocker 2 — the evergreen editorial pages are stale, and one is materially wrong
+### Blocker 2 — the evergreen editorial pages are stale, and one is materially wrong — ✅ FIXED Aug 2, 2026
+
+> [!NOTE]
+> **The stale stats are fixed at the root, not patched.** Catalogue figures in generated prose are now `{total}`/`{active}`/`{deals}` tokens substituted from a live query at render, so they can never drift from the stat tiles again. The four pages that quoted 589/417/280 were regenerated; the numbers they show are now recomputed on every request. Total cost $0.007.
+>
+> Discovered while fixing it: `enrich-seo-pages.ts` had been **broken since the Zod 4 upgrade** — a `z.record(z.any())` call that needs two arguments in Zod 4. It generated content, then threw before saving. Any attempt to refresh these pages since the upgrade would have silently failed, which is a large part of why they sat at December 2025 for eight months.
+>
+> **`/how-to-apply` was rewritten by hand**, not regenerated — the model produced the wrong version from search results once already. It is now sourced from ABC's official casting pages: two free routes (online application, in-person open calls), the ~60-second open-call pitch format, the wristband/queue reality, eligibility, what happens after applying, and an explicit scam section. The $100 fee, the Houston "Innovation Weekend", the external reviewers, and the cash-prize final are gone. The page carries the @sharktanktv.com warning ABC publishes.
+>
+> Also removed: an invented "How We Verify Business Status" section claiming a research team doing manual outreach and *guaranteeing* accuracy. The page now describes the real method — one developer, an automated pipeline over public sources, best-effort, can lag reality. The generator is now instructed never to invent operations.
 
 Ten SEO content files were generated in December 2025 and were not refreshed with the catalogue. Multiple live articles still say the site tracks 589 products, 417 active businesses, and 280 deals. The live database now has 664 products.
 
@@ -30,7 +44,14 @@ The `/how-to-apply` guide is the most urgent problem. It is titled for 2025 and 
 
 **Before reindexing:** temporarily noindex `/how-to-apply` until it is rewritten from ABC's current official casting pages. Refresh the other editorial pages from live database stats and verify every dated financial claim.
 
-### Blocker 3 — freshness is being implied rather than earned
+### Blocker 3 — freshness is being implied rather than earned — ✅ FIXED Aug 2, 2026
+
+> [!NOTE]
+> **The `{year}` token is retired for products.** All 109 records using it were phrasing factual claims — "over $10M revenue as of {year}", "out of business as of {year}" — so rendering the current year restated 2025 research as a 2026 fact. Each token was replaced with the year the record was actually enriched, and the generator prompt now forbids dating a fact the source material does not date. Zero tokens remain in the product table.
+>
+> **False Article dates removed.** `datePublished` no longer falls back to `created_at`, which had been stamping historical pitches with the December 2025 import date. It is now emitted only when a real `air_date` exists — which is currently never, so the property is simply absent rather than wrong. `dateModified` still carries a genuine value.
+>
+> Note this leaves `air_date` empty on all 665 products and the `episodes` table holds only 12 rows, none with an air date. Populating air dates is the prerequisite for honest publication dates and remains open — see the backfill project below.
 
 - 616 of 664 product narratives were last enriched before 2026.
 - 324 narratives mention 2025 and 328 mention 2024.
@@ -61,9 +82,9 @@ All 664 records have `current_price = null`. The Product schema therefore emits 
 
 ### Recommended sequence
 
-1. Correct the “every product” promise and noindex/rewrite the application guide.
-2. Refresh the nine non-legal editorial pages with live stats and verified sources.
-3. Remove cosmetic `{year}` freshness and repair Article dates.
+1. ~~Correct the “every product” promise and noindex/rewrite the application guide.~~ — done Aug 2, 2026
+2. ~~Refresh the editorial pages with live stats and verified sources.~~ — done Aug 2, 2026; tokenized so it stays done
+3. ~~Remove cosmetic `{year}` freshness and repair Article dates.~~ — done Aug 2, 2026
 4. Improve pagination crawl depth and sitemap coverage.
 5. Deploy, validate production output, then request indexing for the homepage and the refreshed hubs; resubmit the sitemap.
 6. Start the historical catalogue backfill and Search Console-led content expansion as ongoing growth work.
@@ -211,4 +232,11 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] Return real 404/noindex responses when generated SEO content is unavailable (#6) — deployed Aug 2, 2026
 - [x] Replace synthetic sitemap dates with real modification dates (#7) — deployed Aug 2, 2026
 - [x] Allow answer-engine discovery while keeping training crawlers blocked (#8) — deployed Aug 2, 2026
-- [ ] Deploy and production-check the final pre-indexing hygiene patch above
+- [x] Deploy and production-check the final pre-indexing hygiene patch above
+- [x] **Blocker 1** — remove the “every product / complete database” claims — done Aug 2, 2026
+- [x] **Blocker 2** — rewrite `/how-to-apply` from ABC sources; tokenize and regenerate the stale editorial pages — done Aug 2, 2026
+- [x] **Blocker 3** — retire the cosmetic `{year}` token and remove false Article publication dates — done Aug 2, 2026
+- [ ] **Priority 2** — numbered pagination + canonical pagination URLs in the sitemap
+- [ ] **Priority 2** — decide whether Product schema chases offers/ratings or stays entity-description only
+- [ ] Backfill `air_date` (products and the 12-row `episodes` table) — unlocks honest Article dates
+- [ ] Catalogue backfill: 665 tracked against ~1,400+ aired pitches, seasons 1–16 at 34–43 each

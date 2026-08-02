@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     url: DEFAULT_OG_IMAGE,
     width: DEFAULT_OG_IMAGE_WIDTH,
     height: DEFAULT_OG_IMAGE_HEIGHT,
-    alt: 'tankd.io — Every Shark Tank Product, Deal & Business Status',
+    alt: 'tankd.io — Shark Tank Products, Deals & Business Status',
   }
 
   return {

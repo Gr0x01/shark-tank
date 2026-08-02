@@ -35,7 +35,7 @@ const SEOPageContentSchema = z.object({
     introduction: z.string(),
     sections: z.array(SEOPageSectionSchema).optional(),
   }),
-  stats: z.record(z.any()).optional(),
+  stats: z.record(z.string(), z.any()).optional(),
 });
 
 type SEOPageContent = z.infer<typeof SEOPageContentSchema>;
@@ -44,19 +44,19 @@ type SEOPageContent = z.infer<typeof SEOPageContentSchema>;
 const SEO_PAGES = {
   'still-in-business': {
     type: 'filtered' as const,
-    title: 'Shark Tank Products Still in Business in 2025',
-    meta_description: 'Complete list of 279+ active Shark Tank companies still thriving today. Find out which products succeeded, where to buy them, and what made them successful.',
+    title: 'Shark Tank Products Still in Business',
+    meta_description: 'Active Shark Tank companies still trading today. Find out which products succeeded, where to buy them, and what made them work.',
     keywords: [
       'shark tank products still in business',
       'shark tank success stories',
       'active shark tank companies',
-      'shark tank products 2025',
+      'shark tank products still active',
       'successful shark tank businesses',
       'shark tank still open',
       'where to buy shark tank products'
     ],
     searchQueries: [
-      'Shark Tank products still in business 2025',
+      'Shark Tank products still in business now',
       'most successful Shark Tank companies',
       'Shark Tank success rate statistics',
       'why Shark Tank products succeed'
@@ -68,13 +68,23 @@ REQUIRED CONTENT:
 2. Success statistics: Include specific numbers about how many products are still active
 3. What makes products succeed: Analyze common patterns (shark investment, product category, founder background, etc.)
 4. Notable success stories: Mention 3-4 top performers like Scrub Daddy, Bombas, Ring (if relevant to stats)
-5. Verification approach: Explain how we track and verify business status for accuracy
+5. How the status data is compiled — use ONLY the method described below, and do not embellish it
+
+HOW STATUS IS ACTUALLY TRACKED (the only description you may give):
+tankd.io is run by one developer, not a research team. Business status is compiled by an
+automated pipeline that searches public sources — company websites, retailer listings,
+news coverage, press releases — and summarises what it finds. Records are refreshed on a
+schedule, and each product page shows when its entry was last updated. A company that
+quietly winds down can therefore sit marked active until the next refresh picks it up.
+Be straightforward that this is best-effort and can lag reality. Never claim a team,
+manual outreach, phone calls, continuous monitoring, proprietary data, or guaranteed
+accuracy. Honesty about the method is the point of this section.
 
 THEN create 3-4 sections with H2 headings like:
 - "What Makes Shark Tank Products Succeed?"
 - "The Numbers: Success Rates and Statistics"
 - "Notable Success Stories"
-- "How We Verify Business Status"
+- "How We Track Business Status"
 
 SEO REQUIREMENTS:
 - Naturally include phrases: "shark tank products still in business", "success rate", "active companies"
@@ -95,7 +105,7 @@ Return ONLY valid JSON matching this schema:
   'out-of-business': {
     type: 'filtered' as const,
     title: 'Shark Tank Products That Failed: What Happened?',
-    meta_description: 'Explore the 238+ Shark Tank businesses that closed. Learn why they failed, what went wrong, and the lessons entrepreneurs can take away.',
+    meta_description: 'Explore the Shark Tank businesses that closed. Learn why they failed, what went wrong, and the lessons entrepreneurs can take away.',
     keywords: [
       'shark tank products that failed',
       'failed shark tank businesses',
@@ -199,7 +209,7 @@ Return ONLY valid JSON matching this schema:
   },
   'how-to-apply': {
     type: 'article' as const,
-    title: 'How to Get on Shark Tank: Complete Application Guide for 2025',
+    title: 'How to Get on Shark Tank: The Application Guide',
     meta_description: 'Step-by-step guide to applying for Shark Tank. Learn what the casting team looks for, how to prepare your pitch, and tips from successful entrepreneurs.',
     keywords: [
       'how to get on shark tank',
@@ -211,7 +221,7 @@ Return ONLY valid JSON matching this schema:
       'shark tank application process'
     ],
     searchQueries: [
-      'how to apply for Shark Tank 2025',
+      'how to apply for Shark Tank casting',
       'Shark Tank casting process application',
       'what Shark Tank looks for in entrepreneurs',
       'tips for getting on Shark Tank'
@@ -427,7 +437,7 @@ Return ONLY valid JSON.`
   'about': {
     type: 'article' as const,
     title: 'About tankd.io: Your Spoiler-Free Shark Tank Product Database',
-    meta_description: 'Learn about tankd.io - the comprehensive, spoiler-free database of every Shark Tank product. Built by a solo developer who hates spoilers as much as you do.',
+    meta_description: 'Learn about tankd.io - a spoiler-free Shark Tank product database tracking deals, business status, and where to buy. Built by a solo developer who hates spoilers.',
     keywords: [
       'about tankd.io',
       'shark tank product database',
@@ -598,6 +608,52 @@ Return ONLY valid JSON matching this schema:
 
 type PageSlug = keyof typeof SEO_PAGES;
 
+/**
+ * Catalogue figures are written as tokens, not literals. The page renders them from a
+ * live query, so a baked-in count starts contradicting the stat tiles beside it the
+ * moment a product is added — which is exactly how the December 2025 copy ended up
+ * claiming 589 products against a database of 664.
+ */
+const TOKEN_RULES = `
+
+CATALOGUE FIGURES — MANDATORY:
+When you refer to how many products this site tracks, write the token, never the number:
+  {total} products tracked        {active} still active        {closed} closed
+  {deals} secured a deal          {noDeals} left without one
+  {activePct}% active             {closedPct}% closed          {dealPct}% got a deal
+Write "Of the {total} products tracked, {closed} ({closedPct}%) have closed" — NOT
+"Of the 664 products tracked, 149 (22.4%) have closed". The tokens are substituted with
+live values when the page renders, so a literal number will be wrong within weeks.
+State these figures plainly. Never hedge a token with "approximately", "over", "roughly"
+or "more than" — the substituted value is exact.
+Figures about individual companies — revenue, deal amounts, valuations, years — are
+normal numbers. Write those literally. Only the site's own catalogue counts are tokens.
+
+SCOPE — MANDATORY:
+This site tracks a substantial subset of Shark Tank pitches, not all of them. Never write
+"every product", "every pitch", "all Shark Tank products", "complete database",
+"comprehensive", or any phrasing that promises the full history of the show. Say "tracked",
+"in our database", or "the {total} products we track". Describing coverage we do not have
+is the one thing that makes this page untrustworthy.
+
+NEVER INVENT OPERATIONS:
+tankd.io is one developer and an automated research pipeline. Do not describe a team,
+editors, analysts, manual verification, direct contact with companies, or partnerships,
+and do not guarantee accuracy. If you need to describe how the site works, describe only
+what the prompt tells you.`;
+
+/** Stat values that must not appear as literals in generated copy. */
+function findBakedFigures(
+  text: string,
+  stats: Awaited<ReturnType<typeof getProductStats>>
+): string[] {
+  const suspects = [stats.total, stats.active, stats.outOfBusiness, stats.gotDeal, stats.noDeal];
+  // A bare count, not part of a larger figure like "$340,000" or "1,483 stores".
+  return suspects
+    .map(String)
+    .filter(value => new RegExp(`(?<![\\d,$.])${value}(?![\\d,.])`).test(text));
+}
+
 async function getProductStats() {
   const { data, error } = await supabase
     .from('products')
@@ -756,12 +812,16 @@ async function generatePageContent(
     })
     .join('\n\n');
 
+  // Shown as token → current value so the model can judge scale and phrasing while
+  // still writing the token. Listing bare numbers here invites it to copy them.
   const statsContext = stats ? [
-    `Total Products: ${stats.total}`,
-    `Active: ${stats.active} (${stats.successRate}%)`,
-    `Closed: ${stats.outOfBusiness} (${stats.failureRate}%)`,
-    `Got Deals: ${stats.gotDeal} (${stats.dealRate}%)`,
-    `No Deals: ${stats.noDeal}`,
+    `{total} = ${stats.total} products tracked`,
+    `{active} = ${stats.active} active, {activePct} = ${stats.successRate}`,
+    `{closed} = ${stats.outOfBusiness} closed, {closedPct} = ${stats.failureRate}`,
+    `{deals} = ${stats.gotDeal} got a deal, {dealPct} = ${stats.dealRate}`,
+    `{noDeals} = ${stats.noDeal} left without a deal`,
+    '',
+    'Write the token, not the value.',
   ].join('\n') : '';
 
   // Format deals data for the prompt
@@ -779,7 +839,7 @@ async function generatePageContent(
     const response = await openai.chat.completions.create({
       model: 'gpt-4.1-mini',
       messages: [
-        { role: 'system', content: config.prompt },
+        { role: 'system', content: config.prompt + TOKEN_RULES },
         {
           role: 'user',
           content: `Page: ${config.title}\n\nStatistics:\n${statsContext}${dealsContext}\n\nSearch Results:\n${combinedContent}`
@@ -852,6 +912,12 @@ async function enrichSEOPage(slug: PageSlug, dryRun: boolean): Promise<boolean> 
   }
 
   console.log(`      ✅ Generated introduction + ${content.sections?.length || 0} sections`);
+
+  const baked = findBakedFigures(JSON.stringify(content), stats);
+  if (baked.length > 0) {
+    console.log(`      ⚠️  Literal catalogue figures found (${baked.join(', ')}) — should be tokens.`);
+    console.log('         Review this page before shipping; these numbers will go stale.');
+  }
 
   if (dryRun) {
     console.log('\n      --- PREVIEW ---');

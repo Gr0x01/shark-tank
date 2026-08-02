@@ -6,6 +6,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 | # | Name | Date | Notes |
 |---|------|------|-------|
+| 40 | SEO Truth & Freshness Pass | Aug 2, 2026 | Closed audit Blockers 1–3. Dropped the "every product / complete database" claims site-wide; rewrote `/how-to-apply` by hand from ABC's official casting pages (the old version invented a $100 fee and a Houston pitch weekend); made catalogue figures in editorial prose live tokens substituted at render, so they can't go stale again, and regenerated the four pages still quoting 589 products; retired the cosmetic `{year}` token from product copy in favour of the year each fact was actually researched; stopped Article schema claiming a December 2025 publication date for decade-old pitches. Also fixed `enrich-seo-pages.ts`, silently broken since the Zod 4 upgrade, and removed an invented "how we verify" section describing a research team that doesn't exist |
 | 39 | SEO Audit Completion | Aug 2, 2026 | Closed audit #6–#8 and the final indexing pass: genuine 404/noindex handling across invalid routes, trustworthy sitemap dates, crawlable rendering assets, valid publisher schema, and answer-engine access while training crawlers remain blocked. Production build passed all 725 pages |
 | 38 | Mobile-First Redesign + SEO Launch | Aug 2, 2026 | Deployed the redesigned homepage, mobile navigation, shark index/profiles, and product-page polish from `main` alongside SEO audit fixes #1–#5. Vercel completed successfully; the 725-page build and public phone-size checks covered navigation, sharks, product FAQs/schema, spoiler reveal, and `{year}` replacement |
 | 37 | Product + Listing Structured Data | Aug 2, 2026 | Product pages now emit Product schema and 2–4 visible, matching FAQs; priced buy links can emit complete Offer data. ItemLists now contain the actual linked products, categories, or seasons shown across all listing pages |
@@ -48,7 +49,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 ## Current Status (as of Aug 2, 2026)
 
-- **Products**: 664 total; all narrative-enriched with unique SEO titles and descriptions; 663/664 with photos; Season 17 complete through E18
+- **Products**: 665 total; all narrative-enriched with unique SEO titles and descriptions; Season 17 complete through E18
 - **Sharks**: 50 total, including 2 retired; every recorded deal has its investor linked
 - **Frontend**: Mobile-first redesign live across the homepage, navigation, shark pages, and product pages; catalogue fully paginated and historical product-to-episode navigation restored
 - **Stack**: Next.js 16.1.6, React 19.2.4, Supabase, Tailwind CSS 4.2, Zod 4, Playwright

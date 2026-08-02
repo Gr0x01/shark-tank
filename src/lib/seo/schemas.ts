@@ -94,7 +94,7 @@ export function createOrganizationSchema() {
     name: SCHEMA_ORG_NAME,
     url: SCHEMA_ORG_URL,
     logo: SCHEMA_ORG_LOGO,
-    description: 'tankd.io - Complete database of every Shark Tank product with business status tracking and deal information.',
+    description: 'tankd.io - Shark Tank product database with business status tracking and deal information.',
     sameAs: [
       // Add social media URLs when available
     ]
@@ -139,11 +139,18 @@ export function createTVEpisodeSchema(
   }
 }
 
+/**
+ * `datePublished` is optional on purpose. A pitch that aired years ago has no honest
+ * publication date unless we know its air date, and the previous fallback stamped every
+ * such page with the December 2025 database import — telling Google that a Season 1
+ * product was published last winter. Omitting the property is better than asserting a
+ * date we cannot support.
+ */
 export function createArticleSchema(params: {
   headline: string
   description: string
   url: string
-  datePublished: string
+  datePublished?: string
   dateModified?: string
   image?: string
 }) {
@@ -153,8 +160,8 @@ export function createArticleSchema(params: {
     headline: params.headline,
     description: params.description,
     url: params.url,
-    datePublished: params.datePublished,
-    dateModified: params.dateModified || params.datePublished,
+    ...(params.datePublished && { datePublished: params.datePublished }),
+    ...(params.dateModified && { dateModified: params.dateModified }),
     author: {
       '@type': 'Organization',
       name: SCHEMA_ORG_NAME,

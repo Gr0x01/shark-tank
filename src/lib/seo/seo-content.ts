@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { hasStatTokens, substituteTokens, type ContentStats } from './tokens'
 
 export interface SEOPageSection {
   heading: string
@@ -54,6 +55,28 @@ const seoContentLoaders: Record<string, () => Promise<unknown>> = {
 }
 
 /**
+ * Resolve the stats used to fill catalogue figures in generated copy.
+ *
+ * Fetched lazily so the legal and About pages — which cite no figures — keep working
+ * with no database dependency at all. If the live query fails, the snapshot saved when
+ * the page was generated is used rather than shipping raw `{total}` tokens to readers.
+ */
+async function resolveStats(
+  needsStats: boolean,
+  snapshot: Record<string, unknown> | undefined
+): Promise<ContentStats | undefined> {
+  if (!needsStats) return undefined
+
+  try {
+    const { getProductStats } = await import('@/lib/queries/cached')
+    return await getProductStats()
+  } catch (error) {
+    console.error('Live stats unavailable, falling back to generated snapshot:', error)
+    return snapshot ? (snapshot as unknown as ContentStats) : undefined
+  }
+}
+
+/**
  * Load SEO page content using dynamic imports
  * This ensures JSON files are bundled at build time and available on Vercel
  * @param slug - The page slug (e.g., 'still-in-business')
@@ -71,7 +94,26 @@ export async function loadSEOContent(slug: string): Promise<SEOPageContent | nul
     // Handle both default export and direct export
     const content = (loadedModule as { default?: unknown }).default || loadedModule
     const validated = SEOPageContentSchema.parse(content)
-    return validated
+
+    const raw = JSON.stringify(validated.content)
+    const stats = await resolveStats(hasStatTokens(raw), validated.stats)
+
+    // Substituting here rather than in each template means a page can't render raw
+    // tokens by forgetting to call it — there is exactly one path to this content.
+    const sub = (text: string) => substituteTokens(text, stats)
+
+    return {
+      ...validated,
+      title: sub(validated.title),
+      meta_description: sub(validated.meta_description),
+      content: {
+        introduction: sub(validated.content.introduction),
+        sections: validated.content.sections?.map(section => ({
+          heading: sub(section.heading),
+          content: sub(section.content),
+        })),
+      },
+    }
   } catch (error) {
     console.error(`Failed to load SEO content for ${slug}:`, error)
     return null

@@ -12,8 +12,8 @@ import { createOrganizationSchema, createSearchActionSchema, escapeJsonLd } from
 export const revalidate = 21600
 
 export async function generateMetadata(): Promise<Metadata> {
-  const title = 'tankd.io | Every Shark Tank Product, Deal & Business Status'
-  const description = 'Every Shark Tank product in one place. Find out which products are still in business, where to buy them, and what deals were made.'
+  const title = 'tankd.io | Shark Tank Products: Deals, Updates & Business Status'
+  const description = 'Track Shark Tank products in one place. Find out which are still in business, where to buy them, and what deals were made.'
 
   return {
     title,
@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
         url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: 'tankd.io - Every Shark Tank Product'
+        alt: 'tankd.io - Shark Tank Products, Deals & Business Status'
       }],
       type: 'website',
       locale: 'en_US'

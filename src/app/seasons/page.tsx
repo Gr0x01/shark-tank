@@ -9,7 +9,7 @@ export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = 'All Seasons | tankd.io'
-  const description = 'Browse all 17+ seasons of Shark Tank. See every product pitched and every deal made, season by season.'
+  const description = 'Browse Shark Tank season by season. See the products we track from each season, their deals, and where they are now.'
 
   return {
     title,
@@ -65,7 +65,7 @@ export default async function SeasonsPage() {
 
   const collectionSchema = createCollectionPageSchema(
     'All Shark Tank Seasons',
-    'Browse products from every season of Shark Tank',
+    'Browse Shark Tank products season by season',
     `${SITE_URL}/seasons`,
     seasons.map(season => ({
       name: `Season ${season}`,

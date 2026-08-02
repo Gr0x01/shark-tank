@@ -13,6 +13,7 @@ import { AffiliateLink } from '@/components/ui/AffiliateLink'
 import { addAmazonAffiliateTag } from '@/lib/utils'
 import { createArticleSchema, createProductSchema, escapeJsonLd } from '@/lib/seo/schemas'
 import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_HEIGHT, DEFAULT_OG_IMAGE_WIDTH } from '@/lib/seo/constants'
+import { substituteTokens } from '@/lib/seo/tokens'
 
 // ISR: Revalidate every 12 hours (narratives/deals change monthly)
 export const revalidate = 43200
@@ -20,13 +21,6 @@ export const dynamicParams = false
 
 type Props = {
   params: Promise<{ slug: string }>
-}
-
-// Stored titles/descriptions carry a "{year}" token rather than a literal year, so a
-// freshness signal written once doesn't go stale next January. Every read of
-// seo_title/meta_description must go through this — including structured data.
-function withYear(text: string): string {
-  return text.replace(/\{year\}/g, String(new Date().getFullYear()))
 }
 
 interface NarrativeContent {
@@ -56,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // Generate SEO-optimized title (under 55 chars, emotional hook)
   const generateTitle = (): string => {
-    if (product.seo_title) return withYear(product.seo_title)
+    if (product.seo_title) return substituteTokens(product.seo_title)
 
     const name = product.name
 
@@ -79,7 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // Generate SEO-optimized description (150-160 chars, storytelling)
   const generateDescription = (): string => {
-    if (product.meta_description) return withYear(product.meta_description)
+    if (product.meta_description) return substituteTokens(product.meta_description)
 
     const name = product.name
     const dealAmount = product.deal_amount
@@ -130,7 +124,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         url: DEFAULT_OG_IMAGE,
         width: DEFAULT_OG_IMAGE_WIDTH,
         height: DEFAULT_OG_IMAGE_HEIGHT,
-        alt: 'tankd.io — Every Shark Tank Product, Deal & Business Status',
+        alt: 'tankd.io — Shark Tank Products, Deals & Business Status',
       }
 
   // Generate SEO keywords
@@ -211,9 +205,11 @@ export default async function ProductPage({ params }: Props) {
   // JSON-LD Structured Data
   const articleJsonLd = createArticleSchema({
     headline: product.name,
-    description: withYear(product.meta_description || product.tagline || product.pitch_summary || ''),
+    description: substituteTokens(product.meta_description || product.tagline || product.pitch_summary || ''),
     url: `${SITE_URL}/products/${slug}`,
-    datePublished: product.air_date || product.created_at || '2009-08-09', // Shark Tank series premiere
+    // Only the air date is a real publication date. Falling back to created_at stamped
+    // historical pitches with the database import date; no property beats a false one.
+    datePublished: product.air_date || undefined,
     dateModified: lastUpdatedDate || undefined,
     image: product.photo_url || undefined,
   })
@@ -221,7 +217,7 @@ export default async function ProductPage({ params }: Props) {
   const affiliateAmazonUrl = addAmazonAffiliateTag(product.amazon_url)
   const productJsonLd = createProductSchema({
     name: product.name,
-    description: withYear(product.meta_description || product.tagline || product.pitch_summary || product.description || ''),
+    description: substituteTokens(product.meta_description || product.tagline || product.pitch_summary || product.description || ''),
     url: `${SITE_URL}/products/${slug}`,
     brand: product.company_name || product.name,
     image: product.photo_url,
