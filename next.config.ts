@@ -43,6 +43,17 @@ const nextConfig: NextConfig = {
         destination: '/sharks/kevin-oleary',
         permanent: true,
       },
+      {
+        // Duplicate product records from the same Dec 2025 import, merged Aug 2, 2026.
+        source: '/products/wicked-good-cupcakes',
+        destination: '/products/wicked-good-cupcakes-in-a-jar',
+        permanent: true,
+      },
+      {
+        source: '/products/the-bouqs-company-flowers-shipped-from-a-volcano',
+        destination: '/products/the-bouqs-company',
+        permanent: true,
+      },
     ];
   },
   async headers() {

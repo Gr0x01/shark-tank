@@ -100,16 +100,14 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 > [!NOTE]
 > Zero products now have a shark on a no-deal, and every recorded deal has its investor linked except the duplicate below.
 
-### ⚠️ Needs your call: two duplicate product pages
+- **Two duplicate product pages merged** — the same Dec 12, 2025 import that created the O'Leary duplicate also created a second record for two companies, so two URLs competed for the same searches. Kept `wicked-good-cupcakes-in-a-jar` (has the episode and the shark link) and `the-bouqs-company` (cleaner slug and richer narrative, given the other record's "$1.1M deal" was a bogus `deal_amount` on a no-deal record). Both old URLs 308-redirect. Catalogue is now 664 products.
+  - Deliberately **not** carried across: the duplicate's `acquired` status for Wicked Good. The `still-in-business` page filters on `status = 'active'`, so marking it acquired would drop a company that still sells cupcakes off that listing. Same reason RocketBook is missing from it — worth revisiting as a product question, since "acquired" and "still trading" aren't opposites.
+- Copa Di Vino and Echo Valley Meats look like duplicates but are genuine second appearances — correctly left as separate pages.
 
-Both came from the same Dec 12, 2025 import that created the O'Leary duplicate — the same company exists twice, so two URLs compete for the same searches:
+### Known-bad data left alone deliberately
 
-| Company | Record A (Dec 10) | Record B (Dec 12) |
-|---|---|---|
-| Wicked Good Cupcakes | `wicked-good-cupcakes-in-a-jar` — S4E22, status active, shark linked | `wicked-good-cupcakes` — S4, no episode, status acquired, no shark, longer narrative |
-| The Bouqs Company | `the-bouqs-company-flowers-shipped-from-a-volcano` — S5, $1.1M deal | `the-bouqs-company` — S5, no deal recorded, cleaner slug |
-
-Neither pair is a genuine second appearance (Copa Di Vino and Echo Valley Meats are, and are correctly separate). Merging means picking the keeper, moving across anything better on the loser, deleting it, and redirecting the old URL. Each pair has a real trade-off — Record A has the deal data, Record B has the better slug or status — so I'd rather you choose than guess.
+- `deal_amount` holds the **ask**, not a deal, on at least two no-deal products (Budsies $600K, The Bouqs $1.1M). Nothing renders it on a no-deal page, and editing a deal field fires the narrative-refresh trigger, so fixing it means paying for regenerations to correct something invisible. Worth a sweep if you ever touch deal fields in bulk.
+- The Bouqs' `annual_revenue` (100M) isn't supported by its own narrative, which cites $640M lifetime and the other record cited $50M annual. Pre-existing conflict between two LLM-generated estimates, not introduced here.
 
 ## Suggested order of attack
 

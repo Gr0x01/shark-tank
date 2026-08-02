@@ -6,6 +6,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 | # | Name | Date | Notes |
 |---|------|------|-------|
+| 34 | Duplicate Product Pages Merged | Aug 2, 2026 | Wicked Good Cupcakes and The Bouqs Company each existed twice (Dec 2025 import); kept the stronger record of each, 308-redirected the dead URLs. Catalogue 666 → 664 |
 | 33 | Shark Attribution Data Repair | Aug 2, 2026 | Merged duplicate Kevin O'Leary shark records (9 deals repointed, dupe deleted, old slug 308-redirects); linked the 2 deals that had no shark (Lovepop, Essence Aromatherapy Ring); removed Mark Cuban from Budsies, which got no deal. O'Leary now shows 62 deals / 74.2% success |
 | 32 | Unique Meta Titles + Descriptions for All 666 Products | Aug 2, 2026 | `scripts/enrich-product-meta.ts` generates fact-specific copy from existing narratives (gpt-4.1-mini, Flex, $0.19 total). 666/666 unique descriptions. Stored `{year}` token is substituted at render so freshness signals don't go stale |
 | 31 | SEO Fix: Deal Info + Shark Links Now Crawlable | Aug 2, 2026 | Spoiler gate hides the real outcome with CSS instead of removing it from the DOM — 666 product pages now carry their deal figures and shark links in the HTML. Also fixed `getProductSlugs()` silently capping `generateStaticParams` at 100 |
