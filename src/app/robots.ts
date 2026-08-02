@@ -10,21 +10,34 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/api/', '/admin/', '/_next/'],
       },
-      // Block AI scrapers from training on our content
+      // Let answer engines discover and cite tankd.io without granting training use.
       {
         userAgent: [
-          'GPTBot',           // OpenAI
-          'ChatGPT-User',     // OpenAI ChatGPT
-          'CCBot',            // Common Crawl (used by many AI companies)
-          'anthropic-ai',     // Anthropic
-          'Claude-Web',       // Anthropic Claude
-          'Google-Extended',  // Google Bard/Gemini training
-          'cohere-ai',        // Cohere
-          'Omgilibot',        // Omgili (AI training)
-          'FacebookBot',      // Meta AI training
-          'Diffbot',          // Diffbot
-          'Bytespider',       // ByteDance (TikTok)
-          'ImagesiftBot',     // Image AI training
+          'OAI-SearchBot',
+          'ChatGPT-User',
+          'Claude-SearchBot',
+          'Claude-User',
+          'PerplexityBot',
+          'Perplexity-User',
+        ],
+        allow: '/',
+        disallow: ['/api/', '/admin/', '/_next/'],
+      },
+      // Block crawlers used for model training or bulk dataset collection.
+      {
+        userAgent: [
+          'GPTBot',
+          'ClaudeBot',
+          'anthropic-ai',
+          'Claude-Web',
+          'CCBot',
+          'Google-Extended',
+          'cohere-ai',
+          'Omgilibot',
+          'FacebookBot',
+          'Diffbot',
+          'Bytespider',
+          'ImagesiftBot',
         ],
         disallow: ['/'],
       },

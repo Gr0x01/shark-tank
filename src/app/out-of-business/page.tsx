@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { getProducts, getProductStats, getSharkPhotos } from '@/lib/queries/cached'
 import { loadSEOContent } from '@/lib/seo/seo-content'
 import { FilteredListingPage } from '@/components/seo/FilteredListingPage'
@@ -71,16 +72,7 @@ export default async function OutOfBusinessPage() {
   const sharkPhotos = sharkPhotosResult.status === 'fulfilled' ? sharkPhotosResult.value : {}
 
   if (!content) {
-    return (
-      <main className="min-h-screen py-12 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl font-medium mb-4">Content Not Available</h1>
-          <p className="text-[var(--ink-600)]">
-            Please run: <code className="bg-[var(--ink-100)] px-2 py-1 rounded text-sm">npx tsx scripts/enrich-seo-pages.ts --page out-of-business</code>
-          </p>
-        </div>
-      </main>
-    )
+    notFound()
   }
 
   const breadcrumbSchema = createBreadcrumbSchema([

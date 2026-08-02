@@ -67,21 +67,30 @@ The templates are decent CTR copy, but when 266 pages end with the identical sen
 - Product FAQ schema has exactly one question, and only when `current_status` exists. We have material for 3–4 (still in business? did they get a deal? who invested? where to buy?).
 - `/sharks` index emits no JSON-LD at all; `Organization.sameAs` is empty (should list the site's social profiles); the About page's `datePublished` churns on every render.
 
-### 6. Indexable failure pages
+### 6. Indexable failure pages — ✅ FIXED LOCALLY Aug 2, 2026
+
+> [!NOTE]
+> All ten generated SEO pages now return the branded 404 response when their content cannot load. Next.js supplies the 404 status and `noindex`, and the internal enrichment command is no longer exposed to visitors or crawlers.
 
 If an SEO-content JSON fails to load, pages like `/best-deals` return **HTTP 200 with a literal dev instruction** ("Please run: npx tsx scripts/enrich-seo-pages.ts…") and no noindex. Should be a hard error or noindex.
 
-### 7. Sitemap lastModified is meaningless
+### 7. Sitemap lastModified is meaningless — ✅ FIXED LOCALLY Aug 2, 2026
+
+> [!NOTE]
+> Product and shark URLs now use their direct database modification dates. Static and aggregate URLs—including season and episode pages—omit `lastmod` because no single record captures every change rendered on those pages.
 
 Most entries use `new Date()`, so every crawl says everything changed today. Google learns to ignore lastmod. Use real `updated_at` where we have it and omit it where we don't.
 
-### 8. AI crawlers are fully blocked — a deliberate trade-off worth revisiting
+### 8. AI crawlers are fully blocked — ✅ POLICY UPDATED LOCALLY Aug 2, 2026
+
+> [!NOTE]
+> Chosen policy: allow search/indexing and user-requested retrieval bots from OpenAI, Anthropic, and Perplexity, while continuing to block model-training and bulk-dataset crawlers. The blanket `noai` response header is removed because it contradicted that split. This makes tankd.io eligible for answer-engine citations without granting training use.
 
 robots.ts blocks GPTBot, ChatGPT-User, Claude, CCBot, Google-Extended, and more; `next.config.ts` adds a `noai` header. This was a reasonable anti-training stance, but in 2026 it also means **tankd.io can never be cited by ChatGPT search, Perplexity, or Gemini** — which is exactly where "is X from Shark Tank still in business?" questions get asked now. Options: keep the block (protective), or allow the *search/answer* crawlers while still blocking pure training bots. Your call — flagging it because for a product-discovery site the forfeited referral surface is real.
 
 ## Priority 3 — quick wins
 
-### ✅ Fixed locally Aug 2, 2026 — awaiting deployment
+### ✅ Deployed Aug 2, 2026
 
 - **Fonts + analytics loading:** moved Google Fonts to `next/font`, GA to `next/script`, and prioritized the product hero image.
 - **Copy bugs:** fixed the duplicated About title and broken under-$100K fallback description; the full prepared About article now renders instead of the thinner hardcoded version.
@@ -114,7 +123,7 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 ## Where this stands — Aug 2, 2026
 
 > [!NOTE]
-> SEO fixes #1–#5 are deployed from `main` and publicly verified. The Priority 3 cleanup is complete and verified with a 725-page production build plus browser checks; it is ready to deploy.
+> SEO fixes #1–#5 and the Priority 3 cleanup are deployed from `main`. Indexing hygiene fixes #6–#8 are complete locally and awaiting their final build and deployment.
 
 **Done Aug 2** — deal info and shark links now crawlable (#1); unique titles and descriptions for all 664 products (#2); shark attribution repaired; two duplicate product pages merged; three 308 redirects added.
 
@@ -127,5 +136,7 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] PNG OG image + fallbacks (#3) — done Aug 2, 2026
 - [x] Products pagination + episode links from product pages (#4) — done Aug 2, 2026
 - [x] Product schema + populated ItemLists + expanded FAQs (#5) — done Aug 2, 2026
-- [x] **The Priority 3 quick wins in one cleanup pass** — done locally Aug 2, 2026; deploy next
-- [ ] Decide on the AI-crawler policy (#8)
+- [x] **The Priority 3 quick wins in one cleanup pass** — deployed Aug 2, 2026
+- [x] Return real 404/noindex responses when generated SEO content is unavailable (#6) — done locally Aug 2, 2026
+- [x] Replace synthetic sitemap dates with real modification dates (#7) — done locally Aug 2, 2026
+- [x] Allow answer-engine discovery while keeping training crawlers blocked (#8) — done locally Aug 2, 2026

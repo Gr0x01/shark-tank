@@ -55,7 +55,7 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 ## Up Next
 
-- [ ] Deploy the completed Priority 3 SEO cleanup (font/analytics loading, copy fixes, icon cleanup, branded 404); IndexNow was already wired
+- [ ] Deploy SEO indexing hygiene fixes: real failure-page 404s, trustworthy sitemap dates, and search-only AI crawler access
 - [ ] Fix 5 products whose `amazon_url` is a bare slug (e.g. `amazon.com/clean-bottle`) and 404s — those clicks earn nothing
 - [ ] Affiliate link management system
 - [ ] Email alerts for new episodes
