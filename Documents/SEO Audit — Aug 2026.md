@@ -209,8 +209,17 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 
 ## Where this stands — Aug 2, 2026
 
+> [!CAUTION]
+> **None of this is live. `main` is 5 commits ahead of `origin/main` — nothing has been pushed, so Vercel has never built any of it.**
+>
+> Verified against production Aug 2, 2026: the homepage still returns "tankd.io | Every Shark Tank Product, Deal & Business Status", `/how-to-apply` still returns "Complete Application Guide for 2025", and `robots.txt` still carries `Disallow: /_next/`.
+>
+> This includes `0fdff84`, the "final pre-indexing hygiene" patch from the previous session, which this document had recorded as deployed and production-checked. It was committed and never pushed. The checkbox was ticked on the strength of the commit rather than a check against the live site.
+>
+> **Nothing in the sequence below can start until these are pushed.** Treat any "deployed" claim in this document as unverified unless it names the production symptom that was checked.
+
 > [!NOTE]
-> **Every code-level audit item and all three blockers are fixed and committed to `main`** (`6570ef9` SEO truth/freshness, `a9f6ab5` doc corrections, `91dd932` status reconciliation, on top of the earlier `#1–#8` work). What remains is crawl-depth polish, one schema decision, and growth work — see the staged sequence in **Remaining** below, which deliberately splits correcting false content from asking Google to recrawl the catalogue.
+> **Every code-level audit item and all three blockers are fixed and committed to `main`** (`6570ef9` SEO truth/freshness, `a9f6ab5` doc corrections, `91dd932` status reconciliation, `07c5ba0` sequencing, on top of `0fdff84`). What remains after deployment is crawl-depth polish, one schema decision, and growth work — see the staged sequence in **Remaining** below, which deliberately splits correcting false content from asking Google to recrawl the catalogue.
 
 ### The earlier passes, for the record
 
@@ -236,7 +245,7 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] Return real 404/noindex responses when generated SEO content is unavailable (#6) — deployed Aug 2, 2026
 - [x] Replace synthetic sitemap dates with real modification dates (#7) — deployed Aug 2, 2026
 - [x] Allow answer-engine discovery while keeping training crawlers blocked (#8) — deployed Aug 2, 2026
-- [x] Deploy and production-check the final pre-indexing hygiene patch above
+- [ ] ~~Deploy and production-check the final pre-indexing hygiene patch above~~ — **was ticked in error.** `0fdff84` was committed but never pushed; production still serves `Disallow: /_next/`. Unticked Aug 2, 2026 after checking the live site
 - [x] **Blocker 1** — remove the “every product / complete database” claims — done Aug 2, 2026
 - [x] **Blocker 2** — rewrite `/how-to-apply` from ABC sources; tokenize and regenerate the stale editorial pages — done Aug 2, 2026
 - [x] **Blocker 3** — retire the cosmetic `{year}` token and remove false Article publication dates — done Aug 2, 2026
@@ -245,7 +254,7 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 
 ### Now — correcting content that is live and wrong
 
-- [ ] **Deploy check.** Three commits sit on `main` (`6570ef9`, `a9f6ab5`, `91dd932`); confirm Vercel shipped them and spot-check `/how-to-apply` and `/still-in-business` in production.
+- [ ] **Push `main` to `origin`.** This is the blocker for everything else — 5 commits are sitting locally and Vercel has built none of them. Then confirm the deploy and spot-check `/how-to-apply`, `/still-in-business`, and `robots.txt` in production. Note curl gets a 429 Security Checkpoint from the Vercel firewall; check with a real browser.
 - [ ] **Request reindexing for `/how-to-apply` specifically.** It has been live since December claiming a $100 application fee and a Houston "Innovation Weekend", neither of which exists. Every day it stays in the index it misinforms people acting on it. This is a correction, not an optimisation — it does not wait for anything.
 - [ ] **Request reindexing for the homepage and `/about`**, whose "every Shark Tank product" claim was the other untrue thing on the site.
 
