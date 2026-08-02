@@ -13,6 +13,7 @@ How a new Shark Tank episode gets onto the site, plus the full command reference
 4. Watch the episode, note deals
 5. Run `update-deal.ts` for each product as you watch
 6. Automated systems handle the rest (narrative refresh, missed-deal search — see below)
+7. **The next day**, run `enrich-product-meta.ts` to give the new products their search titles and descriptions
 
 ```bash
 # 1. Create products for the new episode (runs enrichment for backstory)
@@ -22,7 +23,13 @@ npx tsx scripts/new-episode.ts "Product A" "Product B" --season 17 --episode 8
 npx tsx scripts/update-deal.ts "Product A" --deal --amount 200000 --equity 20 --sharks "Lori"
 npx tsx scripts/update-deal.ts "Product A" --no-deal
 npx tsx scripts/update-deal.ts "Product A" --deal --ask 100000 --ask-equity 10 --amount 150000 --equity 25 --sharks "Mark" "Barbara"
+
+# 3. Next day, once narratives have settled — writes only products that have none yet
+npx tsx scripts/enrich-product-meta.ts
 ```
+
+> [!IMPORTANT]
+> **Wait for the narrative before generating meta.** `enrich-product-meta.ts` writes its titles and descriptions from `narrative_content`, so running it before the narrative regenerates produces thin, generic copy. Narratives settle about an hour after your last deal edit. A product with no meta still renders — it falls back to the old templates — so being late costs nothing, but being early bakes in weak copy.
 
 > [!TIP]
 > **Multiple deal edits are fine.** Each edit resets a 1-hour cooldown timer; once an hour passes with no changes, the narrative regenerates automatically. No wasted regenerations while you're editing during the live episode.
@@ -47,6 +54,12 @@ npx tsx scripts/enrich-shark-narratives.ts --shark "Mark"    # One shark
 npx tsx scripts/enrich-shark-narratives.ts --all             # All sharks
 npx tsx scripts/scrape-photos.ts                             # Photos for products missing them
 npx tsx scripts/scrape-photos.ts --dry-run                   # Preview without scraping
+
+# Search titles + meta descriptions (skips products that already have them)
+npx tsx scripts/enrich-product-meta.ts                       # Everything still missing meta
+npx tsx scripts/enrich-product-meta.ts --dry-run --limit 5   # Preview the copy, write nothing
+npx tsx scripts/enrich-product-meta.ts --slug some-product   # Rewrite one product
+npx tsx scripts/enrich-product-meta.ts --force --limit 50    # Rewrite products that already have meta
 
 # Backfill missed episodes (gap recovery when the cron's 72-hour lookback misses one)
 npx tsx scripts/backfill-episodes.ts 17:14 17:15 17:16       # Full pipeline: discovery + enrich + photo + narrative + IndexNow
