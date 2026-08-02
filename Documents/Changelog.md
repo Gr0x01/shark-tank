@@ -6,6 +6,8 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 
 | # | Name | Date | Notes |
 |---|------|------|-------|
+| 36 | Crawlable Product Pagination + Episode Links | Aug 2, 2026 | `/products` now exposes all 664 products through stable 48-item pages with filter-preserving Previous/Next links, page-specific canonicals, and 404s for invalid pages. Product episode badges link to episode pages; historical episode pages now work even when the newer `episodes` table has no row |
+| 35 | Social Sharing Image Fallbacks | Aug 2, 2026 | Replaced the unsupported default SVG with a 1200×630 PNG; product and shark pages now fall back to it when a photo is missing, with explicit image dimensions |
 | 34 | Duplicate Product Pages Merged | Aug 2, 2026 | Wicked Good Cupcakes and The Bouqs Company each existed twice (Dec 2025 import); kept the stronger record of each, 308-redirected the dead URLs. Catalogue 666 → 664 |
 | 33 | Shark Attribution Data Repair | Aug 2, 2026 | Merged duplicate Kevin O'Leary shark records (9 deals repointed, dupe deleted, old slug 308-redirects); linked the 2 deals that had no shark (Lovepop, Essence Aromatherapy Ring); removed Mark Cuban from Budsies, which got no deal. O'Leary now shows 62 deals / 74.2% success |
 | 32 | Unique Meta Titles + Descriptions for All 666 Products | Aug 2, 2026 | `scripts/enrich-product-meta.ts` generates fact-specific copy from existing narratives (gpt-4.1-mini, Flex, $0.19 total). 666/666 unique descriptions. Stored `{year}` token is substituted at render so freshness signals don't go stale |
@@ -41,16 +43,17 @@ Running log of shipped milestones. Newest first. Detailed Phase 1–3 implementa
 | 2 | Project Memory Setup | Dec 10, 2025 | Migrated to Koda layout Jul 30, 2026 |
 | 1 | Project Initialization | Dec 10, 2025 | |
 
-## Current Status (as of Apr 25, 2026)
+## Current Status (as of Aug 2, 2026)
 
-- **Products**: 666 total — 340 deals, 253 no deal, 72 fell through; all narrative-enriched; 665/666 with photos; Season 17 covered through E18
-- **Sharks**: 47 (8 main + 39 guest); all enriched with photos; 279 deal products linked via `product_sharks`
-- **Frontend**: All core pages shipped (home, listings, detail pages, categories, seasons, episodes, SEO pages)
+- **Products**: 664 total; all narrative-enriched with unique SEO titles and descriptions; 663/664 with photos; Season 17 complete through E18
+- **Sharks**: 50 total, including 2 retired; every recorded deal has its investor linked
+- **Frontend**: All core pages shipped; product catalogue fully paginated and historical product-to-episode navigation restored
 - **Stack**: Next.js 16.1.6, React 19.2.4, Supabase, Tailwind CSS 4.2, Zod 4, Playwright
 - **Site**: Live at https://tankd.io since Dec 12, 2025
 
 ## Up Next
 
+- [ ] Product schema, populated ItemLists, and expanded product FAQs (SEO audit #5)
 - [ ] Fix 5 products whose `amazon_url` is a bare slug (e.g. `amazon.com/clean-bottle`) and 404s — those clicks earn nothing
 - [ ] Affiliate link management system
 - [ ] Email alerts for new episodes
