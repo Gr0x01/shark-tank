@@ -67,21 +67,21 @@ The templates are decent CTR copy, but when 266 pages end with the identical sen
 - Product FAQ schema has exactly one question, and only when `current_status` exists. We have material for 3–4 (still in business? did they get a deal? who invested? where to buy?).
 - `/sharks` index emits no JSON-LD at all; `Organization.sameAs` is empty (should list the site's social profiles); the About page's `datePublished` churns on every render.
 
-### 6. Indexable failure pages — ✅ FIXED LOCALLY Aug 2, 2026
+### 6. Indexable failure pages — ✅ FIXED Aug 2, 2026
 
 > [!NOTE]
 > All ten generated SEO pages now return the branded 404 response when their content cannot load. Next.js supplies the 404 status and `noindex`, and the internal enrichment command is no longer exposed to visitors or crawlers.
 
 If an SEO-content JSON fails to load, pages like `/best-deals` return **HTTP 200 with a literal dev instruction** ("Please run: npx tsx scripts/enrich-seo-pages.ts…") and no noindex. Should be a hard error or noindex.
 
-### 7. Sitemap lastModified is meaningless — ✅ FIXED LOCALLY Aug 2, 2026
+### 7. Sitemap lastModified is meaningless — ✅ FIXED Aug 2, 2026
 
 > [!NOTE]
 > Product and shark URLs now use their direct database modification dates. Static and aggregate URLs—including season and episode pages—omit `lastmod` because no single record captures every change rendered on those pages.
 
 Most entries use `new Date()`, so every crawl says everything changed today. Google learns to ignore lastmod. Use real `updated_at` where we have it and omit it where we don't.
 
-### 8. AI crawlers are fully blocked — ✅ POLICY UPDATED LOCALLY Aug 2, 2026
+### 8. AI crawlers are fully blocked — ✅ POLICY UPDATED Aug 2, 2026
 
 > [!NOTE]
 > Chosen policy: allow search/indexing and user-requested retrieval bots from OpenAI, Anthropic, and Perplexity, while continuing to block model-training and bulk-dataset crawlers. The blanket `noai` response header is removed because it contradicted that split. This makes tankd.io eligible for answer-engine citations without granting training use.
@@ -123,7 +123,7 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 ## Where this stands — Aug 2, 2026
 
 > [!NOTE]
-> SEO fixes #1–#5 and the Priority 3 cleanup are deployed from `main`. Indexing hygiene fixes #6–#8 are complete locally and awaiting their final build and deployment.
+> All code-level SEO audit fixes #1–#8 and the Priority 3 cleanup are deployed from `main`. The final production build generated all 725 pages successfully.
 
 **Done Aug 2** — deal info and shark links now crawlable (#1); unique titles and descriptions for all 664 products (#2); shark attribution repaired; two duplicate product pages merged; three 308 redirects added.
 
@@ -137,6 +137,6 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] Products pagination + episode links from product pages (#4) — done Aug 2, 2026
 - [x] Product schema + populated ItemLists + expanded FAQs (#5) — done Aug 2, 2026
 - [x] **The Priority 3 quick wins in one cleanup pass** — deployed Aug 2, 2026
-- [x] Return real 404/noindex responses when generated SEO content is unavailable (#6) — done locally Aug 2, 2026
-- [x] Replace synthetic sitemap dates with real modification dates (#7) — done locally Aug 2, 2026
-- [x] Allow answer-engine discovery while keeping training crawlers blocked (#8) — done locally Aug 2, 2026
+- [x] Return real 404/noindex responses when generated SEO content is unavailable (#6) — deployed Aug 2, 2026
+- [x] Replace synthetic sitemap dates with real modification dates (#7) — deployed Aug 2, 2026
+- [x] Allow answer-engine discovery while keeping training crawlers blocked (#8) — deployed Aug 2, 2026
