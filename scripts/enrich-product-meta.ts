@@ -265,7 +265,7 @@ async function main() {
   let query = supabase
     .from('products_with_sharks')
     .select(
-      'id, name, slug, tagline, pitch_summary, description, season, episode_number, deal_outcome, status, asking_amount, asking_equity, deal_amount, deal_equity, founder_names, annual_revenue, lifetime_revenue, revenue_estimate, amazon_url, website_url, narrative_content, shark_names'
+      'id, name, slug, tagline, pitch_summary, description, season, episode_number, deal_outcome, status, asking_amount, asking_equity, deal_amount, deal_equity, founder_names, annual_revenue, lifetime_revenue, revenue_estimate, amazon_url, website_url, narrative_content, narrative_version, shark_names'
     )
     .order('name');
 
@@ -274,6 +274,13 @@ async function main() {
   } else {
     if (!force) {
       query = query.or('seo_title.is.null,meta_description.is.null');
+      // Skip products whose narrative hasn't been generated yet. A product created by a
+      // backfill lands with narrative_content = {} and narrative_version = 0 before its
+      // narrative arrives — note {} is NOT null, so a null check does not catch this.
+      // Without the guard, running mid-backfill writes thin copy from the structured
+      // fields alone, and the product then has meta, so this script skips it forever
+      // after. Re-runnable by design: run it again once narratives finish.
+      query = query.gt('narrative_version', 0);
     }
     if (limit) query = query.limit(limit);
   }
@@ -285,12 +292,27 @@ async function main() {
     process.exit(1);
   }
 
+  // Products deliberately held back by the narrative guard. Reported so a run that looks
+  // complete isn't mistaken for one — these need a re-run once their narratives land.
+  const { count: awaitingNarrative } = await supabase
+    .from('products')
+    .select('id', { count: 'exact', head: true })
+    .or('seo_title.is.null,meta_description.is.null')
+    .eq('narrative_version', 0);
+
   if (!products || products.length === 0) {
     console.log('\n   No products to process.\n');
+    if (awaitingNarrative) {
+      console.log(`   ⏳ ${awaitingNarrative} waiting on their narrative — re-run after enrichment.\n`);
+    }
     return;
   }
 
-  console.log(`\n   Found ${products.length} products\n`);
+  console.log(`\n   Found ${products.length} products`);
+  if (awaitingNarrative) {
+    console.log(`   ⏳ Skipping ${awaitingNarrative} whose narrative hasn't generated yet — re-run later.`);
+  }
+  console.log('');
 
   const { data: sharkRows } = await supabase.from('sharks').select('name');
   const allSharks = (sharkRows || []).map((s: { name: string }) => s.name);
