@@ -27,14 +27,34 @@ interface EpisodeSlug {
   episode_number: number
 }
 
+/**
+ * PostgREST caps an unbounded select at 1000 rows. The catalogue passed that on
+ * Aug 2, 2026 and the sitemap silently dropped ~595 products — no error, just a
+ * short list. Page through explicitly so the sitemap can't quietly truncate again.
+ */
+async function selectAll<T>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  build: () => any,
+  pageSize = 1000
+): Promise<T[]> {
+  const rows: T[] = []
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await build().range(from, from + pageSize - 1)
+    if (error) throw new Error(`sitemap query failed: ${error.message}`)
+    if (!data?.length) break
+    rows.push(...(data as T[]))
+    if (data.length < pageSize) break
+  }
+  return rows
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = createStaticClient()
 
   // Fetch all product slugs
-  const { data: products } = await supabase
-    .from('products')
-    .select('slug, updated_at')
-    .order('slug')
+  const products = await selectAll<ProductSlug>(() =>
+    supabase.from('products').select('slug, updated_at').order('slug')
+  )
 
   // Fetch all shark slugs
   const { data: sharks } = await supabase
@@ -48,22 +68,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select('slug')
     .order('slug')
 
-  // Fetch all seasons
-  const { data: seasons } = await supabase
-    .from('products')
-    .select('season')
-    .not('season', 'is', null)
-    .order('season', { ascending: false })
+  // Fetch all seasons. This reads one row per product, so the 1000-row cap bit here
+  // too: ordered by season descending, the first 1000 rows only reached season 7 and
+  // the sitemap advertised 12 seasons instead of 17.
+  const seasons = await selectAll<SeasonData>(() =>
+    supabase.from('products').select('season').not('season', 'is', null).order('season', { ascending: false })
+  )
 
   // Get unique seasons
-  const uniqueSeasons = [...new Set((seasons as SeasonData[] || []).map(s => s.season))]
+  const uniqueSeasons = [...new Set(seasons.map(s => s.season))]
 
   // Fetch all episodes
-  const { data: episodes } = await supabase
-    .from('episodes')
-    .select('season, episode_number')
-    .order('season', { ascending: false })
-    .order('episode_number', { ascending: false })
+  const episodes = await selectAll<EpisodeSlug>(() =>
+    supabase
+      .from('episodes')
+      .select('season, episode_number')
+      .order('season', { ascending: false })
+      .order('episode_number', { ascending: false })
+  )
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -169,7 +191,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Product pages
-  const productPages: MetadataRoute.Sitemap = (products as ProductSlug[] || []).map((product) => ({
+  const productPages: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${SITE_URL}/products/${product.slug}`,
     ...(product.updated_at && { lastModified: new Date(product.updated_at) }),
     changeFrequency: 'weekly' as const,
@@ -199,7 +221,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // Episode pages
-  const episodePages: MetadataRoute.Sitemap = (episodes as EpisodeSlug[] || []).map((episode) => ({
+  const episodePages: MetadataRoute.Sitemap = episodes.map((episode) => ({
     url: `${SITE_URL}/episodes/${episode.season}/${episode.episode_number}`,
     changeFrequency: 'monthly' as const,
     priority: 0.6,
