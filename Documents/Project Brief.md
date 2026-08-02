@@ -3,7 +3,7 @@
 A directory of Shark Tank products with tracking of business status, where to buy, and deal details. Built to outcompete existing sites through better data freshness, filtering, and affiliate optimization.
 
 > [!IMPORTANT]
-> **Depth first, breadth second.** The catalogue holds 665 products against roughly 1,400+ aired pitches — strong depth on what it tracks, about half the breadth of the "every pitch" sites. Public copy says "tracked", never "every product" or "complete database"; those claims were removed site-wide on Aug 2, 2026. Closing the breadth gap is an ongoing backfill, not a claim to make in advance.
+> **Depth first, breadth second — and as of Aug 2, 2026 the breadth is there too.** The catalogue holds 1,595 products, covering every pitch the reference lists for seasons 1–16 plus Season 17, with the same per-product depth (deal, status, founders, photo, six-section narrative, unique meta) applied throughout. Public copy still says "tracked", never "every product" or "complete database" — the show has aired pitches no public index records, so the honest claim is what we track, not totality.
 
 > [!NOTE]
 > **Status**: Live at https://tankd.io since Dec 12, 2025 — currently in Phase 4 (Launch & Growth).

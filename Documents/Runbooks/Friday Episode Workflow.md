@@ -64,6 +64,12 @@ npx tsx scripts/enrich-product-meta.ts --force --limit 50    # Rewrite products 
 # Backfill missed episodes (gap recovery when the cron's 72-hour lookback misses one)
 npx tsx scripts/backfill-episodes.ts 17:14 17:15 17:16       # Full pipeline: discovery + enrich + photo + narrative + IndexNow
 
+# Backfill historical pitches from the diffed gap list (NOT for new episodes)
+# Use this instead of backfill-episodes.ts when the episode already holds some products —
+# that script skips any episode that isn't empty, so it can't fill a partial season.
+npx tsx scripts/backfill-catalog.ts --season 9 --dry-run     # List what it would create
+npx tsx scripts/backfill-catalog.ts --season 9 --concurrency 8
+
 # Air dates — run after ANY batch that adds products, including a new episode
 npx tsx scripts/backfill-air-dates.ts --dry-run              # Preview, write nothing
 npx tsx scripts/backfill-air-dates.ts                        # Upsert episodes + stamp products
