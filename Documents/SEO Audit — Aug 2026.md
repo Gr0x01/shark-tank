@@ -1,6 +1,9 @@
 # SEO Audit — August 2026
 
-Audit of tankd.io's code-level SEO: metadata, structured data, indexability, internal linking, and description copy. Database checked Aug 2, 2026 (666 products).
+Audit of tankd.io's code-level SEO: metadata, structured data, indexability, internal linking, and description copy. Findings gathered Aug 2, 2026.
+
+> [!NOTE]
+> Product counts quoted in the findings below are snapshots from when each issue was found and are left as written. The live figure moves — see **Where this stands** at the end for current status and the standing warning about re-pinning counts here.
 
 > [!IMPORTANT]
 > The foundation is genuinely good — canonicals on every route, a complete sitemap, 700–1,000 words of unique server-rendered narrative per product page, WebSite + SearchAction schema, clean 404s for bad slugs. The issues below are what's being left on the table, ordered by impact.
@@ -207,19 +210,20 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 ## Where this stands — Aug 2, 2026
 
 > [!NOTE]
-> All original code-level SEO audit fixes #1–#8 and the Priority 3 cleanup are deployed from `main`. A final pre-indexing hygiene patch is built and verified locally; deploy it before requesting Google reindexing.
+> **Every code-level audit item and all three blockers are fixed and committed to `main`** (`6570ef9` SEO truth/freshness, `a9f6ab5` doc corrections, on top of the earlier `#1–#8` work). Nothing outstanding blocks a reindex request — what remains is crawl-depth polish, one schema decision, and growth work.
 
-### Final pre-indexing pass — built and verified Aug 2, 2026
+### The earlier passes, for the record
 
-- Removed `/_next/` from `robots.txt` disallows so Google and answer engines can fetch the CSS and JavaScript used for rendering.
-- Replaced the nonexistent `/logo.png` Article publisher image with the valid 1200×630 default brand image.
-- Added explicit `noindex, nofollow` metadata to generated-content failures and invalid product, category, shark, episode, and season routes.
-- Fixed nonexistent seasons such as `/seasons/999`, which previously returned a thin HTTP 200 page, to return the branded 404.
-- Verified with `NODE_ENV=production npm run build`: all 725 pages generated successfully. Browser checks confirmed the new 404/noindex behavior, robots output, and publisher image URL.
+- **#1–#8 and the Priority 3 cleanup** — deployed from `main` earlier on Aug 2: crawlable deal info and shark links, unique titles/descriptions for the whole catalogue, PNG OG fallbacks, product pagination and episode links, Product schema and populated ItemLists, real 404/noindex on failure routes, honest sitemap dates, answer-engine access with training crawlers still blocked.
+- **Final pre-indexing hygiene** — `/_next/` unblocked in robots so crawlers can fetch rendering assets; valid publisher image; explicit `noindex, nofollow` on invalid product/category/shark/episode/season routes; nonexistent seasons returning a branded 404 instead of a thin 200.
+- **Data repairs** — shark attribution fixed, two duplicate product pages merged, three 308 redirects added.
 
-**Done Aug 2** — deal info and shark links now crawlable (#1); unique titles and descriptions for all 664 products (#2); shark attribution repaired; two duplicate product pages merged; three 308 redirects added.
+### Verification of the Blockers 1–3 work
 
-**Verified against the database after all changes:** 664 products, 0 missing meta descriptions, 0 flagged narratives, 0 deals without a shark linked, 0 no-deal products carrying a shark. `NODE_ENV=production npm run build` exit 0, 727 pages generated.
+`NODE_ENV=production npm run build` exit 0, 727 pages. `tsc --noEmit` and `npm run lint` clean (13 pre-existing warnings, 0 errors). Server HTML checked on `/`, `/products`, `/seasons`, `/still-in-business`, `/out-of-business`, `/success-stories`, `/deals/over-500k`, `/how-to-apply`, `/about`: no raw `{token}` anywhere, titles and descriptions correct, catalogue figures substituting live, and `Article.datePublished` absent rather than falsely set on `/products/scrub-daddy`.
+
+> [!WARNING]
+> **Do not re-pin a product count in this document.** The catalogue is actively growing — it went 664 → 685 during the afternoon of Aug 2 as the historical backfill ran. Any figure written here is stale on arrival; query the database instead. This is the same failure that put "589 products" on live pages for eight months.
 
 ### Remaining, in order
 
@@ -236,7 +240,14 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] **Blocker 1** — remove the “every product / complete database” claims — done Aug 2, 2026
 - [x] **Blocker 2** — rewrite `/how-to-apply` from ABC sources; tokenize and regenerate the stale editorial pages — done Aug 2, 2026
 - [x] **Blocker 3** — retire the cosmetic `{year}` token and remove false Article publication dates — done Aug 2, 2026
-- [ ] **Priority 2** — numbered pagination + canonical pagination URLs in the sitemap
-- [ ] **Priority 2** — decide whether Product schema chases offers/ratings or stays entity-description only
-- [ ] Backfill `air_date` (products and the 12-row `episodes` table) — unlocks honest Article dates
-- [ ] Catalogue backfill: 665 tracked against ~1,400+ aired pitches, seasons 1–16 at 34–43 each
+**Nothing below blocks requesting indexation.** Ordered by what actually costs traffic.
+
+- [ ] **Deploy check + request indexing.** Both commits are on `main`; confirm Vercel shipped them, spot-check `/how-to-apply` and `/still-in-business` in production, resubmit the sitemap.
+- [ ] **Run `enrich-product-meta.ts` once the backfill settles.** Every product the backfill adds arrives with no `seo_title`/`meta_description` and falls back to the shared template strings — which is exactly the duplicate-description problem audit item #2 fixed. Verified open: 21 of the first backfilled products had no meta.
+- [ ] **5 products have a bare-slug `amazon_url`** (e.g. `amazon.com/clean-bottle`) that 404s. Those clicks earn nothing — the only item here with direct revenue impact.
+- [ ] **Priority 2 — pagination crawl depth.** Confirmed still open: `/products` exposes only Previous/Next (`src/app/products/page.tsx`), and `src/app/sitemap.ts` lists only `/products`, not the numbered pages. Back-of-catalogue products sit many clicks from the root, and the backfill makes this worse with every season added.
+- [ ] **Priority 2 — Product schema decision.** Every product still has `current_price = null`, so no Offer is emitted and there are no review/rating fields. Either commit to maintaining real offer data or accept Product schema as entity description and stop expecting rich results. Do not inject stale prices to satisfy markup.
+- [ ] **Priority 3 — title lengths.** 245 titles exceed 55 characters, 17 exceed 60. Truncation and clarity, not a blocker.
+- [ ] **`air_date` is empty on every product** and the `episodes` table holds 12 rows with no air dates. This is the prerequisite for honest `Article.datePublished` — worth folding into the backfill while it is running rather than as a separate pass later.
+- [ ] **Catalogue breadth** — the ongoing backfill toward the ~1,400+ aired pitches. Seasons 1–16 were at 34–43 each when this audit opened.
+- [ ] **Editorial expansion** — build new hubs only from demonstrated Search Console demand, not a generic keyword list.
