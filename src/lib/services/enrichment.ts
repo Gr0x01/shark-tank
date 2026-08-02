@@ -217,7 +217,8 @@ IMPORTANT:
 - Set confidence to "high" only if the deal outcome is explicitly stated
 - Set confidence to "low" if information is ambiguous or conflicting
 - If truly unknown, use "unknown" for dealOutcome and "low" for confidence
-- Do NOT make up deal terms`
+- Do NOT make up deal terms
+- In "sharks", list ONLY those who closed the final accepted deal and actually invested. Exclude any shark who merely made an offer that was declined or beaten, counter-offered, negotiated, or expressed interest without being part of the accepted deal. Most deals involve exactly one shark; only list several when they explicitly went in together`
 
 const SHARK_NAME_MAP: Record<string, string> = {
   'mark cuban': 'mark-cuban',
@@ -582,7 +583,7 @@ const normalizeDealType = (val: unknown) => {
   return 'unknown'
 }
 
-const FullEnrichmentSchema = z.object({
+export const FullEnrichmentSchema = z.object({
   founders: z.array(z.string()).nullable(),
   founderStory: z.string().nullable(),
   askingAmount: z.number().nullable(),
@@ -610,7 +611,7 @@ const FullEnrichmentSchema = z.object({
 
 type FullEnrichment = z.infer<typeof FullEnrichmentSchema>
 
-const FULL_ENRICHMENT_PROMPT = `You are a data extraction assistant. Extract structured information about a Shark Tank product from the provided search results.
+export const FULL_ENRICHMENT_PROMPT = `You are a data extraction assistant. Extract structured information about a Shark Tank product from the provided search results.
 
 Return ONLY valid JSON matching this schema:
 {

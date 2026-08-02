@@ -44,6 +44,24 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // Three more duplicate shark records from the Dec 2025 import, merged Aug 2, 2026:
+        // the model had written Lubetzky as a bare first name and as a misspelling, and
+        // Rashaun Williams with a middle initial.
+        source: '/sharks/daniel',
+        destination: '/sharks/daniel-lubetzky',
+        permanent: true,
+      },
+      {
+        source: '/sharks/daniel-lubetsky',
+        destination: '/sharks/daniel-lubetzky',
+        permanent: true,
+      },
+      {
+        source: '/sharks/rashaun-l-williams',
+        destination: '/sharks/rashaun-williams',
+        permanent: true,
+      },
+      {
         // Duplicate product records from the same Dec 2025 import, merged Aug 2, 2026.
         source: '/products/wicked-good-cupcakes',
         destination: '/products/wicked-good-cupcakes-in-a-jar',
