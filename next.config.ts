@@ -33,6 +33,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        // Kevin O'Leary had a duplicate shark record (curly vs straight apostrophe)
+        // holding 9 of his deals; merged into kevin-oleary on Aug 2, 2026. This slug
+        // was live and in the sitemap, so it redirects rather than 404s.
+        source: '/sharks/kevin-o-leary',
+        destination: '/sharks/kevin-oleary',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

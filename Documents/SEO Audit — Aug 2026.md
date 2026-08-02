@@ -89,10 +89,27 @@ robots.ts blocks GPTBot, ChatGPT-User, Claude, CCBot, Google-Extended, and more;
 
 ## Data problems found while fixing these
 
-Both surfaced during the meta-description work and are **not yet fixed** — they need your call:
+These surfaced during the meta-description work. Most are fixed; the duplicate product pages need your call.
 
-- **Kevin O'Leary exists twice in the `sharks` table.** One record (`kevin-oleary`, straight apostrophe) holds 52 products and has a photo; a duplicate (`kevin-o-leary`, curly apostrophe) holds 9 and has no photo. His portfolio, deal count, and success rate are split across two profile pages, and the thin duplicate is in the sitemap. Fixing means repointing those 9 products and deleting the duplicate record. No other shark is duplicated.
-- **3 products record a real deal but have no shark linked** (Lovepop is one — a $300K/15% deal with no investor attached). Those pages show a deal with no shark avatars and contribute no link to the shark's profile.
+### ✅ Fixed Aug 2, 2026
+
+- **Kevin O'Leary was duplicated in the `sharks` table** — `kevin-oleary` (52 products, photo) and `kevin-o-leary` (9 products, no photo, curly apostrophe), splitting his portfolio and stats across two profile pages. The 9 deals were repointed and the duplicate deleted; his profile now reads 62 deals, 74.2% success. `/sharks/kevin-o-leary` was live and in the sitemap, so `next.config.ts` now 308-redirects it to the real profile. No other shark is duplicated.
+- **2 products recorded a real deal with no shark linked** — Lovepop (Kevin O'Leary, $300K/15%) and Essence Aromatherapy Ring (Robert Herjavec, $250K/20%). Both linked, confirmed against their narratives. Their pages now carry the deal *and* the link to the shark.
+- **Budsies was credited to Mark Cuban despite getting no deal** — the link inflated Cuban's deal count and success rate. Removed. Its `deal_amount` is also wrong (it holds the $600K *ask*, not a deal); left alone deliberately, because changing a deal field fires the narrative-refresh trigger and the narrative is already correct. Nothing displays that field on a no-deal page.
+
+> [!NOTE]
+> Zero products now have a shark on a no-deal, and every recorded deal has its investor linked except the duplicate below.
+
+### ⚠️ Needs your call: two duplicate product pages
+
+Both came from the same Dec 12, 2025 import that created the O'Leary duplicate — the same company exists twice, so two URLs compete for the same searches:
+
+| Company | Record A (Dec 10) | Record B (Dec 12) |
+|---|---|---|
+| Wicked Good Cupcakes | `wicked-good-cupcakes-in-a-jar` — S4E22, status active, shark linked | `wicked-good-cupcakes` — S4, no episode, status acquired, no shark, longer narrative |
+| The Bouqs Company | `the-bouqs-company-flowers-shipped-from-a-volcano` — S5, $1.1M deal | `the-bouqs-company` — S5, no deal recorded, cleaner slug |
+
+Neither pair is a genuine second appearance (Copa Di Vino and Echo Valley Meats are, and are correctly separate). Merging means picking the keeper, moving across anything better on the loser, deleting it, and redirecting the old URL. Each pair has a real trade-off — Record A has the deal data, Record B has the better slug or status — so I'd rather you choose than guess.
 
 ## Suggested order of attack
 
