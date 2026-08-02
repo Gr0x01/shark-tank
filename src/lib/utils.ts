@@ -36,3 +36,22 @@ export function addAmazonAffiliateTag(url: string | null | undefined): string | 
     return url
   }
 }
+
+/**
+ * Format a `date` column (YYYY-MM-DD) for display.
+ *
+ * `new Date('2012-10-26')` parses as UTC midnight, so rendering it in any timezone west
+ * of UTC shows the previous day — Scrub Daddy aired Oct 26 and the page said Oct 25.
+ * Forcing UTC keeps the rendered day equal to the stored day everywhere.
+ */
+export function formatAirDate(
+  date: string,
+  options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' }
+): string {
+  return new Date(date).toLocaleDateString('en-US', { ...options, timeZone: 'UTC' })
+}
+
+/** Year of a `date` column, without the same off-by-one shift. */
+export function airDateYear(date: string): number {
+  return new Date(date).getUTCFullYear()
+}

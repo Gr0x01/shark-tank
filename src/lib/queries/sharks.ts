@@ -1,3 +1,4 @@
+import { airDateYear } from '@/lib/utils'
 import { createClient, createStaticClient } from '@/lib/supabase/server'
 import type {
   Shark,
@@ -315,7 +316,7 @@ export async function getSharkTimeline(slug: string): Promise<TimelineEntry[]> {
   // Convert to array and extract year from first product in each season
   for (const [season, products] of seasonMap.entries()) {
     const year = products[0]?.air_date
-      ? new Date(products[0].air_date).getFullYear()
+      ? airDateYear(products[0].air_date)
       : null
 
     timeline.push({

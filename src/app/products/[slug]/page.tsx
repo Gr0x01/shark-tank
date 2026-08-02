@@ -10,7 +10,7 @@ import { WhereToBuySection } from '@/components/ui/WhereToBuySection'
 import { StickyCTABar } from '@/components/ui/StickyCTABar'
 import { ProductCardCommerce } from '@/components/ui/ProductCardCommerce'
 import { AffiliateLink } from '@/components/ui/AffiliateLink'
-import { addAmazonAffiliateTag } from '@/lib/utils'
+import { addAmazonAffiliateTag, formatAirDate } from '@/lib/utils'
 import { createArticleSchema, createProductSchema, escapeJsonLd } from '@/lib/seo/schemas'
 import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_HEIGHT, DEFAULT_OG_IMAGE_WIDTH } from '@/lib/seo/constants'
 import { substituteTokens } from '@/lib/seo/tokens'
@@ -367,11 +367,7 @@ export default async function ProductPage({ params }: Props) {
               </div>
               {product.air_date && (
                 <time className="product-air-date" dateTime={product.air_date}>
-                  Aired {new Date(product.air_date).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
+                  Aired {formatAirDate(product.air_date)}
                 </time>
               )}
 

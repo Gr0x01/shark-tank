@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { formatAirDate } from '@/lib/utils'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getEpisode, getProducts, getSharkPhotos } from '@/lib/queries/cached'
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `Season ${season} Episode ${ep}${episodeData?.title ? ` - ${episodeData.title}` : ''} | tankd.io`
 
   const description = episodeData?.meta_description ||
-    `Products from Shark Tank Season ${season} Episode ${ep}. ${episodeData?.air_date ? `Aired ${new Date(episodeData.air_date).toLocaleDateString()}.` : ''} See what deals were made and where to buy.`
+    `Products from Shark Tank Season ${season} Episode ${ep}. ${episodeData?.air_date ? `Aired ${formatAirDate(episodeData.air_date)}.` : ''} See what deals were made and where to buy.`
 
   // Build keywords dynamically
   const keywords = [
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     'Shark Tank episode',
     ...(episodeData?.title ? [episodeData.title] : []),
     ...(episodeData?.air_date ? [
-      new Date(episodeData.air_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+      formatAirDate(episodeData.air_date, { month: 'long', year: 'numeric' })
     ] : []),
     'products',
     'deals'
@@ -139,7 +140,7 @@ export default async function EpisodePage({ params }: Props) {
 
           {episodeData?.air_date && (
             <p className="text-[var(--ink-400)] font-display">
-              Aired {new Date(episodeData.air_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              Aired {formatAirDate(episodeData.air_date)}
             </p>
           )}
         </div>
