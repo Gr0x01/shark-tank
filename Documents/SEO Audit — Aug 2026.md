@@ -98,7 +98,7 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - **Budsies was credited to Mark Cuban despite getting no deal** — the link inflated Cuban's deal count and success rate. Removed. Its `deal_amount` is also wrong (it holds the $600K *ask*, not a deal); left alone deliberately, because changing a deal field fires the narrative-refresh trigger and the narrative is already correct. Nothing displays that field on a no-deal page.
 
 > [!NOTE]
-> Zero products now have a shark on a no-deal, and every recorded deal has its investor linked except the duplicate below.
+> Zero products now have a shark on a no-deal, and every recorded deal has its investor linked.
 
 - **Two duplicate product pages merged** — the same Dec 12, 2025 import that created the O'Leary duplicate also created a second record for two companies, so two URLs competed for the same searches. Kept `wicked-good-cupcakes-in-a-jar` (has the episode and the shark link) and `the-bouqs-company` (cleaner slug and richer narrative, given the other record's "$1.1M deal" was a bogus `deal_amount` on a no-deal record). Both old URLs 308-redirect. Catalogue is now 664 products.
   - Deliberately **not** carried across: the duplicate's `acquired` status for Wicked Good. The `still-in-business` page filters on `status = 'active'`, so marking it acquired would drop a company that still sells cupcakes off that listing. Same reason RocketBook is missing from it — worth revisiting as a product question, since "acquired" and "still trading" aren't opposites.
@@ -109,11 +109,22 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - `deal_amount` holds the **ask**, not a deal, on at least two no-deal products (Budsies $600K, The Bouqs $1.1M). Nothing renders it on a no-deal page, and editing a deal field fires the narrative-refresh trigger, so fixing it means paying for regenerations to correct something invisible. Worth a sweep if you ever touch deal fields in bulk.
 - The Bouqs' `annual_revenue` (100M) isn't supported by its own narrative, which cites $640M lifetime and the other record cited $50M annual. Pre-existing conflict between two LLM-generated estimates, not introduced here.
 
-## Suggested order of attack
+## Where this stands — Aug 2, 2026
+
+> [!WARNING]
+> **Nothing here is deployed yet.** The branch `seo/crawlable-deal-info` holds 5 commits, and production is currently half-changed: the database work is live (it was written directly to production), but the code that reads it is not.
+>
+> The one live consequence: 109 products store a `{year}` token in their meta description, and the code that swaps it for the current year ships with this branch. Until you deploy, those descriptions show a literal `{year}` to Google as the 12-hour page caches expire. Merging and deploying resolves it — there's nothing else to do.
+
+**Done Aug 2** — deal info and shark links now crawlable (#1); unique titles and descriptions for all 664 products (#2); shark attribution repaired; two duplicate product pages merged; three 308 redirects added.
+
+**Verified against the database after all changes:** 664 products, 0 missing meta descriptions, 0 flagged narratives, 0 deals without a shark linked, 0 no-deal products carrying a shark. `NODE_ENV=production npm run build` exit 0, 727 pages generated.
+
+### Remaining, in order
 
 - [x] Spoiler gate → CSS-hide so deal content + shark links are in the HTML (#1) — done Aug 2, 2026
-- [x] Batch-generate unique titles/descriptions for all 666 products (#2) — done Aug 2, 2026
-- [ ] PNG OG image + fallbacks (#3)
+- [x] Batch-generate unique titles/descriptions for all products (#2) — done Aug 2, 2026
+- [ ] **PNG OG image + fallbacks (#3)** ← next
 - [ ] Products pagination + episode links from product pages (#4)
 - [ ] Product schema + populated ItemLists + expanded FAQs (#5)
 - [ ] The Priority 3 quick wins in one cleanup pass
