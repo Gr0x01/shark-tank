@@ -21,6 +21,13 @@ type Props = {
   params: Promise<{ slug: string }>
 }
 
+// Stored titles/descriptions carry a "{year}" token rather than a literal year, so a
+// freshness signal written once doesn't go stale next January. Every read of
+// seo_title/meta_description must go through this — including structured data.
+function withYear(text: string): string {
+  return text.replace(/\{year\}/g, String(new Date().getFullYear()))
+}
+
 interface NarrativeContent {
   origin_story?: string | null
   pitch_journey?: string | null
@@ -45,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // Generate SEO-optimized title (under 55 chars, emotional hook)
   const generateTitle = (): string => {
-    if (product.seo_title) return product.seo_title
+    if (product.seo_title) return withYear(product.seo_title)
 
     const name = product.name
 
@@ -68,7 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // Generate SEO-optimized description (150-160 chars, storytelling)
   const generateDescription = (): string => {
-    if (product.meta_description) return product.meta_description
+    if (product.meta_description) return withYear(product.meta_description)
 
     const name = product.name
     const dealAmount = product.deal_amount
@@ -192,7 +199,7 @@ export default async function ProductPage({ params }: Props) {
   // JSON-LD Structured Data
   const articleJsonLd = createArticleSchema({
     headline: product.name,
-    description: product.meta_description || product.tagline || product.pitch_summary || '',
+    description: withYear(product.meta_description || product.tagline || product.pitch_summary || ''),
     url: `${SITE_URL}/products/${slug}`,
     datePublished: product.air_date || product.created_at || '2009-08-09', // Shark Tank series premiere
     dateModified: lastUpdatedDate || undefined,
