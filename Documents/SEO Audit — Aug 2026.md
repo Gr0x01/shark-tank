@@ -210,7 +210,7 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 ## Where this stands — Aug 2, 2026
 
 > [!NOTE]
-> **Every code-level audit item and all three blockers are fixed and committed to `main`** (`6570ef9` SEO truth/freshness, `a9f6ab5` doc corrections, on top of the earlier `#1–#8` work). Nothing outstanding blocks a reindex request — what remains is crawl-depth polish, one schema decision, and growth work.
+> **Every code-level audit item and all three blockers are fixed and committed to `main`** (`6570ef9` SEO truth/freshness, `a9f6ab5` doc corrections, `91dd932` status reconciliation, on top of the earlier `#1–#8` work). What remains is crawl-depth polish, one schema decision, and growth work — see the staged sequence in **Remaining** below, which deliberately splits correcting false content from asking Google to recrawl the catalogue.
 
 ### The earlier passes, for the record
 
@@ -240,14 +240,28 @@ These surfaced during the meta-description work. Most are fixed; the duplicate p
 - [x] **Blocker 1** — remove the “every product / complete database” claims — done Aug 2, 2026
 - [x] **Blocker 2** — rewrite `/how-to-apply` from ABC sources; tokenize and regenerate the stale editorial pages — done Aug 2, 2026
 - [x] **Blocker 3** — retire the cosmetic `{year}` token and remove false Article publication dates — done Aug 2, 2026
-**Nothing below blocks requesting indexation.** Ordered by what actually costs traffic.
+> [!IMPORTANT]
+> **Broad indexing waits for the backfill; the false-content correction does not.** These are two different asks and conflating them costs either accuracy or crawl budget. Requesting a full recrawl now would have Google discover a URL structure that numbered pagination is about to change, and index hundreds of freshly backfilled products that have no meta description yet. But a page that is currently telling readers something untrue should be corrected in the index the day it is fixed.
 
-- [ ] **Deploy check + request indexing.** Both commits are on `main`; confirm Vercel shipped them, spot-check `/how-to-apply` and `/still-in-business` in production, resubmit the sitemap.
-- [ ] **Run `enrich-product-meta.ts` once the backfill settles.** Every product the backfill adds arrives with no `seo_title`/`meta_description` and falls back to the shared template strings — which is exactly the duplicate-description problem audit item #2 fixed. Verified open: 21 of the first backfilled products had no meta.
-- [ ] **5 products have a bare-slug `amazon_url`** (e.g. `amazon.com/clean-bottle`) that 404s. Those clicks earn nothing — the only item here with direct revenue impact.
-- [ ] **Priority 2 — pagination crawl depth.** Confirmed still open: `/products` exposes only Previous/Next (`src/app/products/page.tsx`), and `src/app/sitemap.ts` lists only `/products`, not the numbered pages. Back-of-catalogue products sit many clicks from the root, and the backfill makes this worse with every season added.
+### Now — correcting content that is live and wrong
+
+- [ ] **Deploy check.** Three commits sit on `main` (`6570ef9`, `a9f6ab5`, `91dd932`); confirm Vercel shipped them and spot-check `/how-to-apply` and `/still-in-business` in production.
+- [ ] **Request reindexing for `/how-to-apply` specifically.** It has been live since December claiming a $100 application fee and a Houston "Innovation Weekend", neither of which exists. Every day it stays in the index it misinforms people acting on it. This is a correction, not an optimisation — it does not wait for anything.
+- [ ] **Request reindexing for the homepage and `/about`**, whose "every Shark Tank product" claim was the other untrue thing on the site.
+
+Do **not** resubmit the sitemap or request broad recrawling at this stage.
+
+### Next — before asking Google to recrawl the catalogue
+
+- [ ] **Run `enrich-product-meta.ts` once the backfill settles.** Every backfilled product arrives with no `seo_title`/`meta_description` and falls back to the shared template strings — exactly the duplicate-description problem audit item #2 fixed. Verified open: the first 21 backfilled products had none. Indexing before this runs bakes the problem in.
+- [ ] **Priority 2 — pagination crawl depth.** Confirmed still open: `/products` exposes only Previous/Next (`src/app/products/page.tsx`), and `src/app/sitemap.ts` lists only `/products`, not the numbered pages. Back-of-catalogue products sit many clicks from the root, and the backfill worsens it with every season. **Fix this before the sitemap resubmission**, so Google discovers the final structure once.
+- [ ] **`air_date`** is empty on every product and the `episodes` table holds 12 rows with none. Prerequisite for honest `Article.datePublished`; cheapest to fold into the backfill while episode data is already in hand.
+- [ ] **Then**: resubmit the sitemap and request indexing for the refreshed hubs.
+
+### Independent of indexing
+
+- [ ] **5 products have a bare-slug `amazon_url`** (e.g. `amazon.com/clean-bottle`) that 404s. Those clicks earn nothing — the only item here with direct revenue impact, and it does not depend on any of the above.
 - [ ] **Priority 2 — Product schema decision.** Every product still has `current_price = null`, so no Offer is emitted and there are no review/rating fields. Either commit to maintaining real offer data or accept Product schema as entity description and stop expecting rich results. Do not inject stale prices to satisfy markup.
 - [ ] **Priority 3 — title lengths.** 245 titles exceed 55 characters, 17 exceed 60. Truncation and clarity, not a blocker.
-- [ ] **`air_date` is empty on every product** and the `episodes` table holds 12 rows with no air dates. This is the prerequisite for honest `Article.datePublished` — worth folding into the backfill while it is running rather than as a separate pass later.
 - [ ] **Catalogue breadth** — the ongoing backfill toward the ~1,400+ aired pitches. Seasons 1–16 were at 34–43 each when this audit opened.
 - [ ] **Editorial expansion** — build new hubs only from demonstrated Search Console demand, not a generic keyword list.
